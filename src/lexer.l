@@ -44,6 +44,12 @@ std::map<std::string, std::string> keywords = {
 ")" {
     std::cout << "RPAREN\n"; 
 }
+"{" {
+    std::cout << "LBRACE\n"; 
+}
+"}" {
+    std::cout << "RBRACE\n"; 
+}
 [ \t\n]+ {
     /* Ignore whitespace */ 
 }
