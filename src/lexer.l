@@ -1,7 +1,13 @@
 %{
 #include <iostream>
 #include <fstream>
+#include <map>
 FlexLexer* lexer = nullptr;
+std::map<std::string, std::string> keywords = {
+    {"if", "IF"},
+    {"loop", "LOOP"},
+    {"int", "INT"},
+};
 %}
 
 %option c++
@@ -10,7 +16,12 @@ FlexLexer* lexer = nullptr;
 %%
 
 [a-zA-Z_]+[a-zA-Z_0-9]* {
-    std::cout<< "IDENTIFIER(" << yytext <<")\n";
+    if(keywords.contains(yytext)) {
+        std::cout<<keywords[yytext]<<"\n";
+    }
+    else {
+        std::cout<< "IDENTIFIER(" << yytext <<")\n";
+    }
 }
 [0-9]+ {
     std::cout << "NUMBER(" << yytext << ")\n"; 
