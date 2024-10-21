@@ -7,6 +7,7 @@ std::map<std::string, std::string> keywords = {
     {"if", "IF"},
     {"loop", "LOOP"},
     {"int", "INT"},
+    {"return", "RETURN"},
 };
 %}
 
@@ -26,6 +27,9 @@ std::map<std::string, std::string> keywords = {
 [0-9]+ {
     std::cout << "NUMBER(" << yytext << ")\n"; 
 }
+"->" {
+    std::cout << "ARROW\n";
+}
 "+" { 
     std::cout << "PLUS\n"; 
 }
@@ -38,6 +42,9 @@ std::map<std::string, std::string> keywords = {
 "/" {
     std::cout << "DIVIDE\n"; 
 }
+"=" {
+    std::cout << "ASSIGNMENT\n";
+}
 "(" {
     std::cout << "LPAREN\n"; 
 }
@@ -49,6 +56,15 @@ std::map<std::string, std::string> keywords = {
 }
 "}" {
     std::cout << "RBRACE\n"; 
+}
+"," {
+    std::cout << "COMMA\n";
+}
+":" {
+    std::cout << "COLON\n";
+}
+";" {
+    std::cout << "SEMICOLON\n";
 }
 [ \t\n]+ {
     /* Ignore whitespace */ 
