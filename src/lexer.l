@@ -9,16 +9,37 @@ FlexLexer* lexer = nullptr;
 
 %%
 
-[0-9]+      { std::cout << "NUMBER(" << yytext << ")\n"; }
-"+"         { std::cout << "PLUS\n"; }
-"-"         { std::cout << "MINUS\n"; }
-"*"         { std::cout << "MULTIPLY\n"; }
-"/"         { std::cout << "DIVIDE\n"; }
-"("         { std::cout << "LPAREN\n"; }
-")"         { std::cout << "RPAREN\n"; }
-[ \t\n]+    { /* Ignore whitespace */ }
+[a-zA-Z_]+[a-zA-Z_0-9]* {
+    std::cout<< "IDENTIFIER(" << yytext <<")\n";
+}
+[0-9]+ {
+    std::cout << "NUMBER(" << yytext << ")\n"; 
+}
+"+" { 
+    std::cout << "PLUS\n"; 
+}
+"-" {
+    std::cout << "MINUS\n"; 
+}
+"*" {
+    std::cout << "MULTIPLY\n"; 
+}
+"/" {
+    std::cout << "DIVIDE\n"; 
+}
+"(" {
+    std::cout << "LPAREN\n"; 
+}
+")" {
+    std::cout << "RPAREN\n"; 
+}
+[ \t\n]+ {
+    /* Ignore whitespace */ 
+}
 
-.           { std::cout << "UNKNOWN TOKEN: " << yytext << "\n"; }
+.   {
+    std::cout << "UNKNOWN TOKEN: " << yytext << "\n"; 
+}
 
 %%
 
@@ -40,7 +61,6 @@ int main(int argc, char** argv) {
 
     // Call the lexer
     while (lexer->yylex() != 0) {
-        // yylex() returns 0 when it reaches the end of input
     }
 
     delete lexer;
