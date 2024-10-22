@@ -2,4 +2,4 @@
 Toolchain experiments
 # todo
 - Add cmake build system
-- Force C++ standard of at least 20
+- Make the lexer actually generate tokens rather than just print statements
