@@ -19,6 +19,13 @@ namespace Tokens {
     COMMA,
     COLON,
     SEMICOLON,
+      
+    RETURN,  
+
+    IF,
+    ELSE,
+    LOOP, //replacement of a while loop
+    FOR, //there should be a for loop cause it's convenient
 
     UNKNOWN,
 
@@ -28,7 +35,7 @@ namespace Tokens {
   struct Token {
     TokType type;
     std::string metadata;
-    Token(TokType type, std::string metadata); //TODO: implement
+    Token(TokType type, std::string metadata); 
   };
 
 }
