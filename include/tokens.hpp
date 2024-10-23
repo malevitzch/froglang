@@ -28,6 +28,7 @@ namespace Tokens {
   struct Token {
     TokType type;
     std::string metadata;
+    Token(TokType type, std::string metadata); //TODO: implement
   };
 
 }
