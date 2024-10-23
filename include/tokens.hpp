@@ -1,6 +1,7 @@
+#include <string>
 namespace Tokens {
-  enum class TokType
-  {
+  enum class TokType {
+    
     IDENTIFIER,
     NUMBER,
 
@@ -20,6 +21,13 @@ namespace Tokens {
     SEMICOLON,
 
     UNKNOWN,
+
   };
 //TODO: add keywords, perhaps even use inheritance for tokens
+
+  struct Token {
+    TokType type;
+    std::string metadata;
+  };
+
 }
