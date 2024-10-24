@@ -77,7 +77,7 @@ std::map<std::string, std::string> keywords = {
 %%
 
 int main(int argc, char** argv) {
-    std::istream* in = &std::cin;  // Default input stream (stdin)
+    std::istream* in;  // Default input stream (stdin)
     std::ifstream* file;
     if (argc > 1) {
         // If a file is provided, open it and set as input stream
@@ -85,8 +85,11 @@ int main(int argc, char** argv) {
         if (!file->is_open()) {
             std::cerr << "Cannot open file: " << argv[1] << "\n";
             return 1;
-        }
+        } 
         in = file;
+    } else {
+        std::cerr << "No file input given\n";
+        return 0;
     }
 
     // Create a lexer object
