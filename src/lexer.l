@@ -2,6 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <memory>
+
 FlexLexer* lexer = nullptr;
 std::map<std::string, std::string> keywords = {
     {"if", "IF"},
@@ -76,8 +78,21 @@ std::map<std::string, std::string> keywords = {
 
 %%
 
+void lex_file(std::string filename) {
+    std::shared_ptr<std::ifstream> in = std::make_shared<std::ifstream>(std::ifstream(filename));
+    if(!in->is_open()) {
+        std::cerr << "Cannot open file: " << filename << "\n";
+        return;
+    }
+    lexer = new yyFlexLexer(in.get());
+
+    while(lexer->yylex() != 0) {}
+
+    delete lexer;
+}
+
 int main(int argc, char** argv) {
-    std::istream* in;  // Default input stream (stdin)
+    std::istream* in;
     std::ifstream* file;
     if (argc > 1) {
         // If a file is provided, open it and set as input stream
@@ -94,7 +109,6 @@ int main(int argc, char** argv) {
 
     // Create a lexer object
     lexer = new yyFlexLexer(in);
-
     // Call the lexer
     while (lexer->yylex() != 0) {
     }
