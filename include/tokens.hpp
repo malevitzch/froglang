@@ -1,7 +1,7 @@
 #include <string>
 namespace Tokens {
   enum class TokType {
-    
+
     IDENTIFIER,
     NUMBER,
 
@@ -19,8 +19,8 @@ namespace Tokens {
     COMMA,
     COLON,
     SEMICOLON,
-      
-    RETURN,  
+
+    RETURN,
 
     IF,
     ELSE,
