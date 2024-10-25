@@ -30,7 +30,6 @@ namespace Tokens {
     UNKNOWN,
 
   };
-//TODO: add keywords, perhaps even use inheritance for tokens
 
   struct Token {
     TokType type;
