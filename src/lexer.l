@@ -6,10 +6,10 @@
 
 FlexLexer* lexer = nullptr;
 std::map<std::string, std::string> keywords = {
-    {"if", "IF"},
-    {"loop", "LOOP"},
-    {"int", "INT"},
-    {"return", "RETURN"},
+  {"if", "IF"},
+  {"loop", "LOOP"},
+  {"int", "INT"},
+  {"return", "RETURN"},
 };
 %}
 
@@ -19,101 +19,101 @@ std::map<std::string, std::string> keywords = {
 %%
 
 [a-zA-Z_]+[a-zA-Z_0-9]* {
-    if(keywords.contains(yytext)) {
-        std::cout<<keywords[yytext]<<"\n";
-    }
-    else {
-        std::cout<< "IDENTIFIER(" << yytext <<")\n";
-    }
+  if(keywords.contains(yytext)) {
+    std::cout<<keywords[yytext]<<"\n";
+  }
+  else {
+    std::cout<< "IDENTIFIER(" << yytext <<")\n";
+  }
 }
 [0-9]+ {
-    std::cout << "NUMBER(" << yytext << ")\n"; 
+  std::cout << "NUMBER(" << yytext << ")\n"; 
 }
 "->" {
-    std::cout << "ARROW\n";
+  std::cout << "ARROW\n";
 }
 "+" { 
-    std::cout << "PLUS\n"; 
+  std::cout << "PLUS\n"; 
 }
 "-" {
-    std::cout << "MINUS\n"; 
+  std::cout << "MINUS\n"; 
 }
 "*" {
-    std::cout << "MULTIPLY\n"; 
+  std::cout << "MULTIPLY\n"; 
 }
 "/" {
-    std::cout << "DIVIDE\n"; 
+  std::cout << "DIVIDE\n"; 
 }
 "=" {
-    std::cout << "ASSIGNMENT\n";
+  std::cout << "ASSIGNMENT\n";
 }
 "(" {
-    std::cout << "LPAREN\n"; 
+  std::cout << "LPAREN\n"; 
 }
 ")" {
-    std::cout << "RPAREN\n"; 
+  std::cout << "RPAREN\n"; 
 }
 "{" {
-    std::cout << "LBRACE\n"; 
+  std::cout << "LBRACE\n"; 
 }
 "}" {
-    std::cout << "RBRACE\n"; 
+  std::cout << "RBRACE\n"; 
 }
 "," {
-    std::cout << "COMMA\n";
+  std::cout << "COMMA\n";
 }
 ":" {
-    std::cout << "COLON\n";
+  std::cout << "COLON\n";
 }
 ";" {
-    std::cout << "SEMICOLON\n";
+  std::cout << "SEMICOLON\n";
 }
 [ \t\n]+ {
-    /* Ignore whitespace */ 
+  /* Ignore whitespace */ 
 }
 
 .   {
-    std::cout << "UNKNOWN TOKEN: " << yytext << "\n"; 
+  std::cout << "UNKNOWN TOKEN: " << yytext << "\n"; 
 }
 
 %%
 
 void lex_file(std::string filename) {
-    std::shared_ptr<std::ifstream> in = std::make_shared<std::ifstream>(std::ifstream(filename));
-    if(!in->is_open()) {
-        std::cerr << "Cannot open file: " << filename << "\n";
-        return;
-    }
-    lexer = new yyFlexLexer(in.get());
+  std::shared_ptr<std::ifstream> in = std::make_shared<std::ifstream>(std::ifstream(filename));
+  if(!in->is_open()) {
+    std::cerr << "Cannot open file: " << filename << "\n";
+    return;
+  }
+  lexer = new yyFlexLexer(in.get());
 
-    while(lexer->yylex() != 0) {}
+  while(lexer->yylex() != 0) {}
 
-    delete lexer;
+  delete lexer;
 }
 
 int main(int argc, char** argv) {
-    std::istream* in;
-    std::ifstream* file;
-    if (argc > 1) {
-        // If a file is provided, open it and set as input stream
-        file = new std::ifstream(argv[1]);
-        if (!file->is_open()) {
-            std::cerr << "Cannot open file: " << argv[1] << "\n";
-            return 1;
-        } 
-        in = file;
-    } else {
-        std::cerr << "No file input given\n";
-        return 0;
-    }
-
-    // Create a lexer object
-    lexer = new yyFlexLexer(in);
-    // Call the lexer
-    while (lexer->yylex() != 0) {
-    }
-
-    delete lexer;
-    delete file;
+  std::istream* in;
+  std::ifstream* file;
+  if (argc > 1) {
+    // If a file is provided, open it and set as input stream
+    file = new std::ifstream(argv[1]);
+    if (!file->is_open()) {
+      std::cerr << "Cannot open file: " << argv[1] << "\n";
+      return 1;
+    } 
+    in = file;
+  } else {
+    std::cerr << "No file input given\n";
     return 0;
+  }
+
+  // Create a lexer object
+  lexer = new yyFlexLexer(in);
+  // Call the lexer
+  while (lexer->yylex() != 0) {
+  }
+
+  delete lexer;
+  delete file;
+  return 0;
 }
