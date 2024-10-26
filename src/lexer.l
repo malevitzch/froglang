@@ -94,13 +94,13 @@ void lex_file(std::string filename) {
 int main(int argc, char** argv) {
   std::istream* in;
   std::ifstream* file;
-  if (argc > 1) {
+  if(argc > 1) {
     // If a file is provided, open it and set as input stream
     file = new std::ifstream(argv[1]);
-    if (!file->is_open()) {
+    if(!file->is_open()) {
       std::cerr << "Cannot open file: " << argv[1] << "\n";
       return 1;
-    } 
+    }
     in = file;
   } else {
     std::cerr << "No file input given\n";
@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
   // Create a lexer object
   lexer = new yyFlexLexer(in);
   // Call the lexer
-  while (lexer->yylex() != 0) {
+  while(lexer->yylex() != 0) {
   }
 
   delete lexer;
