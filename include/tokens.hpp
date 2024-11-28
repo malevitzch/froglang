@@ -9,7 +9,7 @@ namespace Tokens {
     PLUS,
     MINUS,
     STAR, //multiply (but I think this is better since it might mean deref later so probably worth to do this way)
-    DIVISION,
+    SLASH,
     ASSIGNMENT,
 
     LPAREN,
@@ -34,7 +34,8 @@ namespace Tokens {
   struct Token {
     TokType type;
     std::string metadata;
-    Token(TokType type, std::string metadata); 
+    Token(TokType type, std::string metadata);
+    Token(TokType type);
   };
 
 }

@@ -1,15 +1,21 @@
 %{
+#include "tokens.hpp"
+#include "parser.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <map>
 #include <memory>
 
+using namespace Tokens;
+
 FlexLexer* lexer = nullptr;
-std::map<std::string, std::string> keywords = {
-  {"if", "IF"},
-  {"loop", "LOOP"},
-  {"int", "INT"},
-  {"return", "RETURN"},
+extern Token* yylval;
+
+std::map<std::string, TokType> keywords = {
+  {"if", TokType::IF},
+  {"loop", TokType::LOOP},
+  {"return", TokType::RETURN},
 };
 %}
 
@@ -20,53 +26,69 @@ std::map<std::string, std::string> keywords = {
 
 [a-zA-Z_]+[a-zA-Z_0-9]* {
   if(keywords.contains(yytext)) {
-    std::cout<<keywords[yytext]<<"\n";
+    std::cout << "Keyword : [" << yytext << "]\n";
+    yylval = new Token(keywords[yytext]);
   }
   else {
-    std::cout<< "IDENTIFIER(" << yytext <<")\n";
+    std::cout << "IDENTIFIER(" << yytext << ")\n";
+    yylval = new Token(TokType::IDENTIFIER, yytext);
   }
 }
 [0-9]+ {
-  std::cout << "NUMBER(" << yytext << ")\n"; 
+  std::cout << "NUMBER(" << yytext << ")\n";
+  yylval = new Token(TokType::NUMBER, yytext);
 }
 "->" {
   std::cout << "ARROW\n";
+  yylval = new Token(TokType::ARROW, yytext);
 }
 "+" { 
-  std::cout << "PLUS\n"; 
+  std::cout << "PLUS\n";
+  yylval = new Token(TokType::PLUS, yytext);
 }
 "-" {
   std::cout << "MINUS\n"; 
+  yylval = new Token(TokType::MINUS, yytext);
 }
 "*" {
-  std::cout << "MULTIPLY\n"; 
+  std::cout << "STAR\n";
+  yylval = new Token(TokType::STAR, yytext);
 }
 "/" {
-  std::cout << "DIVIDE\n"; 
+  std::cout << "SLASH\n";
+  yylval = new Token(TokType::SLASH, yytext);
 }
 "=" {
   std::cout << "ASSIGNMENT\n";
+  yylval = new Token(TokType::ASSIGNMENT, yytext);
 }
 "(" {
   std::cout << "LPAREN\n"; 
+  yylval = new Token(TokType::LPAREN, yytext);
 }
 ")" {
   std::cout << "RPAREN\n"; 
+  yylval = new Token(TokType::RPAREN, yytext);
 }
 "{" {
-  std::cout << "LBRACE\n"; 
+  std::cout << "LBRACE\n";
+  yylval = new Token(TokType::LBRACE, yytext);
 }
 "}" {
   std::cout << "RBRACE\n"; 
+  yylval = new Token(TokType::RBRACE, yytext);
 }
 "," {
   std::cout << "COMMA\n";
+  yylval = new Token(TokType::COMMA, yytext);
 }
 ":" {
   std::cout << "COLON\n";
+  yylval = new Token(TokType::COLON, yytext);
 }
 ";" {
   std::cout << "SEMICOLON\n";
+  yylval = new Token(TokType::SEMICOLON, yytext);
 }
 [ \t\n]+ {
   /* Ignore whitespace */ 
