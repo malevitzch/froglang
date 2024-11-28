@@ -17,6 +17,6 @@ add_custom_command(
   COMMAND ${FLEX_EXECUTABLE} --c++ -o ${FLEX_OUTPUT} ${FLEX_INPUT}
 )
 
-set(SOURCES ${FLEX_OUTPUT})
+set(SOURCES ${BISON_OUTPUT} ${FLEX_OUTPUT})
 
 add_executable(lexer ${SOURCES})
