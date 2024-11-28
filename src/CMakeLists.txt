@@ -8,6 +8,16 @@ add_custom_command(
   COMMAND ${FLEX_EXECUTABLE} --c++ -o ${FLEX_OUTPUT} ${FLEX_INPUT}
 )
 
+set(BISON_INPUT ${CMAKE_SOURCE_DIR}/src/parser.y)
+set(BISON_OUTPUT ${CMAKE_BINARY_DIR}/parser.cpp)
+set(BISON_HEADER ${CMAKE_BINARY_DIR}/parser.hpp)
+
+add_custom_command(
+    OUTPUT ${BISON_OUTPUT} ${BISON_HEADER}
+    COMMAND ${BISON_EXECUTABLE} -d --defines=${BISON_HEADER} -o ${BISON_OUTPUT} ${BISON_INPUT}
+    MAIN_DEPENDENCY ${BISON_INPUT}
+)
+
 set(SOURCES ${FLEX_OUTPUT})
 
 add_executable(lexer ${SOURCES})
