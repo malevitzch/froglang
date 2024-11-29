@@ -10,12 +10,12 @@
 using namespace Tokens;
 
 FlexLexer* lexer = nullptr;
-extern Token* yylval;
+extern Tokens::Token* yylval;
 
-std::map<std::string, TokType> keywords = {
-  {"if", TokType::IF},
-  {"loop", TokType::LOOP},
-  {"return", TokType::RETURN},
+std::map<std::string, Tokens::TokType> keywords = {
+  {"if", Tokens::TokType::IF},
+  {"loop", Tokens::TokType::LOOP},
+  {"return", Tokens::TokType::RETURN},
 };
 %}
 
@@ -27,68 +27,68 @@ std::map<std::string, TokType> keywords = {
 [a-zA-Z_]+[a-zA-Z_0-9]* {
   if(keywords.contains(yytext)) {
     std::cout << "Keyword : [" << yytext << "]\n";
-    yylval = new Token(keywords[yytext]);
+    yylval = new Tokens::Token(keywords[yytext]);
   }
   else {
     std::cout << "IDENTIFIER(" << yytext << ")\n";
-    yylval = new Token(TokType::IDENTIFIER, yytext);
+    yylval = new Tokens::Token(Tokens::TokType::IDENTIFIER, yytext);
   }
 }
 [0-9]+ {
   std::cout << "NUMBER(" << yytext << ")\n";
-  yylval = new Token(TokType::NUMBER, yytext);
+  yylval = new Tokens::Token(Tokens::TokType::NUMBER, yytext);
 }
 "->" {
   std::cout << "ARROW\n";
-  yylval = new Token(TokType::ARROW, yytext);
+  yylval = new Tokens::Token(Tokens::TokType::ARROW, yytext);
 }
 "+" { 
   std::cout << "PLUS\n";
-  yylval = new Token(TokType::PLUS, yytext);
+  yylval = new Tokens::Token(Tokens::TokType::PLUS, yytext);
 }
 "-" {
   std::cout << "MINUS\n"; 
-  yylval = new Token(TokType::MINUS, yytext);
+  yylval = new Tokens::Token(Tokens::TokType::MINUS, yytext);
 }
 "*" {
   std::cout << "STAR\n";
-  yylval = new Token(TokType::STAR, yytext);
+  yylval = new Tokens::Token(Tokens::TokType::STAR, yytext);
 }
 "/" {
   std::cout << "SLASH\n";
-  yylval = new Token(TokType::SLASH, yytext);
+  yylval = new Tokens::Token(Tokens::TokType::SLASH, yytext);
 }
 "=" {
   std::cout << "ASSIGNMENT\n";
-  yylval = new Token(TokType::ASSIGNMENT, yytext);
+  yylval = new Tokens::Token(Tokens::TokType::ASSIGNMENT, yytext);
 }
 "(" {
   std::cout << "LPAREN\n"; 
-  yylval = new Token(TokType::LPAREN, yytext);
+  yylval = new Tokens::Token(Tokens::TokType::LPAREN, yytext);
 }
 ")" {
   std::cout << "RPAREN\n"; 
-  yylval = new Token(TokType::RPAREN, yytext);
+  yylval = new Tokens::Token(Tokens::TokType::RPAREN, yytext);
 }
 "{" {
   std::cout << "LBRACE\n";
-  yylval = new Token(TokType::LBRACE, yytext);
+  yylval = new Tokens::Token(Tokens::TokType::LBRACE, yytext);
 }
 "}" {
   std::cout << "RBRACE\n"; 
-  yylval = new Token(TokType::RBRACE, yytext);
+  yylval = new Tokens::Token(Tokens::TokType::RBRACE, yytext);
 }
 "," {
   std::cout << "COMMA\n";
-  yylval = new Token(TokType::COMMA, yytext);
+  yylval = new Tokens::Token(Tokens::TokType::COMMA, yytext);
 }
 ":" {
   std::cout << "COLON\n";
-  yylval = new Token(TokType::COLON, yytext);
+  yylval = new Tokens::Token(Tokens::TokType::COLON, yytext);
 }
 ";" {
   std::cout << "SEMICOLON\n";
-  yylval = new Token(TokType::SEMICOLON, yytext);
+  yylval = new Tokens::Token(Tokens::TokType::SEMICOLON, yytext);
 }
 [ \t\n]+ {
   /* Ignore whitespace */ 
