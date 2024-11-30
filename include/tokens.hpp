@@ -37,6 +37,7 @@ namespace Tokens {
     std::string metadata;
     Token(TokType type, std::string metadata);
     Token(TokType type);
+    Token() = default;
   };
 
 }

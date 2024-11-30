@@ -9,8 +9,7 @@
 
 using namespace Tokens;
 
-FlexLexer* lexer = nullptr;
-extern Tokens::Token* yylval;
+int yylex(Tokens::Token*& yylval);
 
 std::map<std::string, Tokens::TokType> keywords = {
   {"if", Tokens::TokType::IF},
@@ -21,6 +20,8 @@ std::map<std::string, Tokens::TokType> keywords = {
 
 %option c++
 %option noyywrap
+%option pure
+%option extra="Tokens::Token*& yylval"
 
 %%
 
@@ -130,9 +131,10 @@ int main(int argc, char** argv) {
   }
 
   // Create a lexer object
-  lexer = new yyFlexLexer(in);
+  FlexLexer* lexer = new yyFlexLexer(in);
   // Call the lexer
-  while(lexer->yylex() != 0) {
+  Tokens::Token* yylval = new Tokens::Token();
+  while(lexer->yylex(yylval)) {
   }
 
   delete lexer;
