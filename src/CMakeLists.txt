@@ -17,7 +17,7 @@ add_custom_command(
   COMMAND ${FLEX_EXECUTABLE} --c++ -o ${FLEX_OUTPUT} ${FLEX_INPUT}
 )
 
-set(SOURCES ${BISON_OUTPUT} ${FLEX_OUTPUT} ${CMAKE_SOURCE_DIR}/src/tokens.cpp)
+set(SOURCES ${BISON_OUTPUT} ${FLEX_OUTPUT} ${CMAKE_SOURCE_DIR}/src/tokens.cpp ${CMAKE_SOURCE_DIR}/src/main.cpp)
 
 add_executable(lexer ${SOURCES})
 target_link_libraries(lexer PUBLIC fl)
