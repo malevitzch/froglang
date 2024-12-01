@@ -1,23 +1,20 @@
-%define api.value.type {Token*}
-%define api.parser.class {Parser}
+%define api.value.type {Tokens::Token}
 //%define api.pure full
 //%define parse.assert
 //%define api.header.include {"tokens.hpp"}
 %language "c++"
+%parse-param {FrogLexer &lexer}
 
 %code requires {
+    struct Token;
     #include "tokens.hpp"
-    struct Token; // Forward declaration
-    class yyFlexLexer;
-    int yylex(Token** yylval);
-    //int yylex(Token*& yylval, yyFlexLexer& lexer);
+    #include "froglexer.hpp"
 }
 %code {
-    #include <iostream>
+    #define yylex lexer.yylex
 }
 
 %{
-#include "tokens.hpp"
 %}
 
 %token NUMBER
@@ -29,3 +26,8 @@ program:
 ;
 
 %%
+
+void yy::parser::error(const std::string &message)
+{
+    std::cerr << "Error: " << message << std::endl;
+}
