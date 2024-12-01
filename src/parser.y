@@ -21,7 +21,7 @@
 
 %%
 program:
-    | NUMBER
+    | NUMBER {std::cout<<"WORKS";}
     ;
 ;
 

@@ -3,6 +3,7 @@
 #include <fstream>
 #include "froglexer.hpp"
 #include "tokens.hpp"
+#include "parser.hpp"
 void lex_file(std::string filename) {
   std::shared_ptr<std::ifstream> in = std::make_shared<std::ifstream>(std::ifstream(filename));
   if(!in->is_open()) {
@@ -31,8 +32,10 @@ int main(int argc, char** argv) {
   FrogLexer lexer(&file);
   // Call the lexer
   Tokens::Token *yylval = new Tokens::Token();
-  while(lexer.yylex(yylval)) {
-  }
+  yy::parser parser(lexer);
+  parser();
+  /*while(lexer.yylex(yylval)) {
+  }*/
 
   return 0;
 }

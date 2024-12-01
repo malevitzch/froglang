@@ -38,6 +38,7 @@ std::map<std::string, Tokens::TokType> keywords = {
 [0-9]+ {
   std::cout << "NUMBER(" << yytext << ")\n";
   *yylval = Tokens::Token(Tokens::TokType::NUMBER, yytext);
+  return yy::parser::token::NUMBER;
 }
 "->" {
   std::cout << "ARROW\n";
