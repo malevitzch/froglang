@@ -58,6 +58,7 @@ std::map<std::string, Tokens::TokType> keywords = {
 "*" {
   std::cout << "STAR\n";
   *yylval = Tokens::Token(Tokens::TokType::STAR, yytext);
+  return yy::parser::token::STAR;
 }
 "/" {
   std::cout << "SLASH\n";

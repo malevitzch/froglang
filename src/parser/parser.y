@@ -20,6 +20,7 @@
 %token PLUS
 
 %left PLUS
+%left STAR
 
 %%
 program: number {std::cout<<"FINISHED\n";}
@@ -27,6 +28,7 @@ program: number {std::cout<<"FINISHED\n";}
 
 number: NUMBER {std::cout<<"Converted\n";}
     | number PLUS number {std::cout<<"Added\n";}
+    | number STAR number {std::cout<<"Multiplied\n";}
 %%
 
 void yy::parser::error(const std::string &message)
