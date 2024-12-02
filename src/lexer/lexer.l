@@ -29,10 +29,12 @@ std::map<std::string, Tokens::TokType> keywords = {
   if(keywords.contains(yytext)) {
     std::cout << "Keyword : [" << yytext << "]\n";
     *yylval = Tokens::Token(keywords[yytext]);
+    //TODO: return the right token here
   }
   else {
     std::cout << "IDENTIFIER(" << yytext << ")\n";
     *yylval = Tokens::Token(Tokens::TokType::IDENTIFIER, yytext);
+    return yy::parser::token::IDENTIFIER;
   }
 }
 [0-9]+ {
@@ -47,6 +49,7 @@ std::map<std::string, Tokens::TokType> keywords = {
 "+" { 
   std::cout << "PLUS\n";
   *yylval = Tokens::Token(Tokens::TokType::PLUS, yytext);
+  return yy::parser::token::PLUS;
 }
 "-" {
   std::cout << "MINUS\n"; 

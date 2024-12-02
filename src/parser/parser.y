@@ -1,12 +1,9 @@
+
 %define api.value.type {Tokens::Token}
-//%define api.pure full
-//%define parse.assert
-//%define api.header.include {"tokens.hpp"}
 %language "c++"
 %parse-param {FrogLexer &lexer}
 
 %code requires {
-    struct Token;
     #include "tokens.hpp"
     #include "froglexer.hpp"
 }
@@ -15,16 +12,21 @@
 }
 
 %{
-%}
 
+%}
+//TODO: finish inputting tokens
 %token NUMBER
+%token IDENTIFIER
+%token PLUS
+
+%left PLUS
 
 %%
-program:
-    | NUMBER {std::cout<<"WORKS";}
+program: number {std::cout<<"FINISHED\n";}
     ;
-;
 
+number: NUMBER {std::cout<<"Converted\n";}
+    | number PLUS number {std::cout<<"Added\n";}
 %%
 
 void yy::parser::error(const std::string &message)
