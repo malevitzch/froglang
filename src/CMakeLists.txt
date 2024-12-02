@@ -1,4 +1,4 @@
-set(BISON_INPUT ${CMAKE_SOURCE_DIR}/src/parser.y)
+set(BISON_INPUT ${CMAKE_SOURCE_DIR}/src/parser/parser.y)
 set(BISON_OUTPUT ${CMAKE_BINARY_DIR}/parser.cpp)
 set(BISON_HEADER ${CMAKE_BINARY_DIR}/parser.hpp)
 
@@ -8,7 +8,7 @@ add_custom_command(
     MAIN_DEPENDENCY ${BISON_INPUT}
 )
 
-set(FLEX_INPUT ${CMAKE_SOURCE_DIR}/src/lexer.l)
+set(FLEX_INPUT ${CMAKE_SOURCE_DIR}/src/lexer/lexer.l)
 set(FLEX_OUTPUT ${CMAKE_BINARY_DIR}/lex.yy.cpp)
 
 add_custom_command(
@@ -17,7 +17,7 @@ add_custom_command(
   COMMAND ${FLEX_EXECUTABLE} --c++ -o ${FLEX_OUTPUT} ${FLEX_INPUT}
 )
 
-set(SOURCES ${BISON_OUTPUT} ${FLEX_OUTPUT} ${CMAKE_SOURCE_DIR}/src/tokens.cpp ${CMAKE_SOURCE_DIR}/src/main.cpp)
+set(SOURCES ${BISON_OUTPUT} ${FLEX_OUTPUT} ${CMAKE_SOURCE_DIR}/src/tokens/tokens.cpp ${CMAKE_SOURCE_DIR}/src/main.cpp)
 
 add_executable(lexer ${SOURCES})
 target_link_libraries(lexer PUBLIC fl)
