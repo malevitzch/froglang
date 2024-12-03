@@ -95,6 +95,7 @@ std::map<std::string, Tokens::TokType> keywords = {
 ";" {
   std::cout << "SEMICOLON\n";
   *yylval = Tokens::Token(Tokens::TokType::SEMICOLON, yytext);
+  return yy::parser::token::SEMICOLON;
 }
 [ \t\n]+ {
   /* Ignore whitespace */ 

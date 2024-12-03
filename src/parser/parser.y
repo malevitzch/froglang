@@ -18,14 +18,23 @@
 %token NUMBER
 %token IDENTIFIER
 %token PLUS
+%token LBRACE
+%token RBRACE
+%token SEMICOLON
 
 %left PLUS
 %left STAR
 
 %%
-program: number {std::cout<<"FINISHED\n";}
+block: statements {std::cout<<"FINISHED\n";}
     ;
-
+statements: {std::cout<<"CONJURED STATEMENTS\n";}
+    | statement statements {std::cout<<"combined\n";}
+    ;
+statement: expression SEMICOLON {std::cout<<"STATEMENT\n";}
+    ;
+expression: number {std::cout<<"EXPR\n";}
+    ;
 number: NUMBER {std::cout<<"Converted\n";}
     | number PLUS number {std::cout<<"Added\n";}
     | number STAR number {std::cout<<"Multiplied\n";}
