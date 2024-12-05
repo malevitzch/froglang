@@ -26,7 +26,7 @@
 %left STAR
 
 %%
-block: statements {std::cout<<"FINISHED\n";}
+block: LBRACE statements RBRACE {std::cout<<"FINISHED\n";}
     ;
 statements: {std::cout<<"CONJURED STATEMENTS\n";}
     | statement statements {std::cout<<"combined\n";}

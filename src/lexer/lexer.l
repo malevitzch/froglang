@@ -79,10 +79,12 @@ std::map<std::string, Tokens::TokType> keywords = {
 "{" {
   std::cout << "LBRACE\n";
   *yylval = Tokens::Token(Tokens::TokType::LBRACE, yytext);
+  return yy::parser::token::LBRACE;
 }
 "}" {
   std::cout << "RBRACE\n"; 
   *yylval = Tokens::Token(Tokens::TokType::RBRACE, yytext);
+  return yy::parser::token::RBRACE;
 }
 "," {
   std::cout << "COMMA\n";
