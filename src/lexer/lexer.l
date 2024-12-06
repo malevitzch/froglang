@@ -54,6 +54,7 @@ std::map<std::string, Tokens::TokType> keywords = {
 "-" {
   std::cout << "MINUS\n"; 
   *yylval = Tokens::Token(Tokens::TokType::MINUS, yytext);
+  return yy::parser::token::MINUS;
 }
 "*" {
   std::cout << "STAR\n";
@@ -63,6 +64,7 @@ std::map<std::string, Tokens::TokType> keywords = {
 "/" {
   std::cout << "SLASH\n";
   *yylval = Tokens::Token(Tokens::TokType::SLASH, yytext);
+  return yy::parser::token::SLASH;
 }
 "=" {
   std::cout << "ASSIGNMENT\n";
