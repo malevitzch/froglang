@@ -14,6 +14,7 @@ std::map<std::string, Tokens::TokType> keywords = {
   {"if", Tokens::TokType::IF},
   {"loop", Tokens::TokType::LOOP},
   {"return", Tokens::TokType::RETURN},
+  {"function", Tokens::TokType::FUNCTION},
 };
 #undef  YY_DECL
 #define YY_DECL int FrogLexer::yylex(Tokens::Token *const yylval)
@@ -73,10 +74,12 @@ std::map<std::string, Tokens::TokType> keywords = {
 "(" {
   std::cout << "LPAREN\n"; 
   *yylval = Tokens::Token(Tokens::TokType::LPAREN, yytext);
+  return yy::parser::token::LPAREN;
 }
 ")" {
   std::cout << "RPAREN\n"; 
   *yylval = Tokens::Token(Tokens::TokType::RPAREN, yytext);
+  return yy::parser::token::RPAREN;
 }
 "{" {
   std::cout << "LBRACE\n";

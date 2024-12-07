@@ -22,6 +22,7 @@ namespace Tokens {
     SEMICOLON,
 
     RETURN,
+    FUNCTION,
 
     IF,
     ELSE,

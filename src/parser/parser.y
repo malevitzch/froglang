@@ -23,6 +23,11 @@
 %token STAR
 %token SLASH
 
+%token FUNCTION
+
+%token LPAREN
+%token RPAREN
+
 %token LBRACE
 %token RBRACE
 %token SEMICOLON
@@ -31,9 +36,19 @@
 %left STAR SLASH
 
 %%
-block: LBRACE statements RBRACE {std::cout<<"FINISHED\n";}
+program: global_obj YYEOF {std::cout<<"FINISHED\n";}
     ;
-statements: {std::cout<<"CONJURED STATEMENTS\n";}
+global_obj: function {std::cout<<"DECLARATION\n";}
+    ;
+function: function_declaration block {std::cout<<"FUNC";}
+    ;
+arglist: LPAREN RPAREN {std::cout<<"FUNCTION ARGS\n";}
+    ;
+function_declaration: FUNCTION arglist {std::cout<<"DECLARED\n";}
+    ;
+block: LBRACE statements RBRACE {std::cout<<"BLOCK\n";}
+    ;
+statements: /* empty */
     | statement statements {std::cout<<"combined\n";}
     ;
 statement: expression SEMICOLON {std::cout<<"STATEMENT\n";}
@@ -45,6 +60,7 @@ number: NUMBER {std::cout<<"Converted\n";}
     | number MINUS number {std::cout<<"Subtracted\n";}
     | number STAR number {std::cout<<"Multiplied\n";}
     | number SLASH number {std::cout<<"Divided\n";}
+    ;
 %%
 
 void yy::parser::error(const std::string &message)
