@@ -31,6 +31,7 @@ std::map<std::string, Tokens::TokType> keywords = {
     std::cout << "Keyword : [" << yytext << "]\n";
     *yylval = Tokens::Token(keywords[yytext]);
     //TODO: return the right token here
+    if(yylval->type == Tokens::TokType::FUNCTION) return yy::parser::token::FUNCTION;
   }
   else {
     std::cout << "IDENTIFIER(" << yytext << ")\n";

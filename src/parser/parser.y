@@ -2,6 +2,7 @@
 %define api.value.type {Tokens::Token}
 %language "c++"
 %parse-param {FrogLexer &lexer}
+%define parse.error verbose
 
 %code requires {
     #include "tokens.hpp"
@@ -41,14 +42,14 @@ program: global_obj {std::cout<<"FINISHED\n";}
 
 global_obj: function {std::cout<<"DECLARATION\n";}
     ;
-function: function_declaration block {std::cout<<"FUNC";}
+function: function_declaration block {std::cout<<"FUNC\n";}
     ;
 function_declaration: FUNCTION arglist {std::cout<<"DECLARED\n";}
     ;
 
 block: LBRACE statements RBRACE {std::cout<<"BLOCK\n";}
     ;
-statements: /* empty */ {std::cout<<"CONJURED";}
+statements: /* empty */ {std::cout<<"CONJURED STATEMENTS\n";}
     | statement statements {std::cout<<"combined\n";}
     ;
 statement: expression SEMICOLON {std::cout<<"STATEMENT\n";}
