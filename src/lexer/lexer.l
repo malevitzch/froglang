@@ -10,11 +10,11 @@
 
 using namespace Tokens;
 
-std::map<std::string, Tokens::TokType> keywords = {
-  {"if", Tokens::TokType::IF},
-  {"loop", Tokens::TokType::LOOP},
-  {"return", Tokens::TokType::RETURN},
-  {"function", Tokens::TokType::FUNCTION},
+std::map<std::string, std::pair<Tokens::TokType, int> > keywords = {
+  //{"if", Tokens::TokType::IF},
+  //{"loop", Tokens::TokType::LOOP},
+  //{"return", Tokens::TokType::RETURN},
+  {"function", {Tokens::TokType::FUNCTION, yy::parser::token::FUNCTION}},
 };
 #undef  YY_DECL
 #define YY_DECL int FrogLexer::yylex(Tokens::Token *const yylval)
@@ -28,10 +28,11 @@ std::map<std::string, Tokens::TokType> keywords = {
 
 [a-zA-Z_]+[a-zA-Z_0-9]* {
   if(keywords.contains(yytext)) {
+    auto&[type, yy_type] = keywords[yytext];
     std::cout << "Keyword : [" << yytext << "]\n";
-    *yylval = Tokens::Token(keywords[yytext]);
-    //TODO: return the right token here
-    if(yylval->type == Tokens::TokType::FUNCTION) return yy::parser::token::FUNCTION;
+    *yylval = type;
+    return yy_type;
+    //TODO: return the right token here 
   }
   else {
     std::cout << "IDENTIFIER(" << yytext << ")\n";
