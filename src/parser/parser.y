@@ -44,7 +44,7 @@ global_obj: function {std::cout<<"DECLARATION\n";}
     ;
 function: function_declaration block {std::cout<<"FUNC\n";}
     ;
-function_declaration: FUNCTION arglist {std::cout<<"DECLARED\n";}
+function_declaration: FUNCTION IDENTIFIER arglist {std::cout<<"DECLARED\n";}
     ;
 
 block: LBRACE statements RBRACE {std::cout<<"BLOCK\n";}
@@ -54,13 +54,11 @@ statements: /* empty */ {std::cout<<"CONJURED STATEMENTS\n";}
     ;
 statement: expression SEMICOLON {std::cout<<"STATEMENT\n";}
     ;
-expression: number {std::cout<<"EXPR\n";}
-    ;
-number: NUMBER {std::cout<<"Converted\n";}
-    | number PLUS number {std::cout<<"Added\n";}
-    | number MINUS number {std::cout<<"Subtracted\n";}
-    | number STAR number {std::cout<<"Multiplied\n";}
-    | number SLASH number {std::cout<<"Divided\n";}
+expression: NUMBER {std::cout<<"Converted\n";}
+    | expression PLUS expression {std::cout<<"Added\n";}
+    | expression MINUS expression {std::cout<<"Subtracted\n";}
+    | expression STAR expression {std::cout<<"Multiplied\n";}
+    | expression SLASH expression {std::cout<<"Divided\n";}
     ;
 arglist: LPAREN RPAREN {std::cout<<"FUNCTION ARGS\n";}
     ;

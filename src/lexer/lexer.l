@@ -24,6 +24,7 @@ std::map<std::string, std::pair<Tokens::TokType, int> > keywords = {
 %option noyywrap
 %option yyclass="FrogLexer"
 
+%x DECL
 %%
 
 [a-zA-Z_]+[a-zA-Z_0-9]* {
@@ -31,8 +32,7 @@ std::map<std::string, std::pair<Tokens::TokType, int> > keywords = {
     auto&[type, yy_type] = keywords[yytext];
     std::cout << "Keyword : [" << yytext << "]\n";
     *yylval = type;
-    return yy_type;
-    //TODO: return the right token here 
+    return yy_type; 
   }
   else {
     std::cout << "IDENTIFIER(" << yytext << ")\n";
