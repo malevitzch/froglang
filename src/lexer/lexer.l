@@ -105,10 +105,12 @@ std::map<std::string, Tokens::TokType> types = {
 "," {
   std::cout << "COMMA\n";
   *yylval = Tokens::Token(Tokens::TokType::COMMA, yytext);
+  return yy::parser::token::COMMA;
 }
 ":" {
   std::cout << "COLON\n";
   *yylval = Tokens::Token(Tokens::TokType::COLON, yytext);
+  return yy::parser::token::COLON;
 }
 ";" {
   std::cout << "SEMICOLON\n";

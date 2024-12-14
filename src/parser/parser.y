@@ -35,6 +35,8 @@
 %token LBRACE
 %token RBRACE
 %token SEMICOLON
+%token COMMA
+%token COLON
 
 %left PLUS MINUS
 %left STAR SLASH
@@ -45,25 +47,37 @@ program: global_obj {std::cout<<"FINISHED\n";}
 
 global_obj: function {std::cout<<"DECLARATION\n";}
     ;
+
 function: function_declaration block {std::cout<<"FUNC\n";}
     ;
+
 function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {std::cout<<"DECLARED\n";}
     ;
 
 block: LBRACE statements RBRACE {std::cout<<"BLOCK\n";}
     ;
+
 statements: /* empty */ {std::cout<<"CONJURED STATEMENTS\n";}
     | statement statements {std::cout<<"combined\n";}
     ;
+
 statement: expression SEMICOLON {std::cout<<"STATEMENT\n";}
     ;
+
 expression: NUMBER {std::cout<<"Converted\n";}
     | expression PLUS expression {std::cout<<"Added\n";}
     | expression MINUS expression {std::cout<<"Subtracted\n";}
     | expression STAR expression {std::cout<<"Multiplied\n";}
     | expression SLASH expression {std::cout<<"Divided\n";}
     ;
-arglist: LPAREN RPAREN {std::cout<<"FUNCTION ARGS\n";}
+
+arg: IDENTIFIER COLON TYPE_ID;
+
+args:  /*empty*/ {std::cout<<"CONJURED ARGS\n";}
+    | arg;
+    | arg COMMA args;
+
+arglist: LPAREN args RPAREN {std::cout<<"FUNCTION ARGS\n";}
     ;
 %%
 
