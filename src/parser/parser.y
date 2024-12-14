@@ -74,8 +74,9 @@ expression: NUMBER {std::cout<<"Converted\n";}
 arg: IDENTIFIER COLON TYPE_ID;
 
 args:  /*empty*/ {std::cout<<"CONJURED ARGS\n";}
-    | arg;
-    | arg COMMA args;
+    | arg
+    | arg COMMA args
+    ;
 
 arglist: LPAREN args RPAREN {std::cout<<"FUNCTION ARGS\n";}
     ;
