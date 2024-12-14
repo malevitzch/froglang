@@ -3,6 +3,7 @@
 namespace Tokens {
   enum class TokType {
 
+    TYPE_ID,
     IDENTIFIER,
     NUMBER,
 

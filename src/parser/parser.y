@@ -18,6 +18,9 @@
 //TODO: finish inputting tokens
 %token NUMBER
 %token IDENTIFIER
+%token TYPE_ID
+
+%token ARROW
 
 %token PLUS
 %token MINUS
@@ -44,7 +47,7 @@ global_obj: function {std::cout<<"DECLARATION\n";}
     ;
 function: function_declaration block {std::cout<<"FUNC\n";}
     ;
-function_declaration: FUNCTION IDENTIFIER arglist {std::cout<<"DECLARED\n";}
+function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {std::cout<<"DECLARED\n";}
     ;
 
 block: LBRACE statements RBRACE {std::cout<<"BLOCK\n";}

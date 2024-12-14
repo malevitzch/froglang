@@ -16,6 +16,10 @@ std::map<std::string, std::pair<Tokens::TokType, int> > keywords = {
   //{"return", Tokens::TokType::RETURN},
   {"function", {Tokens::TokType::FUNCTION, yy::parser::token::FUNCTION}},
 };
+
+std::map<std::string, Tokens::TokType> types = {
+  {"int", Tokens::TokType::FUNCTION},
+};
 #undef  YY_DECL
 #define YY_DECL int FrogLexer::yylex(Tokens::Token *const yylval)
 %}
@@ -31,8 +35,12 @@ std::map<std::string, std::pair<Tokens::TokType, int> > keywords = {
   if(keywords.contains(yytext)) {
     auto&[type, yy_type] = keywords[yytext];
     std::cout << "Keyword : [" << yytext << "]\n";
-    *yylval = type;
+    *yylval = Tokens::Token(type, yytext);
     return yy_type; 
+  }
+  else if(types.contains(yytext)) {
+    *yylval = Tokens::Token(Tokens::TokType::TYPE_ID, yytext);
+    return yy::parser::token::TYPE_ID;
   }
   else {
     std::cout << "IDENTIFIER(" << yytext << ")\n";
@@ -48,6 +56,7 @@ std::map<std::string, std::pair<Tokens::TokType, int> > keywords = {
 "->" {
   std::cout << "ARROW\n";
   *yylval = Tokens::Token(Tokens::TokType::ARROW, yytext);
+  return yy::parser::token::ARROW;
 }
 "+" { 
   std::cout << "PLUS\n";
