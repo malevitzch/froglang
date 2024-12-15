@@ -30,6 +30,7 @@
 %token ASSIGNMENT
 
 %token FUNCTION
+%token RETURN
 
 %token LPAREN
 %token RPAREN
@@ -44,7 +45,11 @@
 %left STAR SLASH
 
 %%
-program: global_obj {std::cout<<"FINISHED\n";}
+program: global_objs {std::cout<<"FINISHED\n";}
+    ;
+
+global_objs: global_obj
+    | global_obj global_objs
     ;
 
 global_obj: function {std::cout<<"DECLARATION\n";}
@@ -66,10 +71,12 @@ statements: /* empty */ {std::cout<<"CONJURED STATEMENTS\n";}
 statement: expression SEMICOLON {std::cout<<"STATEMENT\n";}
     | declaration SEMICOLON {}
     | declaration ASSIGNMENT expression SEMICOLON {}
+    | RETURN expression SEMICOLON {std::cout<<"RETURNED\n";}
     ;
 
 declaration: IDENTIFIER COLON TYPE_ID {std::cout<<"DECLARED\n";}
     ;
+
 expression: NUMBER {std::cout<<"Converted\n";}
     | IDENTIFIER {}
     | expression PLUS expression {std::cout<<"Added\n";}
