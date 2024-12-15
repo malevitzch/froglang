@@ -5,20 +5,22 @@
 
 #include <iostream>
 #include <fstream>
-#include <map>
+#include <unordered_map>
+#include <unordered_set>
 #include <memory>
 
 using namespace Tokens;
 
-std::map<std::string, std::pair<Tokens::TokType, int> > keywords = {
+const std::unordered_map<std::string, std::pair<Tokens::TokType, int> > keywords = {
   //{"if", Tokens::TokType::IF},
   //{"loop", Tokens::TokType::LOOP},
   //{"return", Tokens::TokType::RETURN},
   {"function", {Tokens::TokType::FUNCTION, yy::parser::token::FUNCTION}},
 };
 
-std::map<std::string, Tokens::TokType> types = {
-  {"int", Tokens::TokType::FUNCTION},
+std::unordered_set<std::string> types = {
+  "int",
+  "float",
 };
 #undef  YY_DECL
 #define YY_DECL int FrogLexer::yylex(Tokens::Token *const yylval)
@@ -39,6 +41,7 @@ std::map<std::string, Tokens::TokType> types = {
     return yy_type; 
   }
   else if(types.contains(yytext)) {
+    std::cout << "TYPE_ID(" << yytext << ")\n";
     *yylval = Tokens::Token(Tokens::TokType::TYPE_ID, yytext);
     return yy::parser::token::TYPE_ID;
   }
