@@ -78,7 +78,8 @@ declaration: IDENTIFIER COLON TYPE_ID {std::cout<<"DECLARED\n";}
     ;
 
 expression: NUMBER {std::cout<<"Converted\n";}
-    | IDENTIFIER 
+    | IDENTIFIER
+    | LPAREN expression RPAREN
     | expression PLUS expression {std::cout<<"Added\n";}
     | expression MINUS expression {std::cout<<"Subtracted\n";}
     | expression STAR expression {std::cout<<"Multiplied\n";}
