@@ -1,6 +1,6 @@
 # flex-lr1-llvm
 Toolchain experiments
 # todo
-- Make the lexer actually generate tokens rather than just print statements
-- Add a parser with Bison
+- Move the lexer/parser outputs to a stream of choice rather than printing them to cout
+- Make parser build an AST
 - Generate code with llvm
