@@ -84,6 +84,7 @@ std::unordered_set<std::string> types = {
 "=" {
   std::cout << "ASSIGNMENT\n";
   *yylval = Tokens::Token(Tokens::TokType::ASSIGNMENT, yytext);
+  return yy::parser::token::ASSIGNMENT;
 }
 "(" {
   std::cout << "LPAREN\n"; 

@@ -27,6 +27,8 @@
 %token STAR
 %token SLASH
 
+%token ASSIGNMENT
+
 %token FUNCTION
 
 %token LPAREN
@@ -62,20 +64,23 @@ statements: /* empty */ {std::cout<<"CONJURED STATEMENTS\n";}
     ;
 
 statement: expression SEMICOLON {std::cout<<"STATEMENT\n";}
+    | declaration SEMICOLON {}
+    | declaration ASSIGNMENT expression SEMICOLON {}
     ;
 
+declaration: IDENTIFIER COLON TYPE_ID {std::cout<<"DECLARED\n";}
+    ;
 expression: NUMBER {std::cout<<"Converted\n";}
+    | IDENTIFIER {}
     | expression PLUS expression {std::cout<<"Added\n";}
     | expression MINUS expression {std::cout<<"Subtracted\n";}
     | expression STAR expression {std::cout<<"Multiplied\n";}
     | expression SLASH expression {std::cout<<"Divided\n";}
     ;
 
-arg: IDENTIFIER COLON TYPE_ID;
-
 args:  /*empty*/ {std::cout<<"CONJURED ARGS\n";}
-    | arg
-    | arg COMMA args
+    | declaration
+    | declaration COMMA args
     ;
 
 arglist: LPAREN args RPAREN {std::cout<<"FUNCTION ARGS\n";}
