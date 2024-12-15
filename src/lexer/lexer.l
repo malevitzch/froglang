@@ -35,7 +35,7 @@ std::unordered_set<std::string> types = {
 
 [a-zA-Z_]+[a-zA-Z_0-9]* {
   if(keywords.contains(yytext)) {
-    auto&[type, yy_type] = keywords[yytext];
+    auto&[type, yy_type] = keywords.at(yytext);
     std::cout << "Keyword : [" << yytext << "]\n";
     *yylval = Tokens::Token(type, yytext);
     return yy_type; 
