@@ -77,8 +77,14 @@ statement: expression SEMICOLON {std::cout<<"STATEMENT\n";}
 declaration: IDENTIFIER COLON TYPE_ID {std::cout<<"DECLARED\n";}
     ;
 
+call_arglist: /* empty */
+    | expression
+    | expression COMMA call_arglist
+    ;
+
 expression: NUMBER {std::cout<<"Converted\n";}
     | IDENTIFIER
+    | IDENTIFIER LPAREN call_arglist RPAREN
     | LPAREN expression RPAREN
     | expression PLUS expression {std::cout<<"Added\n";}
     | expression MINUS expression {std::cout<<"Subtracted\n";}
