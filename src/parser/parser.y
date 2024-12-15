@@ -58,18 +58,18 @@ global_obj: function {std::cout<<"DECLARATION\n";}
 function: function_declaration block {std::cout<<"FUNC\n";}
     ;
 
-function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {std::cout<<"DECLARED\n";}
+function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {std::cout<<"DECLARED dunction\n";}
     ;
 
 block: LBRACE statements RBRACE {std::cout<<"BLOCK\n";}
     ;
 
-statements: /* empty */ {std::cout<<"CONJURED STATEMENTS\n";}
+statements: /* empty */
     | statement statements {std::cout<<"combined\n";}
     ;
 
 statement: expression SEMICOLON {std::cout<<"STATEMENT\n";}
-    | declaration SEMICOLON {}
+    | declaration SEMICOLON 
     | declaration ASSIGNMENT expression SEMICOLON {}
     | RETURN expression SEMICOLON {std::cout<<"RETURNED\n";}
     ;
@@ -78,14 +78,14 @@ declaration: IDENTIFIER COLON TYPE_ID {std::cout<<"DECLARED\n";}
     ;
 
 expression: NUMBER {std::cout<<"Converted\n";}
-    | IDENTIFIER {}
+    | IDENTIFIER 
     | expression PLUS expression {std::cout<<"Added\n";}
     | expression MINUS expression {std::cout<<"Subtracted\n";}
     | expression STAR expression {std::cout<<"Multiplied\n";}
     | expression SLASH expression {std::cout<<"Divided\n";}
     ;
 
-args:  /*empty*/ {std::cout<<"CONJURED ARGS\n";}
+args:  /*empty*/
     | declaration
     | declaration COMMA args
     ;
