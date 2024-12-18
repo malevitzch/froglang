@@ -1,12 +1,17 @@
 
-%define api.value.type {Tokens::Token}
 %language "c++"
 %parse-param {FrogLexer &lexer}
 %define parse.error verbose
 
+%union {
+    Node* node;
+    Tokens::Token* token;
+}
+
 %code requires {
     #include "tokens.hpp"
     #include "froglexer.hpp"
+    #include "ast/node.hpp"
 }
 %code {
     #define yylex lexer.yylex
@@ -17,7 +22,7 @@
 %}
 //TODO: finish inputting tokens
 %token NUMBER
-%token IDENTIFIER
+%token <token> IDENTIFIER
 %token TYPE_ID
 
 %token ARROW
@@ -29,7 +34,7 @@
 
 %token ASSIGNMENT
 
-%token FUNCTION
+%token <token> FUNCTION
 %token RETURN
 
 %token LPAREN
@@ -38,11 +43,13 @@
 %token LBRACE
 %token RBRACE
 %token SEMICOLON
-%token COMMA
-%token COLON
+%token <token> COMMA
+%token <token> COLON
 
 %left PLUS MINUS
 %left STAR SLASH
+
+%type <node> function_declaration 
 
 %%
 program: global_objs {std::cout<<"FINISHED\n";}
@@ -58,7 +65,7 @@ global_obj: function {std::cout<<"DECLARATION\n";}
 function: function_declaration block {std::cout<<"FUNC\n";}
     ;
 
-function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {std::cout<<"DECLARED dunction\n";}
+function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {std::cout<<"DECLARED function("<<$2.metadata <<")\n";}
     ;
 
 block: LBRACE statements RBRACE {std::cout<<"BLOCK\n";}
