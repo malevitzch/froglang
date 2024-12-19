@@ -1,7 +1,9 @@
 
 %language "c++"
 %define parse.error verbose
- 
+
+%define api.parser.class {Parser} 
+
 %lex-param { yyFlexLexer& lexer }
 %parse-param { yyFlexLexer& lexer }
 
@@ -68,7 +70,7 @@ global_obj: function {std::cout<<"DECLARATION\n";}
 function: function_declaration block {std::cout<<"FUNC\n";}
     ;
 
-function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {std::cout<<"DECLARED function("<<$2.metadata <<")\n";}
+function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {std::cout<<"DECLARED function("<<")\n";}
     ;
 
 block: LBRACE statements RBRACE {std::cout<<"BLOCK\n";}
