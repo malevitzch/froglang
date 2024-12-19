@@ -1,7 +1,9 @@
 
 %language "c++"
-%parse-param {FrogLexer &lexer}
 %define parse.error verbose
+ 
+%lex-param { yyFlexLexer& lexer }
+%parse-param { yyFlexLexer& lexer }
 
 %union {
     Node* node;
@@ -9,9 +11,10 @@
 }
 
 %code requires {
+    class Node;
     #include "tokens.hpp"
-    #include "froglexer.hpp"
-    #include "ast/node.hpp"
+    #include <FlexLexer.h>
+    //#include "ast/node.hpp"
 }
 %code {
     #define yylex lexer.yylex

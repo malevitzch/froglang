@@ -1,7 +1,6 @@
 %{
 #include "tokens.hpp"
 #include "parser.hpp"
-#include "froglexer.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -22,13 +21,11 @@ std::unordered_set<std::string> types = {
   "int",
   "float",
 };
-#undef  YY_DECL
-#define YY_DECL int FrogLexer::yylex(yy::parser::value_type *const yylval)
 %}
 
 %option c++
 %option noyywrap
-%option yyclass="FrogLexer"
+%option yyclass="yyFlexLexer"
 
 %x DECL
 %%
@@ -37,88 +34,88 @@ std::unordered_set<std::string> types = {
   if(keywords.contains(yytext)) {
     auto&[type, yy_type] = keywords.at(yytext);
     std::cout << "Keyword : [" << yytext << "]\n";
-    *yylval->token = new Tokens::Token(type, yytext);
+    yylval.token = new Tokens::Token(type, yytext);
     return yy_type; 
   }
   else if(types.contains(yytext)) {
     std::cout << "TYPE_ID(" << yytext << ")\n";
-    *yylval->token = new Tokens::Token(Tokens::TokType::TYPE_ID, yytext);
+    yylval.token = new Tokens::Token(Tokens::TokType::TYPE_ID, yytext);
     return yy::parser::token::TYPE_ID;
   }
   else {
     std::cout << "IDENTIFIER(" << yytext << ")\n";
-    *yylval->token = new Tokens::Token(Tokens::TokType::IDENTIFIER, yytext);
+    yylval.token = new Tokens::Token(Tokens::TokType::IDENTIFIER, yytext);
     return yy::parser::token::IDENTIFIER;
   }
 }
 [0-9]+ {
   std::cout << "NUMBER(" << yytext << ")\n";
-  *yylval->token = new Tokens::Token(Tokens::TokType::NUMBER, yytext);
+  yylval.token = new Tokens::Token(Tokens::TokType::NUMBER, yytext);
   return yy::parser::token::NUMBER;
 }
 "->" {
   std::cout << "ARROW\n";
-  *yylval->token = new Tokens::Token(Tokens::TokType::ARROW, yytext);
+  yylval.token = new Tokens::Token(Tokens::TokType::ARROW, yytext);
   return yy::parser::token::ARROW;
 }
 "+" { 
   std::cout << "PLUS\n";
-  *yylval->token = new Tokens::Token(Tokens::TokType::PLUS, yytext);
+  yylval.token = new Tokens::Token(Tokens::TokType::PLUS, yytext);
   return yy::parser::token::PLUS;
 }
 "-" {
   std::cout << "MINUS\n"; 
-  *yylval->token = new Tokens::Token(Tokens::TokType::MINUS, yytext);
+  yylval.token = new Tokens::Token(Tokens::TokType::MINUS, yytext);
   return yy::parser::token::MINUS;
 }
 "*" {
   std::cout << "STAR\n";
-  *yylval->token = new Tokens::Token(Tokens::TokType::STAR, yytext);
+  yylval.token = new Tokens::Token(Tokens::TokType::STAR, yytext);
   return yy::parser::token::STAR;
 }
 "/" {
   std::cout << "SLASH\n";
-  *yylval->token = new Tokens::Token(Tokens::TokType::SLASH, yytext);
+  yylval.token = new Tokens::Token(Tokens::TokType::SLASH, yytext);
   return yy::parser::token::SLASH;
 }
 "=" {
   std::cout << "ASSIGNMENT\n";
-  *yylval->token = new Tokens::Token(Tokens::TokType::ASSIGNMENT, yytext);
+  yylval.token = new Tokens::Token(Tokens::TokType::ASSIGNMENT, yytext);
   return yy::parser::token::ASSIGNMENT;
 }
 "(" {
   std::cout << "LPAREN\n"; 
-  *yylval->token = new Tokens::Token(Tokens::TokType::LPAREN, yytext);
+  yylval.token = new Tokens::Token(Tokens::TokType::LPAREN, yytext);
   return yy::parser::token::LPAREN;
 }
 ")" {
   std::cout << "RPAREN\n"; 
-  *yylval->token = new Tokens::Token(Tokens::TokType::RPAREN, yytext);
+  yylval.token = new Tokens::Token(Tokens::TokType::RPAREN, yytext);
   return yy::parser::token::RPAREN;
 }
 "{" {
   std::cout << "LBRACE\n";
-  *yylval->token = new Tokens::Token(Tokens::TokType::LBRACE, yytext);
+  yylval.token = new Tokens::Token(Tokens::TokType::LBRACE, yytext);
   return yy::parser::token::LBRACE;
 }
 "}" {
   std::cout << "RBRACE\n"; 
-  *yylval->token = new Tokens::Token(Tokens::TokType::RBRACE, yytext);
+  yylval.token = new Tokens::Token(Tokens::TokType::RBRACE, yytext);
   return yy::parser::token::RBRACE;
 }
 "," {
   std::cout << "COMMA\n";
-  *yylval->token = new Tokens::Token(Tokens::TokType::COMMA, yytext);
+  yylval.token = new Tokens::Token(Tokens::TokType::COMMA, yytext);
   return yy::parser::token::COMMA;
 }
 ":" {
   std::cout << "COLON\n";
-  *yylval->token = new Tokens::Token(Tokens::TokType::COLON, yytext);
+  yylval.token = new Tokens::Token(Tokens::TokType::COLON, yytext);
   return yy::parser::token::COLON;
 }
 ";" {
   std::cout << "SEMICOLON\n";
-  *yylval->token = new Tokens::Token(Tokens::TokType::SEMICOLON, yytext);
+  yylval.token = new Tokens::Token(Tokens::TokType::SEMICOLON, yytext);
   return yy::parser::token::SEMICOLON;
 }
 [ \t\n]+ {

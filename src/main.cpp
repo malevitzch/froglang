@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <fstream>
-#include "froglexer.hpp"
+#include <FlexLexer.h>
 #include "tokens.hpp"
 #include "parser.hpp"
 void lex_file(std::string filename) {
@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
   }
 
   // Create a lexer object
-  FrogLexer lexer(&file);
+  yyFlexLexer lexer(&file);
   // Call the lexer
   Tokens::Token *yylval = new Tokens::Token();
   yy::parser parser(lexer);
