@@ -6,10 +6,11 @@
 #include <FlexLexer.h>
 #endif
 
+
 class FrogLexer : public yyFlexLexer
 {
 public:
-    int yylex(yy::parser::value_type *const yylval);
+    int yylex(value_type *const yylval);
     FrogLexer(std::istream* input)
         : yyFlexLexer(input) {}
 };

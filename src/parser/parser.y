@@ -2,10 +2,9 @@
 %language "c++"
 %define parse.error verbose
 
-%define api.parser.class {Parser} 
 
-%lex-param { yyFlexLexer& lexer }
-%parse-param { yyFlexLexer& lexer }
+%lex-param { FrogLexer& lexer }
+%parse-param { FrogLexer& lexer }
 
 %union {
     Node* node;

@@ -2,6 +2,8 @@
 #include "tokens.hpp"
 #include "parser.hpp"
 
+#include "froglexer.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
