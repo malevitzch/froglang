@@ -1,20 +1,14 @@
 
 %language "c++"
 %define parse.error verbose
+%define api.value.type {FrogTok}
 
-
-%lex-param { FrogLexer& lexer }
 %parse-param { FrogLexer& lexer }
 
-%union {
-    Node* node;
-    Tokens::Token* token;
-}
-
 %code requires {
-    class Node;
+    #include "froglexer.hpp"
     #include "tokens.hpp"
-    #include <FlexLexer.h>
+    
     //#include "ast/node.hpp"
 }
 %code {

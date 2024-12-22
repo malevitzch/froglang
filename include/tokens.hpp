@@ -41,5 +41,7 @@ namespace Tokens {
     Token(TokType type);
     Token() = default;
   };
-
 }
+union FrogTok {
+  Tokens::Token* token;
+};

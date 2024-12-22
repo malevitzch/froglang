@@ -29,11 +29,11 @@ int main(int argc, char** argv) {
   }
 
   // Create a lexer object
-  yyFlexLexer lexer(&file);
+  FrogLexer lexer(&file);
   // Call the lexer
   Tokens::Token *yylval = new Tokens::Token();
-  yy::parser parser(lexer);
-  parser();
+  yy::parser p(lexer);
+  p();
   /*while(lexer.yylex(yylval)) {
   }*/
 
