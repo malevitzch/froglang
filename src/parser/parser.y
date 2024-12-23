@@ -8,8 +8,6 @@
 %code requires {
     #include "froglexer.hpp"
     #include "tokens.hpp"
-    
-    //#include "ast/node.hpp"
 }
 %code {
     #define yylex lexer.yylex
@@ -63,7 +61,7 @@ global_obj: function {std::cout<<"DECLARATION\n";}
 function: function_declaration block {std::cout<<"FUNC\n";}
     ;
 
-function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {std::cout<<"DECLARED function("<<")\n";}
+function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {std::cout<<"DECLARED function("<<$2->metadata<<")\n";}
     ;
 
 block: LBRACE statements RBRACE {std::cout<<"BLOCK\n";}

@@ -1,5 +1,6 @@
 #pragma once 
 #include <string>
+#include "ast/node.hpp"
 namespace Tokens {
   enum class TokType {
 
@@ -44,4 +45,5 @@ namespace Tokens {
 }
 union FrogTok {
   Tokens::Token* token;
+  Node* node;
 };
