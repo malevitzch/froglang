@@ -45,7 +45,7 @@
 %left PLUS MINUS
 %left STAR SLASH
 
-%type <node> function_declaration 
+%type <node> expression
 
 %%
 program: global_objs {std::cout<<"FINISHED\n";}
@@ -88,7 +88,7 @@ call_arglist: /* empty */
 expression: NUMBER {std::cout<<"Converted\n";}
     | IDENTIFIER
     | IDENTIFIER LPAREN call_arglist RPAREN
-    | LPAREN expression RPAREN
+    | LPAREN expression RPAREN {$$ = $2;}
     | expression PLUS expression {std::cout<<"Added\n";}
     | expression MINUS expression {std::cout<<"Subtracted\n";}
     | expression STAR expression {std::cout<<"Multiplied\n";}
