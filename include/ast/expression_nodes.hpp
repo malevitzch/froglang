@@ -1,9 +1,13 @@
 #include "ast/node.hpp"
+namespace ast {
+  class ExprNode : public Node {
+  private:
+    std::string type;
+  public:
 
-class ExprNode : public Node {
-    
-};
+  };
 
-class OperatorNode : public ExprNode {
+  class BinaryOperator : public ExprNode {
 
-};
+  };
+}

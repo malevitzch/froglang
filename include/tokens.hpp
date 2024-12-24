@@ -45,5 +45,5 @@ namespace Tokens {
 }
 union FrogTok {
   Tokens::Token* token;
-  Node* node;
+  ast::Node* node;
 };
