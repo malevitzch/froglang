@@ -5,13 +5,11 @@ namespace ast {
   // Abstract class
   class Node {
   private:
-    std::string name = "Uninitialized Name";
   protected:
     Node() = default;
-    Node(std::string name);
   public:
     virtual llvm::Value* codegen() = 0;
-    std::string get_name();
+    virtual std::string get_name();
   };
 
   class GlobjectNode : public Node {

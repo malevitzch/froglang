@@ -1,15 +1,14 @@
 #include "ast/node.hpp"
 
 namespace ast {
-  Node::Node(std::string name) : name(name) {}
 
   std::string Node::get_name() {
-    return name;
+    return "Uninitialized Name";
   }
   llvm::Value* GlobjectNode::codegen() {
     //TODO: implement
   }
-  GlobjectNode::GlobjectNode() : Node("Global Object") {}
+  GlobjectNode::GlobjectNode() {}
 
 
   llvm::Value* ProgramNode::codegen() {
@@ -20,5 +19,5 @@ namespace ast {
     globjects.push_back(globject);
   }
 
-  ProgramNode::ProgramNode() : Node("Program Node") {}
+  ProgramNode::ProgramNode() {}
 }
