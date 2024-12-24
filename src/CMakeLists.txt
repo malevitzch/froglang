@@ -24,3 +24,6 @@ llvm_map_components_to_libnames(llvm_libs support core irreader)
 add_executable(lexer ${SOURCES})
 target_link_libraries(lexer PUBLIC fl)
 target_link_libraries(lexer PRIVATE ${llvm_libs})
+
+add_executable(compiler compiler.cpp)
+target_link_libraries(lexer PRIVATE ${llvm_libs})
