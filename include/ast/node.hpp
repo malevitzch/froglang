@@ -16,6 +16,7 @@ namespace ast {
   private:
   public:
     llvm::Value* codegen() override;
+    std::string get_name() override;
     GlobjectNode();
   };
 
@@ -24,6 +25,7 @@ namespace ast {
     std::vector<Node*> globjects;
   public:
     llvm::Value* codegen() override;
+    std::string get_name() override;
     void add_obj(GlobjectNode* globject);
     ProgramNode();
   };
