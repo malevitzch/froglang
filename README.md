@@ -3,5 +3,5 @@ Toolchain experiments
 # todo
 - Move the lexer/parser outputs to a stream of choice rather than printing them to cout
 - Make parser build an AST
-- Create a compiler executable for testing code generation
+- Figure out how llvm works
 - Generate code with llvm
