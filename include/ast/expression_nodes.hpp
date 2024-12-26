@@ -7,6 +7,7 @@ namespace ast {
     // TODO: type might eventually become something more complicated than a string
     std::string type;
   public:
+    virtual std::string get_name() override;
     ExprNode(std::string type);
   };
 
