@@ -12,7 +12,9 @@ namespace ast {
   };
 
   class BinaryOperator : public ExprNode {
-
+  private:
+    std::string operator_type;
+  public:
   };
 
   class IntegerConstant : public ExprNode {
