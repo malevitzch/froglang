@@ -4,23 +4,30 @@ namespace ast {
   
   class ExprNode : public Node {
   private:
-    // TODO: type might eventually become something more complicated than a string
+  protected:
+    // TODO: Type might eventually become something more complicated than a string
     std::string type;
   public:
     virtual std::string get_name() override;
+    virtual std::string get_type();
     ExprNode(std::string type);
+
+    //TODO: Decide whether or not this should stay. It's very practical but not very pure oop-wise
+    ExprNode() = default;
   };
 
   class BinaryOperator : public ExprNode {
   private:
     std::string operator_type;
   public:
+    BinaryOperator(std::string operator_type);
+    std::string get_type() override;
   };
 
   class IntegerConstant : public ExprNode {
   private:
     long long value;
-    // TODO: this might be replaced by an arbitrarily-large bit array
+    // TODO: This might be replaced by an arbitrarily-large bit array
     // so that we can have arbitrary size integers later
   public:
     IntegerConstant(std::string data, std::string type);
