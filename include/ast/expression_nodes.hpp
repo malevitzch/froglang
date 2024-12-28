@@ -19,9 +19,10 @@ namespace ast {
   class BinaryOperator : public ExprNode {
   private:
     std::string operator_type;
-  public:
+  public: 
     BinaryOperator(std::string operator_type);
-    std::string get_type() override;
+    virtual llvm::Value* codegen() override;
+    virtual std::string get_type() override;
   };
 
   class IntegerConstant : public ExprNode {
