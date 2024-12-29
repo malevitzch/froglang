@@ -28,4 +28,4 @@ target_link_libraries(lexer PRIVATE ${llvm_libs})
 set(COMPILER_SOURCES ${CMAKE_SOURCE_DIR}/src/ast/node.cpp ${CMAKE_SOURCE_DIR}/src/ast/expression_nodes.cpp)
 
 add_executable(compiler compiler.cpp)
-target_link_libraries(lexer PRIVATE ${llvm_libs})
+target_link_libraries(compiler PRIVATE ${llvm_libs})
