@@ -1,9 +1,9 @@
 #include "ast/node.hpp"
 
 namespace CompilerContext {
-  llvm::LLVMContext TheContext;
-  llvm::IRBuilder<> Builder(TheContext);
-  std::unique_ptr<llvm::Module> TheModule = std::make_unique<llvm::Module>("Program", TheContext);
+  std::unique_ptr<llvm::LLVMContext> TheContext = std::make_unique<llvm::LLVMContext>();
+  std::unique_ptr<llvm::IRBuilder<>> Builder;
+  std::unique_ptr<llvm::Module> TheModule = std::make_unique<llvm::Module>("Program", *TheContext);
 }
 
 namespace ast {

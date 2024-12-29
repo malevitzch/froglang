@@ -4,8 +4,8 @@
 #include "llvm/IR/Module.h"
 
 namespace CompilerContext {
-  extern llvm::LLVMContext TheContext;
-  extern llvm::IRBuilder<> Builder;
+  extern std::unique_ptr<llvm::LLVMContext> TheContext;
+  extern std::unique_ptr<llvm::IRBuilder<>> Builder;
   extern std::unique_ptr<llvm::Module> TheModule;
 }
 
