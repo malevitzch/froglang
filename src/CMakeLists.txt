@@ -17,7 +17,15 @@ add_custom_command(
   COMMAND ${FLEX_EXECUTABLE} --c++ -o ${FLEX_OUTPUT} ${FLEX_INPUT}
 )
 
-llvm_map_components_to_libnames(llvm_libs support core irreader)
+llvm_map_components_to_libnames(llvm_libs
+    core
+    support
+    irreader
+    target
+    native
+    asmparser
+    asmprinter
+)
 
 set(LEXER_SOURCES ${BISON_OUTPUT} ${FLEX_OUTPUT} ${CMAKE_SOURCE_DIR}/src/tokens/tokens.cpp ${CMAKE_SOURCE_DIR}/src/main.cpp)
 
@@ -25,7 +33,7 @@ add_executable(lexer ${LEXER_SOURCES})
 target_link_libraries(lexer PUBLIC fl)
 target_link_libraries(lexer PRIVATE ${llvm_libs})
 
-set(COMPILER_SOURCES ${CMAKE_SOURCE_DIR}/src/ast/node.cpp ${CMAKE_SOURCE_DIR}/src/ast/expression_nodes.cpp)
+set(COMPILER_SOURCES ${CMAKE_SOURCE_DIR}/src/compiler.cpp ${CMAKE_SOURCE_DIR}/src/ast/node.cpp ${CMAKE_SOURCE_DIR}/src/ast/expression_nodes.cpp)
 
-add_executable(compiler compiler.cpp)
-target_link_libraries(compiler PRIVATE ${llvm_libs})
+add_executable(compiler ${COMPILER_SOURCES})
+target_link_libraries(compiler PRIVATE LLVM)
