@@ -21,6 +21,7 @@
 #include "llvm/Target/TargetOptions.h"
 #include "llvm/TargetParser/Host.h"
 int main() {
+
   auto TargetTriple = llvm::sys::getDefaultTargetTriple();
   llvm::InitializeAllTargetInfos();
   llvm::InitializeAllTargets();
@@ -28,13 +29,23 @@ int main() {
   llvm::InitializeAllAsmParsers();
   llvm::InitializeAllAsmPrinters();
 
-  std::string Error;
+    std::string Error;
   auto Target = llvm::TargetRegistry::lookupTarget(TargetTriple, Error);
+
+  llvm::FunctionType *MainFuncType = llvm::FunctionType::get(llvm::Type::getInt32Ty(CompilerContext::TheContext), false);
+  llvm::Function *MainFunc = llvm::Function::Create(MainFuncType, llvm::Function::ExternalLinkage, "main", CompilerContext::TheModule.get());
+  
+  llvm::BasicBlock *EntryBB = llvm::BasicBlock::Create(CompilerContext::TheContext, "entry", MainFunc);
+  CompilerContext::Builder = llvm::IRBuilder<>(EntryBB);
 
   auto CPU = "generic";
   auto Features = "";
   llvm::TargetOptions opt;
   auto TargetMachine = Target->createTargetMachine(TargetTriple, CPU, Features, opt, llvm::Reloc::PIC_);
+
+  // codegen goes here 
+  CompilerContext::Builder.CreateRet(llvm::ConstantInt::get(llvm::Type::getInt32Ty(CompilerContext::TheContext), 0));
+
 
   CompilerContext::TheModule->setDataLayout(TargetMachine->createDataLayout());
   CompilerContext::TheModule->setTargetTriple(TargetTriple);
@@ -49,4 +60,5 @@ int main() {
   dest.flush();
   //CompilerContext::TheContext;
   std::cout<<"Hello LLVM\n";
+
 }
