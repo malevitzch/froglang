@@ -43,7 +43,7 @@ namespace Tokens {
     Token() = default;
   };
 }
-union FrogTok {
+struct FrogTok {
   Tokens::Token* token;
-  ast::Node* node;
+  std::shared_ptr<ast::Node> node;
 };
