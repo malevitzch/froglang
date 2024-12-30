@@ -69,6 +69,7 @@ int main() {
   pass.run(*CompilerContext::TheModule);
   dest.flush();
   //CompilerContext::TheContext;
-  std::cout<<"Hello LLVM\n";
+  ast::Node* node = new ast::ProgramNode();
+  std::cout<<node->get_name()<<"\n";
 
 }

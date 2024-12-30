@@ -18,6 +18,8 @@ namespace ast {
   public:
     virtual llvm::Value* codegen() = 0;
     virtual std::string get_name();
+
+    virtual std::vector<std::shared_ptr<Node>> get_children();
   };
 
   class GlobjectNode : public Node {
@@ -30,11 +32,13 @@ namespace ast {
 
   class ProgramNode : public Node {
   private:
-    std::vector<Node*> globjects;
+    std::vector<std::shared_ptr<Node>> globjects;
   public:
     llvm::Value* codegen() override;
     std::string get_name() override;
-    void add_obj(GlobjectNode* globject);
+    void add_obj(std::shared_ptr<GlobjectNode> globject);
     ProgramNode();
+
+    std::vector<std::shared_ptr<Node>> get_children() override;
   };
 }
