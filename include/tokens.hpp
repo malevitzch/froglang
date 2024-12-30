@@ -44,6 +44,6 @@ namespace Tokens {
   };
 }
 struct FrogTok {
-  Tokens::Token* token;
+  std::shared_ptr<Tokens::Token> token;
   std::shared_ptr<ast::Node> node;
 };
