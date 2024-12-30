@@ -86,6 +86,7 @@ statement: expression SEMICOLON {std::cout<<"STATEMENT\n";}
   | declaration SEMICOLON 
   | declaration ASSIGNMENT expression SEMICOLON {}
   | RETURN expression SEMICOLON {std::cout<<"RETURNED\n";}
+  | RETURN {std::cout<<"RETURNED (void)\n";}
   ;
 
 declaration: IDENTIFIER COLON TYPE_ID {std::cout<<"DECLARED\n";}
