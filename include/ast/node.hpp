@@ -15,6 +15,7 @@ namespace ast {
   private:
   protected:
     Node() = default;
+    ~Node() = default;
   public:
     virtual llvm::Value* codegen() = 0;
     virtual std::string get_name();

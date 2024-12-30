@@ -7,6 +7,7 @@
 %code requires { 
   #include <memory>
   #include "ast/node.hpp"
+  #include "ast/expression_nodes.hpp"
   #include "froglexer.hpp"
   #include "tokens.hpp"
 }
@@ -19,7 +20,7 @@
 
 %}
 //TODO: finish inputting tokens
-%token NUMBER
+%token <token> NUMBER
 %token <token> IDENTIFIER
 %token TYPE_ID
 
@@ -97,7 +98,10 @@ call_arglist: /* empty */
   | expression COMMA call_arglist
   ;
 
-expression: NUMBER {std::cout<<"Converted\n";}
+expression: NUMBER {
+    $$ = std::make_shared<ast::IntegerConstant>($1->metadata, "int32");
+    std::cout<<"Converted\n";
+  }
   | IDENTIFIER
   | IDENTIFIER LPAREN call_arglist RPAREN
   | LPAREN expression RPAREN {$$ = $2;}

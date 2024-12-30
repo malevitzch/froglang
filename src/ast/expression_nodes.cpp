@@ -1,7 +1,6 @@
 #include "ast/expression_nodes.hpp"
-
+#include <cstdlib>
 namespace ast {
-
   ExprNode::ExprNode(std::string type) : type(type) {}
 
   std::string ExprNode::get_name() {
@@ -18,5 +17,8 @@ namespace ast {
   std::string BinaryOperator::get_type() {
     //FIXME: This is a very bad idea, even when we just introduce if statements (unless we use integers as bools, then it's fine).
     return "int32";
+  }
+  IntegerConstant::IntegerConstant(std::string data, std::string type) : ExprNode(type), value(std::stoi(data)) {}
+  llvm::Value* IntegerConstant::codegen() {
   }
 }

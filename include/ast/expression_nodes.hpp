@@ -5,6 +5,8 @@ namespace ast {
   class ExprNode : public Node {
   private:
   protected:
+    ExprNode() = default;
+    ~ExprNode() = default;
     // TODO: Type might eventually become something more complicated than a string
     std::string type;
   public:
@@ -13,7 +15,6 @@ namespace ast {
     ExprNode(std::string type);
 
     //TODO: Decide whether or not this should stay. It's very practical but not very pure oop-wise
-    ExprNode() = default;
   };
 
   class BinaryOperator : public ExprNode {
@@ -33,6 +34,7 @@ namespace ast {
   public:
     IntegerConstant(std::string data, std::string type);
     llvm::Value* codegen() override;
+    IntegerConstant() = default;
   };
 
 }
