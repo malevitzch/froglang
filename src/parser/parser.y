@@ -4,13 +4,15 @@
 %define api.value.type {FrogTok}
 
 %parse-param { FrogLexer& lexer }
-
-%code requires {
+%code requires { 
+  #include <memory>
+  #include "ast/node.hpp"
   #include "froglexer.hpp"
   #include "tokens.hpp"
 }
 %code {
-    #define yylex lexer.yylex
+  extern std::shared_ptr<ast::Node> ast_root;
+  #define yylex lexer.yylex
 }
 
 %{
@@ -48,7 +50,10 @@
 %type <node> expression
 
 %%
-program: global_objs {std::cout<<"FINISHED\n";}
+program: global_objs {
+    ast_root = std::make_shared<ast::ProgramNode>();
+    std::cout<<"FINISHED\n";
+  }
   ;
 
 global_objs: global_obj

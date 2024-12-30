@@ -4,6 +4,9 @@
 #include <FlexLexer.h>
 #include "tokens.hpp"
 #include "parser.hpp"
+
+std::shared_ptr<ast::Node> ast_root;
+
 void lex_file(std::string filename) {
   std::shared_ptr<std::ifstream> in = std::make_shared<std::ifstream>(std::ifstream(filename));
   if(!in->is_open()) {
@@ -32,8 +35,10 @@ int main(int argc, char** argv) {
   FrogLexer lexer(&file);
   // Call the lexer
   Tokens::Token *yylval = new Tokens::Token();
+  //std::shared_ptr<ast::Node> root;
   yy::parser p(lexer);
   p();
+  std::cout << ast_root->get_name() << "\n";
   /*while(lexer.yylex(yylval)) {
   }*/
 

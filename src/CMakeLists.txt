@@ -27,7 +27,7 @@ llvm_map_components_to_libnames(llvm_libs
     asmprinter
 )
 
-set(LEXER_SOURCES ${BISON_OUTPUT} ${FLEX_OUTPUT} ${CMAKE_SOURCE_DIR}/src/tokens/tokens.cpp ${CMAKE_SOURCE_DIR}/src/main.cpp)
+set(LEXER_SOURCES ${BISON_OUTPUT} ${FLEX_OUTPUT} ${CMAKE_SOURCE_DIR}/src/tokens/tokens.cpp ${CMAKE_SOURCE_DIR}/src/main.cpp ${CMAKE_SOURCE_DIR}/src/ast/node.cpp)
 
 add_executable(lexer ${LEXER_SOURCES})
 target_link_libraries(lexer PUBLIC fl)
