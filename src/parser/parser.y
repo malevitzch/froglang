@@ -47,20 +47,26 @@
 %left PLUS MINUS
 %left STAR SLASH
 
-%type <node> expression
+%type <node> expression program global_obj function
 
 %%
-program: global_objs {
+program: /* */ {
     ast_root = std::make_shared<ast::ProgramNode>();
     std::cout<<"FINISHED\n";
   }
+  | program global_obj {
+    auto globject = std::dynamic_pointer_cast<ast::GlobjectNode>($2);
+    auto prog_node = std::dynamic_pointer_cast<ast::ProgramNode>($1);
+    prog_node->add_obj(globject);
+    std::cout<<"Added globject to program\n";
+    $$ = $1;
+  }
   ;
 
-global_objs: global_obj
-  | global_obj global_objs
-  ;
-
-global_obj: function {std::cout<<"DECLARATION\n";}
+global_obj: function {
+    std::cout<<"FUNCTION\n";
+    $$ = $1;
+  }
   ;
 
 function: function_declaration block {std::cout<<"FUNC\n";}
