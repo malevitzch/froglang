@@ -87,7 +87,7 @@ statement: expression SEMICOLON {std::cout<<"STATEMENT\n";}
   | declaration SEMICOLON 
   | declaration ASSIGNMENT expression SEMICOLON {}
   | RETURN expression SEMICOLON {std::cout<<"RETURNED\n";}
-  | RETURN {std::cout<<"RETURNED (void)\n";}
+  | RETURN SEMICOLON {std::cout<<"RETURNED (void)\n";}
   ;
 
 declaration: IDENTIFIER COLON TYPE_ID {std::cout<<"DECLARED\n";}
@@ -105,10 +105,22 @@ expression: NUMBER {
   | IDENTIFIER
   | IDENTIFIER LPAREN call_arglist RPAREN
   | LPAREN expression RPAREN {$$ = $2;}
-  | expression PLUS expression {std::cout<<"Added\n";}
-  | expression MINUS expression {std::cout<<"Subtracted\n";}
-  | expression STAR expression {std::cout<<"Multiplied\n";}
-  | expression SLASH expression {std::cout<<"Divided\n";}
+  | expression PLUS expression {
+    $$ = std::make_shared<ast::BinaryOperator>("+", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    std::cout<<"Added\n";
+  }
+  | expression MINUS expression {
+    $$ = std::make_shared<ast::BinaryOperator>("-", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    std::cout<<"Subtracted\n";
+  }
+  | expression STAR expression {
+    $$ = std::make_shared<ast::BinaryOperator>("*", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    std::cout<<"Multiplied\n";
+  }
+  | expression SLASH expression {
+    $$ = std::make_shared<ast::BinaryOperator>("+", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    std::cout<<"Divided\n";
+  }
   ;
 
 args:  /*empty*/

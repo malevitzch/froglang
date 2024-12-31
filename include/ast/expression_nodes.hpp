@@ -25,6 +25,7 @@ namespace ast {
     BinaryOperator(std::string operator_type, std::shared_ptr<ExprNode> left, std::shared_ptr<ExprNode> right);
     virtual llvm::Value* codegen() override;
     virtual std::string get_type() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
   class IntegerConstant : public ExprNode {
