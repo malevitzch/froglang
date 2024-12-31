@@ -84,7 +84,7 @@ statements: /* empty */
   ;
 
 statement: expression SEMICOLON {std::cout<<"STATEMENT\n";}
-  | declaration SEMICOLON 
+  | declaration SEMICOLON
   | declaration ASSIGNMENT expression SEMICOLON {}
   | RETURN expression SEMICOLON {std::cout<<"RETURNED\n";}
   | RETURN SEMICOLON {std::cout<<"RETURNED (void)\n";}
@@ -102,8 +102,8 @@ expression: NUMBER {
     $$ = std::make_shared<ast::IntegerConstant>($1->metadata, "int32");
     std::cout<<"Converted\n";
   }
-  | IDENTIFIER
-  | IDENTIFIER LPAREN call_arglist RPAREN
+  | IDENTIFIER {/* variable deref*/}
+  | IDENTIFIER LPAREN call_arglist RPAREN {/*This is a function call, i'll implement it later cause its hard*/}
   | LPAREN expression RPAREN {$$ = $2;}
   | expression PLUS expression {
     $$ = std::make_shared<ast::BinaryOperator>("+", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
