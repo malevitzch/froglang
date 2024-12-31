@@ -22,26 +22,26 @@
 //TODO: finish inputting tokens
 %token <token> NUMBER
 %token <token> IDENTIFIER
-%token TYPE_ID
+%token <token> TYPE_ID
 
-%token ARROW
+%token <token> ARROW
 
-%token PLUS
-%token MINUS
-%token STAR
-%token SLASH
+%token <token> PLUS
+%token <token> MINUS
+%token <token> STAR
+%token <token> SLASH
 
-%token ASSIGNMENT
+%token <token> ASSIGNMENT
 
 %token <token> FUNCTION
-%token RETURN
+%token <token> RETURN
 
-%token LPAREN
-%token RPAREN
+%token <token> LPAREN
+%token <token> RPAREN
 
-%token LBRACE
-%token RBRACE
-%token SEMICOLON
+%token <token> LBRACE
+%token <token> RBRACE
+%token <token> SEMICOLON
 %token <token> COMMA
 %token <token> COLON
 

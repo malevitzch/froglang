@@ -20,8 +20,9 @@ namespace ast {
   class BinaryOperator : public ExprNode {
   private:
     std::string operator_type;
+    std::shared_ptr<ExprNode> left, right;
   public: 
-    BinaryOperator(std::string operator_type);
+    BinaryOperator(std::string operator_type, std::shared_ptr<ExprNode> left, std::shared_ptr<ExprNode> right);
     virtual llvm::Value* codegen() override;
     virtual std::string get_type() override;
   };
