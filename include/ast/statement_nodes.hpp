@@ -5,8 +5,10 @@
 namespace ast {
   class StatementNode : public Node {
   private:
-  public:
+  protected:
     StatementNode() = default;
+    ~StatementNode() = default;
+  public:
   };
 
   // This inherits from Node directly because a bundle of statements is not a statement.
@@ -27,6 +29,10 @@ namespace ast {
   private:
     std::shared_ptr<ExprNode> expr;
   public:
+  };
+
+  //FIXME: this needs a declaration node to even be implemented
+  class DeclarationStatement : public StatementNode {
   };
 
 }
