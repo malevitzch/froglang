@@ -2,7 +2,7 @@
 
 namespace ast {
   
-  class ExprNode : public StatementNode {
+  class ExprNode : public Node {
   private:
   protected:
     ExprNode() = default;

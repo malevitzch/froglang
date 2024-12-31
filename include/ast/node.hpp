@@ -43,14 +43,4 @@ namespace ast {
     std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
-  class StatementNode : public Node {
-  private:
-  public:
-    StatementNode() = default;
-  };
-
-  class BlockNode : public Node {
-  private:
-  public:
-  };
 }
