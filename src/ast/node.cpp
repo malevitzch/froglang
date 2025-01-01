@@ -1,11 +1,5 @@
 #include "ast/node.hpp"
 
-namespace CompilerContext {
-  std::unique_ptr<llvm::LLVMContext> TheContext = std::make_unique<llvm::LLVMContext>();
-  std::unique_ptr<llvm::IRBuilder<>> Builder;
-  std::unique_ptr<llvm::Module> TheModule = std::make_unique<llvm::Module>("Program", *TheContext);
-}
-
 namespace ast {
 
   std::string Node::get_name() {

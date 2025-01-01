@@ -33,7 +33,7 @@ add_executable(lexer ${LEXER_SOURCES})
 target_link_libraries(lexer PUBLIC fl)
 target_link_libraries(lexer PRIVATE ${llvm_libs})
 
-set(COMPILER_SOURCES ${CMAKE_SOURCE_DIR}/src/compiler.cpp ${CMAKE_SOURCE_DIR}/src/ast/node.cpp ${CMAKE_SOURCE_DIR}/src/ast/expression_nodes.cpp)
+set(COMPILER_SOURCES ${CMAKE_SOURCE_DIR}/src/compiler.cpp ${CMAKE_SOURCE_DIR}/src/ast/node.cpp ${CMAKE_SOURCE_DIR}/src/ast/expression_nodes.cpp ${CMAKE_SOURCE_DIR}/src/ast/globals.cpp)
 
 add_executable(compiler ${COMPILER_SOURCES})
 target_link_libraries(compiler PRIVATE LLVM)
