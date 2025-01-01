@@ -43,4 +43,13 @@ namespace ast {
     std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
+  class DeclarationNode : public Node {
+  private:
+    std::string var_type;
+    std::string var_name;
+  public:
+
+  friend class DeclarationStatement;
+  };
+
 }

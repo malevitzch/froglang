@@ -33,6 +33,9 @@ namespace ast {
 
   //FIXME: this needs a declaration node to even be implemented
   class DeclarationStatement : public StatementNode {
+  private:
+    std::shared_ptr<DeclarationNode> decl;
+  public:
   };
 
 }
