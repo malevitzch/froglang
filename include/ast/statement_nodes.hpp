@@ -46,13 +46,4 @@ namespace ast {
   public:
   };
 
-  class FunctionGlobject : public GlobjectNode {
-  private:
-    std::shared_ptr<FunctionDeclaration> decl;
-    std::shared_ptr<Block> body;
-  protected:
-  public:
-    FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body);
-  };
-
 }

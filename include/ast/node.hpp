@@ -23,29 +23,6 @@ namespace ast {
     virtual std::vector<std::shared_ptr<Node>> get_children();
   };
 
-  // Maybe should be an abstract class
-  class GlobjectNode : public Node {
-  private:
-  protected:
-    GlobjectNode() = default;
-  public:
-    llvm::Value* codegen() override;
-    std::string get_name() override;
-  };
-
-  class ProgramNode : public Node {
-  private:
-    std::vector<std::shared_ptr<GlobjectNode>> globjects;
-  public:
-    ProgramNode();
-
-    llvm::Value* codegen() override;
-    std::string get_name() override;
-    void add_obj(std::shared_ptr<GlobjectNode> globject);
-
-    std::vector<std::shared_ptr<Node>> get_children() override;
-  };
-
   class DeclarationNode : public Node {
   private:
     std::string var_type;

@@ -18,6 +18,4 @@ namespace ast {
     return statements;
   }
 
-  FunctionGlobject::FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body) 
-  : decl(decl), body(body) {}
 }
