@@ -25,21 +25,23 @@ namespace ast {
 
   class GlobjectNode : public Node {
   private:
+  protected:
+    GlobjectNode() = default;
   public:
     llvm::Value* codegen() override;
     std::string get_name() override;
-    GlobjectNode();
   };
 
   class ProgramNode : public Node {
   private:
     std::vector<std::shared_ptr<Node>> globjects;
   public:
+    ProgramNode();
+
     llvm::Value* codegen() override;
     std::string get_name() override;
     void add_obj(std::shared_ptr<GlobjectNode> globject);
-    ProgramNode();
-
+    
     std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
@@ -48,8 +50,11 @@ namespace ast {
     std::string var_type;
     std::string var_name;
   public:
-
+    DeclarationNode(std::string var_type, std::string var_name);
+    std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
   friend class DeclarationStatement;
+
   };
 
 }

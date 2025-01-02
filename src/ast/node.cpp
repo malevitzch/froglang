@@ -14,7 +14,6 @@ namespace ast {
   llvm::Value* GlobjectNode::codegen() {
     //TODO: implement
   }
-  GlobjectNode::GlobjectNode() {}
   std::string GlobjectNode::get_name() {
     return "Globject Node";
   }
@@ -32,5 +31,14 @@ namespace ast {
   ProgramNode::ProgramNode() {}
   std::vector<std::shared_ptr<Node>> ProgramNode::get_children() {
     return globjects;
+  }
+
+  DeclarationNode::DeclarationNode(std::string var_type, std::string var_name) 
+  : var_type(var_type), var_name(var_name) {}
+  std::string DeclarationNode::get_name() {
+    return "Declaration Node";
+  }
+  std::vector<std::shared_ptr<Node>> DeclarationNode::get_children() {
+    return {};
   }
 }
