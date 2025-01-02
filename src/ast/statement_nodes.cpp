@@ -17,4 +17,7 @@ namespace ast {
   std::vector<std::shared_ptr<Node>> Statements::get_children() {
     return statements;
   }
+
+  FunctionGlobject::FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body) 
+  : decl(decl), body(body) {}
 }

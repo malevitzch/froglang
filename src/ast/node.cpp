@@ -30,7 +30,9 @@ namespace ast {
   }
   ProgramNode::ProgramNode() {}
   std::vector<std::shared_ptr<Node>> ProgramNode::get_children() {
-    return globjects;
+  std::vector<std::shared_ptr<Node>> children;
+    for(std::shared_ptr<GlobjectNode> globject : globjects) children.push_back(static_pointer_cast<Node>(globject));
+    return children;
   }
 
   DeclarationNode::DeclarationNode(std::string var_type, std::string var_name) 

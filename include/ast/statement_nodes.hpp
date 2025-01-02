@@ -29,6 +29,7 @@ namespace ast {
   private:
     std::shared_ptr<StatementNode> statements;
   public:
+    Block() = default;
     virtual llvm::Value* codegen() override;
 
   };
@@ -39,11 +40,19 @@ namespace ast {
   public:
   };
 
-  //FIXME: this needs a declaration node to even be implemented
   class DeclarationStatement : public StatementNode {
   private:
     std::shared_ptr<DeclarationNode> decl;
   public:
+  };
+
+  class FunctionGlobject : public GlobjectNode {
+  private:
+    std::shared_ptr<FunctionDeclaration> decl;
+    std::shared_ptr<Block> body;
+  protected:
+  public:
+    FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body);
   };
 
 }
