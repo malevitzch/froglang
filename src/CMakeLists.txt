@@ -27,13 +27,31 @@ llvm_map_components_to_libnames(llvm_libs
     asmprinter
 )
 
-set(LEXER_SOURCES ${BISON_OUTPUT} ${FLEX_OUTPUT} ${CMAKE_SOURCE_DIR}/src/tokens/tokens.cpp ${CMAKE_SOURCE_DIR}/src/main.cpp ${CMAKE_SOURCE_DIR}/src/ast/node.cpp ${CMAKE_SOURCE_DIR}/src/ast/expression_nodes.cpp)
+set(LEXER_SOURCES 
+  ${BISON_OUTPUT} 
+  ${FLEX_OUTPUT} 
+  tokens/tokens.cpp 
+  main.cpp 
+  ast/node.cpp
+  ast/expression_nodes.cpp
+  ast/statement_nodes.cpp
+  ast/globject_nodes.cpp
+)
 
 add_executable(lexer ${LEXER_SOURCES})
 target_link_libraries(lexer PUBLIC fl)
 target_link_libraries(lexer PRIVATE ${llvm_libs})
 
-set(COMPILER_SOURCES ${CMAKE_SOURCE_DIR}/src/compiler.cpp ${CMAKE_SOURCE_DIR}/src/ast/node.cpp ${CMAKE_SOURCE_DIR}/src/ast/expression_nodes.cpp ${CMAKE_SOURCE_DIR}/src/ast/globals.cpp)
+set(COMPILER_SOURCES 
+  compiler.cpp
+  ast/node.cpp
+  ast/expression_nodes.cpp
+  ast/globals.cpp
+  ast/expression_nodes.cpp
+  ast/statement_nodes.cpp
+  ast/globject_nodes.cpp
+)
+
 
 add_executable(compiler ${COMPILER_SOURCES})
 target_link_libraries(compiler PRIVATE LLVM)

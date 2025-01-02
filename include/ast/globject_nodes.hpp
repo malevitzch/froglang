@@ -19,7 +19,6 @@ namespace ast {
     std::vector<std::shared_ptr<GlobjectNode>> globjects;
   public:
     ProgramNode();
-
     llvm::Value* codegen() override;
     std::string get_name() override;
     void add_obj(std::shared_ptr<GlobjectNode> globject);

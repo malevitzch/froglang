@@ -6,8 +6,7 @@
 %parse-param { FrogLexer& lexer }
 %code requires { 
   #include <memory>
-  #include "ast/node.hpp"
-  #include "ast/expression_nodes.hpp"
+  #include "ast.hpp"
   #include "froglexer.hpp"
   #include "tokens.hpp"
 }

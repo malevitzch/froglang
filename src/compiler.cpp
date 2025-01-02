@@ -1,5 +1,5 @@
 #include <iostream>
-#include "ast/node.hpp"
+#include "ast.hpp"
 #include "llvm/ADT/APFloat.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/IR/BasicBlock.h"
