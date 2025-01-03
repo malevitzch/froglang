@@ -10,7 +10,7 @@ namespace ast {
   std::string ExprNode::get_type() {
     return type;
   }
-  llvm::Value* BinaryOperator::codegen() {
+  void BinaryOperator::codegen() {
     //TODO: implement using builder
   }
   //TODO: the BinaryOperator uses deduce_type() to find out what type it should be. 
@@ -28,6 +28,6 @@ namespace ast {
 
   IntegerConstant::IntegerConstant(std::string data, std::string type) 
   : ExprNode(type), value(std::stoi(data)) {}
-  llvm::Value* IntegerConstant::codegen() {
+  void IntegerConstant::codegen() {
   }
 }

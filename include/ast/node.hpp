@@ -17,7 +17,7 @@ namespace ast {
     Node() = default;
     ~Node() = default;
   public:
-    virtual llvm::Value* codegen() = 0;
+    virtual void codegen();
     virtual std::string get_name();
 
     virtual std::vector<std::shared_ptr<Node>> get_children();
@@ -42,7 +42,7 @@ namespace ast {
     //FIXME: ARGS
   public:
     FunctionDeclaration();
-    llvm::Value* codegen() override;
+    void codegen() override;
   };
 
 }

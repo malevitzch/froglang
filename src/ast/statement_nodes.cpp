@@ -9,7 +9,7 @@ namespace ast {
   std::string Statements::get_name() {
     return "Statements Node";
   }
-  llvm::Value* Statements::codegen() {
+  void Statements::codegen() {
   }
   void Statements::add_statement(std::shared_ptr<StatementNode> statement) {
     statements.push_back(statement);

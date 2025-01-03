@@ -10,7 +10,7 @@ namespace ast {
   protected:
     GlobjectNode() = default;
   public:
-    llvm::Value* codegen() override;
+    virtual void codegen() override;
     std::string get_name() override;
   };
 
@@ -19,8 +19,8 @@ namespace ast {
     std::vector<std::shared_ptr<GlobjectNode>> globjects;
   public:
     ProgramNode();
-    llvm::Value* codegen() override;
-    std::string get_name() override;
+    virtual void codegen() override;
+    virtual std::string get_name() override;
     void add_obj(std::shared_ptr<GlobjectNode> globject);
 
     std::vector<std::shared_ptr<Node>> get_children() override;

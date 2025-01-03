@@ -24,7 +24,7 @@ namespace ast {
     std::shared_ptr<ExprNode> left, right;
   public: 
     BinaryOperator(std::string operator_type, std::shared_ptr<ExprNode> left, std::shared_ptr<ExprNode> right);
-    virtual llvm::Value* codegen() override;
+    virtual void codegen() override;
     virtual std::string get_type() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
@@ -36,7 +36,7 @@ namespace ast {
     // so that we can have arbitrary size integers later
   public:
     IntegerConstant(std::string data, std::string type);
-    llvm::Value* codegen() override;
+    void codegen() override;
     IntegerConstant() = default;
   };
 

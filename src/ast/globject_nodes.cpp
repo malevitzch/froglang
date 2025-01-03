@@ -2,14 +2,14 @@
 
 namespace ast {
 
-  llvm::Value* GlobjectNode::codegen() {
+  void GlobjectNode::codegen() {
     //TODO: implement
   }
   std::string GlobjectNode::get_name() {
     return "Globject Node";
   }
 
-  llvm::Value* ProgramNode::codegen() {
+  void ProgramNode::codegen() {
     //TODO: implement
   }
   std::string ProgramNode::get_name() {

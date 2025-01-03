@@ -1,7 +1,10 @@
 #include "ast/node.hpp"
 
 namespace ast {
-
+  void Node::codegen() {
+    throw std::runtime_error(
+    "The method codegen() is not implemented for type \"" + get_name() + "\"");
+  }
   std::string Node::get_name() {
     return "Uninitialized Name";
   }

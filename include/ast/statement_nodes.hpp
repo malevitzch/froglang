@@ -20,7 +20,7 @@ namespace ast {
     std::vector<std::shared_ptr<Node>> statements;
   public:
     virtual std::string get_name() override;
-    virtual llvm::Value* codegen() override;
+    virtual void codegen() override;
     void add_statement(std::shared_ptr<StatementNode> statement);
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
@@ -30,7 +30,7 @@ namespace ast {
     std::shared_ptr<StatementNode> statements;
   public:
     Block() = default;
-    virtual llvm::Value* codegen() override;
+    virtual void codegen() override;
 
   };
 
