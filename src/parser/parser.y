@@ -49,25 +49,26 @@
 
 %type <node>
   expression program global_obj function
-  function_declaration block
+  function_declaration block arglist
 
 %%
 program: /* */ {
     ast_root = std::make_shared<ast::ProgramNode>();
+    $$ = ast_root;
     std::cout<<"FINISHED\n";
   }
   | program global_obj {
-    auto globject = std::dynamic_pointer_cast<ast::GlobjectNode>($2);
-    auto prog_node = std::dynamic_pointer_cast<ast::ProgramNode>($1);
+    auto prog_node = dynamic_pointer_cast<ast::ProgramNode>($1);
+    auto globject = dynamic_pointer_cast<ast::GlobjectNode>($2);
     prog_node->add_obj(globject);
-    std::cout<<"Added globject to program\n";
+    std::cout<<"Added globject to program"<<std::endl;
     $$ = $1;
   }
   ;
 
 global_obj: function {
     std::cout<<"FUNCTION\n";
-    $$ = $1;
+    $$ = dynamic_pointer_cast<ast::GlobjectNode>($1);
   }
   ;
 
@@ -78,7 +79,10 @@ function: function_declaration block {
   }
   ;
 
-function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {std::cout<<"DECLARED function("<<$2->metadata<<")\n";}
+function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
+  $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArgs>($3), $5->metadata);
+  std::cout<<"DECLARED function("<<$2->metadata<<")\n";
+  }
   ;
 
 block: LBRACE statements RBRACE {std::cout<<"BLOCK\n";}

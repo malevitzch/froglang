@@ -37,10 +37,11 @@ namespace ast {
   class FunctionDeclaration : public Node {
   private:
     //TODO: replace with type representation system
-    std::string return_type;
+    std::string name;
     std::shared_ptr<FunctionArgs> args;
+    std::string return_type;
   public:
-    FunctionDeclaration() = default;
+    FunctionDeclaration(std::string name, std::shared_ptr<FunctionArgs> args, std::string return_type);
     virtual void codegen() override;
   };
 

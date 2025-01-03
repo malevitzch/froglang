@@ -29,6 +29,7 @@ namespace ast {
     args.push_back(arg);
   }
 
+FunctionDeclaration::FunctionDeclaration(std::string name, std::shared_ptr<FunctionArgs> args, std::string return_type) : name(name), args(args), return_type(return_type) {}
   void FunctionDeclaration::codegen() {
   }
 
