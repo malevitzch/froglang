@@ -34,6 +34,18 @@ namespace ast {
 
   };
 
+  class DeclarationNode : public Node {
+  private:
+    std::string var_type;
+    std::string var_name;
+  public:
+    DeclarationNode(std::string var_type, std::string var_name);
+    std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
+  friend class DeclarationStatement;
+
+  };
+
   class ExpressionStatement : public StatementNode {
   private:
     std::shared_ptr<ExprNode> expr;

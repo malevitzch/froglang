@@ -26,6 +26,20 @@ namespace ast {
     std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
+  class FunctionArgs : public Node {
+    
+  };
+  
+  class FunctionDeclaration : public Node {
+  private:
+    //TODO: replace with type representation system
+    std::string return_type;
+    //FIXME: ARGS
+  public:
+    FunctionDeclaration();
+    virtual void codegen() override;
+  };
+
   class FunctionGlobject : public GlobjectNode {
   private:
     std::shared_ptr<FunctionDeclaration> decl;

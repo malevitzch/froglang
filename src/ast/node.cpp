@@ -14,12 +14,4 @@ namespace ast {
     "The method get_children() is not implemented for type \"" + get_name() + "\"");
   }
 
-  DeclarationNode::DeclarationNode(std::string var_type, std::string var_name) 
-  : var_type(var_type), var_name(var_name) {}
-  std::string DeclarationNode::get_name() {
-    return "Declaration Node";
-  }
-  std::vector<std::shared_ptr<Node>> DeclarationNode::get_children() {
-    return {};
-  }
 }
