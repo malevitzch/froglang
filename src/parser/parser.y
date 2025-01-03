@@ -81,15 +81,16 @@ function: function_declaration block {
   ;
 
 function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
-  $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArgs>($3), $5->metadata);
-  std::cout<<"DECLARED function("<<$2->metadata<<")\n";
+    $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArgs>($3), $5->metadata);
+    std::cout<<"DECLARED function("<<$2->metadata<<")\n";
   }
   ;
 
 block: LBRACE statements RBRACE {
-  auto statements = dynamic_pointer_cast<ast::Statements>($2);
-  $$ = std::make_shared<ast::Block>(statements);
-  std::cout<<"BLOCK\n";}
+    auto statements = dynamic_pointer_cast<ast::Statements>($2);
+    $$ = std::make_shared<ast::Block>(statements);
+    std::cout<<"BLOCK\n";
+  }
   ;
 
 statements: /* empty */ { 
@@ -101,7 +102,7 @@ statements: /* empty */ {
     statements->add_statement(statement);
     std::cout<<"combined\n";
     $$ = $1;
-    }
+  }
   ;
 
 statement: expression SEMICOLON {
@@ -111,12 +112,15 @@ statement: expression SEMICOLON {
   | declaration SEMICOLON {
     $$ = std::make_shared<ast::DeclarationStatement>(dynamic_pointer_cast<ast::DeclarationNode>($1));
   }
-  | declaration ASSIGNMENT expression SEMICOLON {}
+  | declaration ASSIGNMENT expression SEMICOLON {/*TODO: implement this one*/ }
   | RETURN expression SEMICOLON {std::cout<<"RETURNED\n";}
   | RETURN SEMICOLON {std::cout<<"RETURNED (void)\n";}
   ;
 
-declaration: IDENTIFIER COLON TYPE_ID {std::cout<<"DECLARED\n";}
+declaration: IDENTIFIER COLON TYPE_ID {
+    $$ = std::make_shared<ast::DeclarationNode>($3->metadata, $1->metadata);
+    std::cout<<"DECLARED\n";
+  }
   ;
 
 call_arglist: /* empty */
@@ -128,7 +132,7 @@ expression: NUMBER {
     $$ = std::make_shared<ast::IntegerConstant>($1->metadata, "int32");
     std::cout<<"Converted\n";
   }
-  | IDENTIFIER {/* variable deref*/}
+  | IDENTIFIER {/* TODO: VariableExpression class */}
   | IDENTIFIER LPAREN call_arglist RPAREN {/*This is a function call, i'll implement it later cause its hard*/}
   | LPAREN expression RPAREN {$$ = $2;}
   | expression PLUS expression {
@@ -150,8 +154,8 @@ expression: NUMBER {
   ;
 
 args:  /*empty*/
-  | declaration
-  | declaration COMMA args
+  | declaration {/*TODO: ADD ARGS CLASS*/}
+  | args COMMA declaration 
   ;
 
 arglist: LPAREN args RPAREN {std::cout<<"FUNCTION ARGS\n";}
