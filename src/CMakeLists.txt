@@ -36,6 +36,7 @@ set(LEXER_SOURCES
   ast/expression_nodes.cpp
   ast/statement_nodes.cpp
   ast/globject_nodes.cpp
+  ast/globals.cpp
 )
 
 add_executable(lexer ${LEXER_SOURCES})
@@ -50,6 +51,7 @@ set(COMPILER_SOURCES
   ast/expression_nodes.cpp
   ast/statement_nodes.cpp
   ast/globject_nodes.cpp
+  ast/globals.cpp
 )
 
 

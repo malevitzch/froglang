@@ -25,6 +25,13 @@ namespace ast {
     return children;
   }
 
+  void FunctionArgs::add_arg(std::shared_ptr<DeclarationNode> arg) {
+    args.push_back(arg);
+  }
+
+  void FunctionDeclaration::codegen() {
+  }
+
   FunctionGlobject::FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body) 
   : decl(decl), body(body) {}
 }

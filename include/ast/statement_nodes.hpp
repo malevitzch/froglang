@@ -9,7 +9,7 @@ namespace ast {
   private:
   protected:
     StatementNode() = default;
-    ~StatementNode() = default;
+    virtual ~StatementNode() = default;
   public:
     virtual std::string get_name() override;
   };
@@ -27,9 +27,10 @@ namespace ast {
 
   class Block : public StatementNode {
   private:
-    std::shared_ptr<StatementNode> statements;
+    std::shared_ptr<Statements> statements;
   public:
     Block() = default;
+    virtual ~Block() = default;
     virtual void codegen() override;
 
   };

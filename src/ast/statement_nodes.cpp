@@ -9,11 +9,17 @@ namespace ast {
   std::string Statements::get_name() {
     return "Statements Node";
   }
+
   void Statements::codegen() {
   }
+
   void Statements::add_statement(std::shared_ptr<StatementNode> statement) {
     statements.push_back(statement);
   }
+
+  void Block::codegen() {
+  }
+  
   std::vector<std::shared_ptr<Node>> Statements::get_children() {
     return statements;
   }

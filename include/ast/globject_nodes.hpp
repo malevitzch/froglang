@@ -27,16 +27,20 @@ namespace ast {
   };
 
   class FunctionArgs : public Node {
-    
+  private:
+    std::vector<std::shared_ptr<DeclarationNode>> args;
+  public:
+    FunctionArgs() = default;
+    void add_arg(std::shared_ptr<DeclarationNode> arg);
   };
-  
+
   class FunctionDeclaration : public Node {
   private:
     //TODO: replace with type representation system
     std::string return_type;
-    //FIXME: ARGS
+    std::shared_ptr<FunctionArgs> args;
   public:
-    FunctionDeclaration();
+    FunctionDeclaration() = default;
     virtual void codegen() override;
   };
 

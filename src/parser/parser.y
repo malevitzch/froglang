@@ -47,7 +47,9 @@
 %left PLUS MINUS
 %left STAR SLASH
 
-%type <node> expression program global_obj function
+%type <node>
+  expression program global_obj function
+  function_declaration block
 
 %%
 program: /* */ {
@@ -69,7 +71,11 @@ global_obj: function {
   }
   ;
 
-function: function_declaration block {std::cout<<"FUNC\n";}
+function: function_declaration block {
+    auto decl = std::dynamic_pointer_cast<ast::FunctionDeclaration>($1);
+    auto body = std::dynamic_pointer_cast<ast::Block>($2);
+    $$ = std::make_shared<ast::FunctionGlobject>(decl, body);
+  }
   ;
 
 function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {std::cout<<"DECLARED function("<<$2->metadata<<")\n";}
