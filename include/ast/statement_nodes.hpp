@@ -12,6 +12,7 @@ namespace ast {
     virtual ~StatementNode() = default;
   public:
     virtual std::string get_name() override;
+    virtual void codegen() override;
   };
 
   // This inherits from Node directly because a bundle of statements is not a statement.
@@ -19,6 +20,8 @@ namespace ast {
   private:
     std::vector<std::shared_ptr<Node>> statements;
   public:
+    Statements() = default;
+    virtual ~Statements() = default;
     virtual std::string get_name() override;
     virtual void codegen() override;
     void add_statement(std::shared_ptr<StatementNode> statement);
@@ -51,12 +54,16 @@ namespace ast {
   private:
     std::shared_ptr<ExprNode> expr;
   public:
+    ExpressionStatement(std::shared_ptr<ExprNode> expr);
+    virtual void codegen() override;
   };
 
   class DeclarationStatement : public StatementNode {
   private:
     std::shared_ptr<DeclarationNode> decl;
   public:
+    DeclarationStatement(std::shared_ptr<DeclarationNode> decl);
+    virtual void codegen() override;
   };
 
 }

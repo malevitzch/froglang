@@ -50,6 +50,7 @@
 %type <node>
   expression program global_obj function
   function_declaration block arglist
+  statement statements declaration
 
 %%
 program: /* */ {
@@ -88,12 +89,25 @@ function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
 block: LBRACE statements RBRACE {std::cout<<"BLOCK\n";}
   ;
 
-statements: /* empty */
-  | statement statements {std::cout<<"combined\n";}
+statements: /* empty */ { 
+    $$ = std::make_shared<ast::Statements>(); 
+  }
+  | statements statement {
+    auto statements = dynamic_pointer_cast<ast::Statements>($1);
+    auto statement = dynamic_pointer_cast<ast::StatementNode>($2); 
+    statements->add_statement(statement);
+    std::cout<<"combined\n";
+    $$ = $1;
+    }
   ;
 
-statement: expression SEMICOLON {std::cout<<"STATEMENT\n";}
-  | declaration SEMICOLON
+statement: expression SEMICOLON {
+    $$ = std::make_shared<ast::ExpressionStatement>(dynamic_pointer_cast<ast::ExprNode>($1));
+    std::cout<<"Expression Statement\n";
+  }
+  | declaration SEMICOLON {
+    $$ = std::make_shared<ast::DeclarationStatement>(dynamic_pointer_cast<ast::DeclarationNode>($1));
+  }
   | declaration ASSIGNMENT expression SEMICOLON {}
   | RETURN expression SEMICOLON {std::cout<<"RETURNED\n";}
   | RETURN SEMICOLON {std::cout<<"RETURNED (void)\n";}

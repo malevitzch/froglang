@@ -6,6 +6,9 @@ namespace ast {
     return "Statement Node";
   }
 
+  void StatementNode::codegen() {
+  }
+
   std::string Statements::get_name() {
     return "Statements Node";
   }
@@ -31,4 +34,15 @@ namespace ast {
   std::vector<std::shared_ptr<Node>> DeclarationNode::get_children() {
     return {};
   }
+
+  DeclarationStatement::DeclarationStatement(std::shared_ptr<DeclarationNode> decl)
+  : decl(decl) {}
+  void DeclarationStatement::codegen() {
+  }
+  
+  ExpressionStatement::ExpressionStatement(std::shared_ptr<ExprNode> expr) 
+  : expr(expr) {}
+  void ExpressionStatement::codegen() {
+  }
+
 }
