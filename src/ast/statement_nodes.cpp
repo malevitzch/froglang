@@ -1,7 +1,7 @@
 #include "ast/statement_nodes.hpp"
 
 namespace ast {
-  
+
   std::string StatementNode::get_name() {
     return "Statement Node";
   }
@@ -19,30 +19,51 @@ namespace ast {
   void Statements::add_statement(std::shared_ptr<StatementNode> statement) {
     statements.push_back(statement);
   }
-
-  void Block::codegen() {
-  }
-  
   std::vector<std::shared_ptr<Node>> Statements::get_children() {
     return statements;
   }
+
+  void Block::codegen() {
+  }
+  std::string Block::get_name() {
+    return "Block";
+  }
+  std::vector<std::shared_ptr<Node>> Block::get_children() {
+    return {statements};
+  }
+
   DeclarationNode::DeclarationNode(std::string var_type, std::string var_name) 
-  : var_type(var_type), var_name(var_name) {}
+  : var_type(var_type), var_name(var_name) {final = true;}
+  void DeclarationNode::codegen() {
+
+  }
   std::string DeclarationNode::get_name() {
     return "Declaration Node";
   }
   std::vector<std::shared_ptr<Node>> DeclarationNode::get_children() {
     return {};
   }
+  
+  ExpressionStatement::ExpressionStatement(std::shared_ptr<ExprNode> expr) 
+  : expr(expr) {}
+  void ExpressionStatement::codegen() {
+  }
+  std::string ExpressionStatement::get_name() {
+    return "Expression Statement";
+  }
+  std::vector<std::shared_ptr<Node>> ExpressionStatement::get_children() {
+    return {expr};
+  }
 
   DeclarationStatement::DeclarationStatement(std::shared_ptr<DeclarationNode> decl)
   : decl(decl) {}
   void DeclarationStatement::codegen() {
   }
-  
-  ExpressionStatement::ExpressionStatement(std::shared_ptr<ExprNode> expr) 
-  : expr(expr) {}
-  void ExpressionStatement::codegen() {
+  std::string DeclarationStatement::get_name() {
+    return "Declaration Statement";
+  }
+  std::vector<std::shared_ptr<Node>> DeclarationStatement::get_children() {
+    return {decl};
   }
 
 }

@@ -10,6 +10,7 @@ namespace ast {
   std::string ExprNode::get_type() {
     return type;
   }
+
   void BinaryOperator::codegen() {
     //TODO: implement using builder
   }
@@ -22,12 +23,18 @@ namespace ast {
     //FIXME: This is a very bad idea, even when we just introduce if statements (unless we use integers as bools, then it's fine for if statements but bad for everything else).
     return type;
   }
+  std::string BinaryOperator::get_name() {
+    return "Binary Operator";
+  }
   std::vector<std::shared_ptr<Node>> BinaryOperator::get_children() {
     return {left, right};
   }
 
   IntegerConstant::IntegerConstant(std::string data, std::string type) 
-  : ExprNode(type), value(std::stoi(data)) {}
+  : ExprNode(type), value(std::stoi(data)) { final = true; }
   void IntegerConstant::codegen() {
+  }
+  std::string IntegerConstant::get_name() {
+    return "Integer Constant";
   }
 }

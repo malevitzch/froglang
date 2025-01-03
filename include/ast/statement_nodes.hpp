@@ -35,6 +35,8 @@ namespace ast {
     Block() = default;
     virtual ~Block() = default;
     virtual void codegen() override;
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
   };
 
@@ -44,6 +46,7 @@ namespace ast {
     std::string var_name;
   public:
     DeclarationNode(std::string var_type, std::string var_name);
+    virtual void codegen() override;
     std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   friend class DeclarationStatement;
@@ -56,6 +59,8 @@ namespace ast {
   public:
     ExpressionStatement(std::shared_ptr<ExprNode> expr);
     virtual void codegen() override;
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override; 
   };
 
   class DeclarationStatement : public StatementNode {
@@ -64,6 +69,8 @@ namespace ast {
   public:
     DeclarationStatement(std::shared_ptr<DeclarationNode> decl);
     virtual void codegen() override;
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
 }
