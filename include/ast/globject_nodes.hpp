@@ -30,8 +30,9 @@ namespace ast {
   private:
     std::vector<std::shared_ptr<DeclarationNode>> args;
   public:
-    FunctionArgs() = default;
+    FunctionArgs();
     void add_arg(std::shared_ptr<DeclarationNode> arg);
+    virtual std::string get_name() override;
   };
 
   class FunctionDeclaration : public Node {
@@ -43,6 +44,7 @@ namespace ast {
   public:
     FunctionDeclaration(std::string name, std::shared_ptr<FunctionArgs> args, std::string return_type);
     virtual void codegen() override;
+    virtual std::string get_name() override;
   };
 
   class FunctionGlobject : public GlobjectNode {
@@ -52,5 +54,7 @@ namespace ast {
   protected:
   public:
     FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body);
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
 }

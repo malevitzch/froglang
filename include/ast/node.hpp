@@ -16,6 +16,7 @@ namespace ast {
   protected:
     Node() = default;
     virtual ~Node() = default;
+    bool final = false;
   public:
     virtual void codegen();
     virtual std::string get_name();
