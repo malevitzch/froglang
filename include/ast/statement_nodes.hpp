@@ -32,7 +32,7 @@ namespace ast {
   private:
     std::shared_ptr<Statements> statements;
   public:
-    Block() = default;
+    Block(std::shared_ptr<Statements> statements);
     virtual ~Block() = default;
     virtual void codegen() override;
     virtual std::string get_name() override;

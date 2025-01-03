@@ -23,6 +23,8 @@ namespace ast {
     return statements;
   }
 
+  Block::Block(std::shared_ptr<Statements> statements) 
+  : statements(statements) {}
   void Block::codegen() {
   }
   std::string Block::get_name() {

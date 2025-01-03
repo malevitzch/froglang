@@ -86,7 +86,10 @@ function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
   }
   ;
 
-block: LBRACE statements RBRACE {std::cout<<"BLOCK\n";}
+block: LBRACE statements RBRACE {
+  auto statements = dynamic_pointer_cast<ast::Statements>($2);
+  $$ = std::make_shared<ast::Block>(statements);
+  std::cout<<"BLOCK\n";}
   ;
 
 statements: /* empty */ { 
