@@ -15,6 +15,19 @@ void lex_file(std::string filename) {
   }
 }
 
+void traverse(std::shared_ptr<ast::Node> node, int depth, std::ostream& out) {
+  for(int i = 0; i < depth; i++) out << "  ";
+  out << node->get_name();
+  if(node->final) {
+    out << "\n";
+    return;
+  }
+  out << " {\n";
+  for(std::shared_ptr<ast::Node> child : node->get_children()) traverse(child, depth+1, out);
+  for(int i = 0; i < depth; i++) out << "  ";
+  out<<"}\n";
+}
+
 int main(int argc, char** argv) {
   std::istream* in;
   std::ifstream file;
@@ -38,7 +51,8 @@ int main(int argc, char** argv) {
   //std::shared_ptr<ast::Node> root;
   yy::parser p(lexer);
   p();
-  std::cout << ast_root->get_name() << "\n";
+  std::ofstream ast_out("tree_output.txt");
+  traverse(ast_root, 0, ast_out);
   /*while(lexer.yylex(yylval)) {
   }*/
 

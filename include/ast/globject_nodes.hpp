@@ -58,6 +58,7 @@ namespace ast {
     FunctionDeclaration(std::string name, std::shared_ptr<FunctionArglist> args, std::string return_type);
     virtual void codegen() override;
     virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
   class FunctionGlobject : public GlobjectNode {

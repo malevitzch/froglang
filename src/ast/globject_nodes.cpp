@@ -56,7 +56,10 @@ namespace ast {
   std::string FunctionDeclaration::get_name() {
     return "Function Declaration";
   }
- 
+  std::vector<std::shared_ptr<Node>> FunctionDeclaration::get_children() {
+    return {args};
+  }
+
   FunctionGlobject::FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body) 
   : decl(decl), body(body) {}
   std::string FunctionGlobject::get_name() {
