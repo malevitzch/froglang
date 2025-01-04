@@ -30,19 +30,32 @@ namespace ast {
   private:
     std::vector<std::shared_ptr<DeclarationNode>> args;
   public:
-    FunctionArgs();
+    FunctionArgs() = default;
     void add_arg(std::shared_ptr<DeclarationNode> arg);
     virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
+  };
+  
+  class FunctionArglist : public Node {
+  private:
+    std::shared_ptr<FunctionArgs> args;
+  public:
+    FunctionArglist() = default;
+    FunctionArglist(std::shared_ptr<FunctionArgs> args);
+    virtual ~FunctionArglist() = default;
+    virtual void codegen() override;
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
   class FunctionDeclaration : public Node {
   private:
     //TODO: replace with type representation system
     std::string name;
-    std::shared_ptr<FunctionArgs> args;
+    std::shared_ptr<FunctionArglist> args;
     std::string return_type;
   public:
-    FunctionDeclaration(std::string name, std::shared_ptr<FunctionArgs> args, std::string return_type);
+    FunctionDeclaration(std::string name, std::shared_ptr<FunctionArglist> args, std::string return_type);
     virtual void codegen() override;
     virtual std::string get_name() override;
   };

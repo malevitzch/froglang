@@ -51,6 +51,7 @@
   expression program global_obj function
   function_declaration block arglist
   statement statements declaration
+  args
 
 %%
 program: /* */ {
@@ -81,7 +82,7 @@ function: function_declaration block {
   ;
 
 function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
-    $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArgs>($3), $5->metadata);
+    $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), $5->metadata);
     std::cout<<"DECLARED function("<<$2->metadata<<")\n";
   }
   ;
@@ -168,12 +169,28 @@ expression: NUMBER {
   }
   ;
 
-args:  /*empty*/
-  | declaration {/*TODO: ADD ARGS CLASS*/}
-  | args COMMA declaration 
+args: /* */ {
+    $$ = std::make_shared<ast::FunctionArgs>();
+  }
+  | declaration {
+    auto args = std::make_shared<ast::FunctionArgs>();
+    auto arg = dynamic_pointer_cast<ast::DeclarationNode>($1);
+    args->add_arg(arg);
+    $$ = args;
+  }
+  | args COMMA declaration {
+    auto args = dynamic_pointer_cast<ast::FunctionArgs>($1);
+    auto arg = dynamic_pointer_cast<ast::DeclarationNode>($3);
+    args->add_arg(arg);
+    $$ = args;
+  }
   ;
 
-arglist: LPAREN args RPAREN {std::cout<<"FUNCTION ARGS\n";}
+arglist: LPAREN args RPAREN {
+    auto args = dynamic_pointer_cast<ast::FunctionArgs>($2);
+    $$ = std::make_shared<ast::FunctionArglist>(args);
+    std::cout<<"FUNCTION ARGLIST\n";
+  }
   ;
 %%
 
