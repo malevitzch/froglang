@@ -35,9 +35,17 @@ namespace ast {
     // TODO: This might be replaced by an arbitrarily-large bit array
     // so that we can have arbitrary size integers later
   public:
-    IntegerConstant() = default;
     IntegerConstant(std::string data, std::string type);
-    void codegen() override;
+    virtual void codegen() override;
+    virtual std::string get_name() override;
+  };
+
+  class VariableIdentifier : public ExprNode {
+  private:
+    std::string var_name;
+  public:
+    VariableIdentifier(std::string var_name, std::string type);
+    virtual void codegen() override;
     virtual std::string get_name() override;
   };
 

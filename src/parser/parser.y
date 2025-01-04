@@ -129,10 +129,14 @@ call_arglist: /* empty */
   ;
 
 expression: NUMBER {
+    //TODO: solve the type issue
     $$ = std::make_shared<ast::IntegerConstant>($1->metadata, "int32");
     std::cout<<"Converted\n";
   }
-  | IDENTIFIER {/* TODO: VariableExpression class */}
+  | IDENTIFIER {
+    //TODO: solve the type issue (actually it's only during codegen)
+    $$ = std::make_shared<ast::VariableIdentifier>($1->metadata, "int32");
+  }
   | IDENTIFIER LPAREN call_arglist RPAREN {/*This is a function call, i'll implement it later cause its hard*/}
   | LPAREN expression RPAREN {$$ = $2;}
   | expression PLUS expression {

@@ -37,4 +37,12 @@ namespace ast {
   std::string IntegerConstant::get_name() {
     return "Integer Constant";
   }
+
+  VariableIdentifier::VariableIdentifier(std::string var_name, std::string type) 
+  : ExprNode(type), var_name(var_name) { final = true; }
+  void VariableIdentifier::codegen() {
+  }
+  std::string VariableIdentifier::get_name() {
+    return "Variable Identifier";
+  }
 }
