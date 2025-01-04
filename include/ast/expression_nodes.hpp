@@ -2,7 +2,7 @@
 #include "ast/node.hpp"
 
 namespace ast {
-  
+
   class ExprNode : public Node {
   private:
   protected:
@@ -47,6 +47,42 @@ namespace ast {
     VariableIdentifier(std::string var_name, std::string type);
     virtual void codegen() override;
     virtual std::string get_name() override;
+  };
+
+  class FunctionCallArgs : public Node {
+  private:
+    std::vector<std::shared_ptr<ExprNode>> args;
+  public:
+    FunctionCallArgs() = default;
+    ~FunctionCallArgs() = default;
+    void add_arg(std::shared_ptr<ExprNode> arg);
+    virtual void codegen() override;
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
+  };
+
+  class FunctionCallArglist : public Node {
+  private:
+    std::shared_ptr<FunctionCallArgs> args;
+  public:
+    FunctionCallArglist() = default;
+    FunctionCallArglist(std::shared_ptr<FunctionCallArgs> args);
+    virtual ~FunctionCallArglist() = default;
+    virtual void codegen() override;
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
+  };
+
+  class FunctionCallExpr : public ExprNode {
+  private:
+    std::string function_name;
+    std::shared_ptr<FunctionCallArglist> args;
+  public:
+    FunctionCallExpr(std::string function_name, std::shared_ptr<FunctionCallArglist> args);
+    virtual ~FunctionCallExpr() = default;
+    virtual void codegen() override;
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
 }

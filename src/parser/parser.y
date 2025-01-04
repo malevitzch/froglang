@@ -51,7 +51,7 @@
   expression program global_obj function
   function_declaration block arglist
   statement statements declaration
-  args
+  args call_args call_arglist
 
 %%
 program: /* */ {
@@ -135,9 +135,27 @@ declaration: IDENTIFIER COLON TYPE_ID {
   }
   ;
 
-call_arglist: /* empty */
-  | expression
-  | expression COMMA call_arglist
+
+call_arglist: LPAREN call_args RPAREN {
+    auto call_args = dynamic_pointer_cast<ast::FunctionCallArgs>($2);
+    $$ = std::make_shared<ast::FunctionCallArglist>(call_args); 
+  }
+
+call_args: /* empty */ {
+    $$ = std::make_shared<ast::FunctionCallArgs>();
+  }
+  | expression {
+    auto call_args = std::make_shared<ast::FunctionCallArgs>();
+    auto expr = dynamic_pointer_cast<ast::ExprNode>($1);
+    call_args->add_arg(expr);
+    $$ = call_args;
+  }
+  | call_args COMMA expression {
+    auto call_args = dynamic_pointer_cast<ast::FunctionCallArgs>($1);
+    auto expr = dynamic_pointer_cast<ast::ExprNode>($3);
+    call_args->add_arg(expr);
+    $$ = call_args;
+  }
   ;
 
 expression: NUMBER {
@@ -149,7 +167,11 @@ expression: NUMBER {
     //TODO: solve the type issue (actually it's only during codegen)
     $$ = std::make_shared<ast::VariableIdentifier>($1->metadata, "int32");
   }
-  | IDENTIFIER LPAREN call_arglist RPAREN {/*This is a function call, i'll implement it later cause its hard*/}
+  | IDENTIFIER call_arglist {
+    auto call_arglist = dynamic_pointer_cast<ast::FunctionCallArglist>($2);
+    $$ = std::make_shared<ast::FunctionCallExpr>($1->metadata, call_arglist);
+    /*This is a function call, i'll implement it later cause its hard*/
+  }
   | LPAREN expression RPAREN {$$ = $2;}
   | expression PLUS expression {
     $$ = std::make_shared<ast::BinaryOperator>("+", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));

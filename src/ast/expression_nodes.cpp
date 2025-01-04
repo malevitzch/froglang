@@ -45,4 +45,43 @@ namespace ast {
   std::string VariableIdentifier::get_name() {
     return "Variable Identifier";
   }
+
+  void FunctionCallArgs::add_arg(std::shared_ptr<ExprNode> arg) {
+    args.push_back(arg);
+  }
+  void FunctionCallArgs::codegen() {
+  }
+  std::string FunctionCallArgs::get_name() {
+    return "Function Call Args";
+  }
+  std::vector<std::shared_ptr<Node>> FunctionCallArgs::get_children() {
+    std::vector<std::shared_ptr<Node>> children;
+    for(std::shared_ptr<ExprNode> arg : args)
+      children.push_back(arg);
+    return children;
+  }
+
+  FunctionCallArglist::FunctionCallArglist(std::shared_ptr<FunctionCallArgs> args) 
+  : args(args) {}
+  void FunctionCallArglist::codegen() {
+  }
+  std::string FunctionCallArglist::get_name() {
+    return "Function Call Arglist";
+  }
+  std::vector<std::shared_ptr<Node>> FunctionCallArglist::get_children() {
+    if(args == nullptr) return {};
+    return {args};
+  }
+
+  //FIXME: crimes are being committed here
+  FunctionCallExpr::FunctionCallExpr(std::string function_name, std::shared_ptr<FunctionCallArglist> args)
+  : ExprNode("int32"), function_name(function_name), args(args) {}
+  void FunctionCallExpr::codegen() {
+  }
+  std::string FunctionCallExpr::get_name() {
+    return "Function Call Expression";
+  }
+  std::vector<std::shared_ptr<Node>> FunctionCallExpr::get_children() {
+    return {args};
+  }
 }
