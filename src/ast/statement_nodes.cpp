@@ -68,4 +68,14 @@ namespace ast {
     return {decl};
   }
 
+  DeclarationAssignmentStatement::DeclarationAssignmentStatement(std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr)
+  : decl(decl), expr(expr) {}
+  void DeclarationAssignmentStatement::codegen() {
+  }
+  std::string DeclarationAssignmentStatement::get_name() {
+    return "Declaration Assignment Node";
+  }
+  std::vector<std::shared_ptr<Node>> DeclarationAssignmentStatement::get_children() {
+    return {decl, expr};
+  }
 }

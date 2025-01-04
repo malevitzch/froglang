@@ -112,7 +112,11 @@ statement: expression SEMICOLON {
   | declaration SEMICOLON {
     $$ = std::make_shared<ast::DeclarationStatement>(dynamic_pointer_cast<ast::DeclarationNode>($1));
   }
-  | declaration ASSIGNMENT expression SEMICOLON {/*TODO: implement this one*/ }
+  | declaration ASSIGNMENT expression SEMICOLON {
+    auto decl = dynamic_pointer_cast<ast::DeclarationNode>($1);
+    auto expr = dynamic_pointer_cast<ast::ExprNode>($3);
+    $$ = std::make_shared<ast::DeclarationAssignmentStatement>(decl, expr);
+  }
   | RETURN expression SEMICOLON {std::cout<<"RETURNED\n";}
   | RETURN SEMICOLON {std::cout<<"RETURNED (void)\n";}
   ;

@@ -73,4 +73,16 @@ namespace ast {
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
+  class DeclarationAssignmentStatement : public StatementNode {
+  private:
+    std::shared_ptr<DeclarationNode> decl;
+    std::shared_ptr<ExprNode> expr;
+  public:
+    DeclarationAssignmentStatement(std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr);
+    ~DeclarationAssignmentStatement() = default;
+    virtual void codegen() override;
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
+  };
+
 }
