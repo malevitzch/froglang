@@ -85,4 +85,18 @@ namespace ast {
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
+  class ReturnStatement : public StatementNode {
+  private:
+    std::string type;
+    std::shared_ptr<ExprNode> val;
+  public:
+    ReturnStatement(); // For void returns
+    ReturnStatement(std::string type, std::shared_ptr<ExprNode> val); // For everything else
+    virtual ~ReturnStatement() = default;
+    virtual void codegen() override;
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+  };
+
 }

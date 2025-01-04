@@ -78,4 +78,18 @@ namespace ast {
   std::vector<std::shared_ptr<Node>> DeclarationAssignmentStatement::get_children() {
     return {decl, expr};
   }
+
+  ReturnStatement::ReturnStatement()
+  : type("void"), val(nullptr) {}
+  ReturnStatement::ReturnStatement(std::string type, std::shared_ptr<ExprNode> val)
+  : type(type), val(val) {}
+  void ReturnStatement::codegen() {
+  }
+  std::string ReturnStatement::get_name() {
+    return "Return Statement";
+  }
+  std::vector<std::shared_ptr<Node>> ReturnStatement::get_children() {
+    if(type == "void") return {};
+    return {val};
+  }
 }

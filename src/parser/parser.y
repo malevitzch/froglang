@@ -117,8 +117,15 @@ statement: expression SEMICOLON {
     auto expr = dynamic_pointer_cast<ast::ExprNode>($3);
     $$ = std::make_shared<ast::DeclarationAssignmentStatement>(decl, expr);
   }
-  | RETURN expression SEMICOLON {std::cout<<"RETURNED\n";}
-  | RETURN SEMICOLON {std::cout<<"RETURNED (void)\n";}
+  | RETURN expression SEMICOLON {
+    auto expr = dynamic_pointer_cast<ast::ExprNode>($2);
+    $$ = std::make_shared<ast::ReturnStatement>(expr->get_type(), expr);
+    std::cout<<"RETURNED\n";
+  }
+  | RETURN SEMICOLON {
+    
+    std::cout<<"RETURNED (void)\n";
+  }
   ;
 
 declaration: IDENTIFIER COLON TYPE_ID {
