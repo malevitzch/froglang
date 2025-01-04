@@ -82,7 +82,8 @@ function: function_declaration block {
   ;
 
 function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
-    $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), $5->metadata);
+    //FIXME: TYPE_ID, add void functions as well
+    $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), "int32");
     std::cout<<"DECLARED function("<<$2->metadata<<")\n";
   }
   ;
@@ -124,13 +125,13 @@ statement: expression SEMICOLON {
     std::cout<<"RETURNED\n";
   }
   | RETURN SEMICOLON {
-    
     std::cout<<"RETURNED (void)\n";
   }
   ;
 
 declaration: IDENTIFIER COLON TYPE_ID {
-    $$ = std::make_shared<ast::DeclarationNode>($3->metadata, $1->metadata);
+    //FIXME: TYPES
+    $$ = std::make_shared<ast::DeclarationNode>("int32", $1->metadata);
     std::cout<<"DECLARED\n";
   }
   ;
