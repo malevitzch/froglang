@@ -34,7 +34,7 @@ int main() {
 
   llvm::FunctionType *MainFuncType = llvm::FunctionType::get(llvm::Type::getInt32Ty(*CompilerContext::TheContext), false);
   llvm::Function *MainFunc = llvm::Function::Create(MainFuncType, llvm::Function::ExternalLinkage, "main", CompilerContext::TheModule.get());
-  
+
   llvm::BasicBlock *EntryBB = llvm::BasicBlock::Create(*CompilerContext::TheContext, "entry", MainFunc);
   CompilerContext::Builder = std::make_unique<llvm::IRBuilder<>>(*CompilerContext::TheContext);
 
