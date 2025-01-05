@@ -24,6 +24,7 @@ namespace ast {
     std::shared_ptr<ExprNode> left, right;
   public: 
     BinaryOperator(std::string operator_type, std::shared_ptr<ExprNode> left, std::shared_ptr<ExprNode> right);
+    virtual std::shared_ptr<llvm::Value> eval() override;
     virtual void codegen() override;
     virtual std::string get_type() override;
     virtual std::string get_name() override;
@@ -37,6 +38,7 @@ namespace ast {
     // so that we can have arbitrary size integers later
   public:
     IntegerConstant(std::string data, std::string type);
+    virtual std::shared_ptr<llvm::Value> eval() override;
     virtual void codegen() override;
     virtual std::string get_name() override;
   };
@@ -46,6 +48,7 @@ namespace ast {
     std::string var_name;
   public:
     VariableIdentifier(std::string var_name, std::string type);
+    virtual std::shared_ptr<llvm::Value> eval() override;
     virtual void codegen() override;
     virtual std::string get_name() override;
   };
@@ -81,6 +84,7 @@ namespace ast {
   public:
     FunctionCallExpr(std::string function_name, std::shared_ptr<FunctionCallArglist> args);
     virtual ~FunctionCallExpr() = default;
+    virtual std::shared_ptr<llvm::Value> eval() override;
     virtual void codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;

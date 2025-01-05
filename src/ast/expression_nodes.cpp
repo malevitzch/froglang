@@ -3,7 +3,6 @@
 namespace ast {
   ExprNode::ExprNode(std::string type)
   : type(type) {}
-  std::shared_ptr<llvm::Value> eval();
   std::string ExprNode::get_name() {
     return "Expression Node";
   }
