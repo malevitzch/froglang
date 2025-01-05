@@ -7,12 +7,13 @@ namespace ast {
   private:
   protected:
     ExprNode() = default;
-    ~ExprNode() = default;
+    virtual ~ExprNode() = default;
     //TODO: this might not exist in the future
     ExprNode(std::string type);
     // TODO: Type might eventually become something more complicated than a string
     std::string type;
   public:
+    virtual std::shared_ptr<llvm::Value> eval() = 0;
     virtual std::string get_name() override;
     virtual std::string get_type();
   };
