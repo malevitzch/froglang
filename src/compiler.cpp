@@ -51,7 +51,6 @@ int main(int argc, char** argv) {
   llvm::Function *MainFunc = llvm::Function::Create(MainFuncType, llvm::Function::ExternalLinkage, "main", CompilerContext::TheModule.get());
 
   llvm::BasicBlock *EntryBB = llvm::BasicBlock::Create(*CompilerContext::TheContext, "entry", MainFunc);
-  CompilerContext::Builder = std::make_unique<llvm::IRBuilder<>>(*CompilerContext::TheContext);
 
   auto CPU = "generic";
   auto Features = "";
