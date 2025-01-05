@@ -43,7 +43,10 @@ add_executable(lexer ${LEXER_SOURCES})
 target_link_libraries(lexer PUBLIC fl)
 target_link_libraries(lexer PRIVATE ${llvm_libs})
 
-set(COMPILER_SOURCES 
+set(COMPILER_SOURCES
+  ${BISON_OUTPUT} 
+  ${FLEX_OUTPUT} 
+  tokens/tokens.cpp
   compiler.cpp
   ast/node.cpp
   ast/expression_nodes.cpp

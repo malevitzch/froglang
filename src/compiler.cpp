@@ -1,7 +1,10 @@
 #include <iostream>
-#include "ast.hpp"
+#include <fstream>
+#include <FlexLexer.h>
+#include "tokens.hpp"
+#include "parser.hpp"
+
 #include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/STLExtras.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/DerivedTypes.h"
@@ -20,7 +23,19 @@
 #include "llvm/Target/TargetMachine.h"
 #include "llvm/Target/TargetOptions.h"
 #include "llvm/TargetParser/Host.h"
-int main() {
+
+std::shared_ptr<ast::Node> ast_root;
+
+void lex_file(std::string filename) {
+  std::shared_ptr<std::ifstream> in = std::make_shared<std::ifstream>(std::ifstream(filename));
+  if(!in->is_open()) {
+    std::cerr << "Cannot open file: " << filename << "\n";
+    return;
+  }
+}
+
+
+int main(int argc, char** argv) {
 
   auto TargetTriple = llvm::sys::getDefaultTargetTriple();
   llvm::InitializeAllTargetInfos();
@@ -42,6 +57,32 @@ int main() {
   auto Features = "";
   llvm::TargetOptions opt;
   auto TargetMachine = Target->createTargetMachine(TargetTriple, CPU, Features, opt, llvm::Reloc::PIC_);
+
+  std::istream* in;
+  std::ifstream file;
+  if(argc > 1) {
+    // If a file is provided, open it and set as input stream
+    file = std::ifstream(argv[1]);
+    if(!file.is_open()) {
+      std::cerr << "Cannot open file: " << argv[1] << "\n";
+      return 1;
+    }
+    //in = file;
+  } else {
+    std::cerr << "No file input given\n";
+    return 0;
+  }
+
+  // Create a lexer object
+  FrogLexer lexer(&file);
+  // Call the lexer
+  Tokens::Token *yylval = new Tokens::Token();
+  //std::shared_ptr<ast::Node> root;
+  yy::parser p(lexer);
+  p();
+  ast_root->codegen();
+
+  std::ofstream ast_out("tree_output.txt");
 
   // codegen goes here 
   CompilerContext::Builder->SetInsertPoint(EntryBB);
