@@ -10,7 +10,8 @@ namespace ast {
   }
 
   void ProgramNode::codegen() {
-    //TODO: implement
+    for(std::shared_ptr<GlobjectNode> globject : globjects)
+      globject->codegen();
   }
   std::string ProgramNode::get_name() {
     return "Program Node";
@@ -25,8 +26,12 @@ namespace ast {
       children.push_back(static_pointer_cast<Node>(globject));
     return children;
   }
+
   void FunctionArgs::add_arg(std::shared_ptr<DeclarationNode> arg) {
     args.push_back(arg);
+  }
+  void FunctionArgs::codegen() {
+    //TODO: implement
   }
   std::string FunctionArgs::get_name() {
     return "Function Args";

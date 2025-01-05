@@ -31,6 +31,8 @@ namespace ast {
     std::vector<std::shared_ptr<DeclarationNode>> args;
   public:
     FunctionArgs() = default;
+    virtual ~FunctionArgs() = default;
+    virtual void codegen() override;
     void add_arg(std::shared_ptr<DeclarationNode> arg);
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
