@@ -48,6 +48,10 @@ namespace ast {
 
   VariableIdentifier::VariableIdentifier(std::string var_name, std::string type) 
   : ExprNode(type), var_name(var_name) { final = true; }
+  std::shared_ptr<llvm::Value> VariableIdentifier::eval() {
+    //TODO: maybe add some check if there is such a named value already
+    return CompilerContext::NamedValues[var_name];
+  }
   void VariableIdentifier::codegen() {
   }
   std::string VariableIdentifier::get_name() {
