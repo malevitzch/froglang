@@ -38,6 +38,7 @@ namespace ast {
     // so that we can have arbitrary size integers later
   public:
     IntegerConstant(std::string data, std::string type);
+    virtual ~IntegerConstant() = default;
     virtual std::shared_ptr<llvm::Value> eval() override;
     virtual void codegen() override;
     virtual std::string get_name() override;

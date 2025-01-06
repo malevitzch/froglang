@@ -1,5 +1,11 @@
 #include "ast/expression_nodes.hpp"
 #include <cstdlib>
+
+#include "llvm/IR/Constants.h"
+#include "llvm/IR/DerivedTypes.h"
+
+
+
 namespace ast {
   ExprNode::ExprNode(std::string type)
   : type(type) {}
@@ -31,6 +37,9 @@ namespace ast {
 
   IntegerConstant::IntegerConstant(std::string data, std::string type) 
   : ExprNode(type), value(std::stoi(data)) { final = true; }
+  std::shared_ptr<llvm::Value> IntegerConstant::eval() {
+    return std::make_shared<llvm::Value>(*llvm::ConstantInt::get(*CompilerContext::TheContext, llvm::APInt(32, value)));
+  }
   void IntegerConstant::codegen() {
   }
   std::string IntegerConstant::get_name() {
