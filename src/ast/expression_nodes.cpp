@@ -103,6 +103,9 @@ namespace ast {
   //FIXME: crimes are being committed here
   FunctionCallExpr::FunctionCallExpr(std::string function_name, std::shared_ptr<FunctionCallArglist> args)
   : ExprNode("int32"), function_name(function_name), args(args) {}
+  llvm::Value* FunctionCallExpr::eval() {
+    //TODO: make args accessible so that we can make a call
+  }
   void FunctionCallExpr::codegen() {
   }
   std::string FunctionCallExpr::get_name() {
