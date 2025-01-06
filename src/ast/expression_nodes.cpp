@@ -15,7 +15,22 @@ namespace ast {
   std::string ExprNode::get_type() {
     return type;
   }
+  
+  llvm::Value* BinaryOperator::eval() {
+    auto L = left->eval();
+    auto R = right->eval();
+    if(operator_type == "+") {
+      return CompilerContext::Builder->CreateAdd(L, R, "addtmp");
+    }
+    if(operator_type == "-") {
+      return CompilerContext::Builder->CreateSub(L, R, "subtmp");
+    }
+    if(operator_type == "*") {
+      return CompilerContext::Builder->CreateMul(L, R, "multmp");
+    }
+  //TODO: division is not as simple as the others
 
+  }
   void BinaryOperator::codegen() {
     //TODO: implement using builder
   }
@@ -37,8 +52,8 @@ namespace ast {
 
   IntegerConstant::IntegerConstant(std::string data, std::string type) 
   : ExprNode(type), value(std::stoi(data)) { final = true; }
-  std::shared_ptr<llvm::Value> IntegerConstant::eval() {
-    return std::make_shared<llvm::Value>(*llvm::ConstantInt::get(*CompilerContext::TheContext, llvm::APInt(32, value)));
+  llvm::Value* IntegerConstant::eval() {
+    return llvm::ConstantInt::get(*CompilerContext::TheContext, llvm::APInt(32, value));
   }
   void IntegerConstant::codegen() {
   }
@@ -48,7 +63,7 @@ namespace ast {
 
   VariableIdentifier::VariableIdentifier(std::string var_name, std::string type) 
   : ExprNode(type), var_name(var_name) { final = true; }
-  std::shared_ptr<llvm::Value> VariableIdentifier::eval() {
+  llvm::Value* VariableIdentifier::eval() {
     //TODO: maybe add some check if there is such a named value already
     return CompilerContext::NamedValues[var_name];
   }
