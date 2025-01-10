@@ -31,9 +31,7 @@ namespace ast {
   //TODO: division is not as simple as the others
 
   }
-  void BinaryOperator::codegen() {
-    //TODO: implement using builder
-  }
+
   //TODO: the BinaryOperator uses deduce_type() to find out what type it should be. 
   // There will be no implicit conversions because those sound like a very bad idea
   BinaryOperator::BinaryOperator(std::string operator_type, std::shared_ptr<ExprNode> left, std::shared_ptr<ExprNode> right)
@@ -55,8 +53,7 @@ namespace ast {
   llvm::Value* IntegerConstant::eval() {
     return llvm::ConstantInt::get(*CompilerContext::TheContext, llvm::APInt(32, value));
   }
-  void IntegerConstant::codegen() {
-  }
+
   std::string IntegerConstant::get_name() {
     return "Integer Constant";
   }
@@ -67,8 +64,7 @@ namespace ast {
     //TODO: maybe add some check if there is such a named value already
     return CompilerContext::NamedValues[var_name];
   }
-  void VariableIdentifier::codegen() {
-  }
+
   std::string VariableIdentifier::get_name() {
     return "Variable Identifier";
   }
@@ -76,8 +72,7 @@ namespace ast {
   void FunctionCallArgs::add_arg(std::shared_ptr<ExprNode> arg) {
     args.push_back(arg);
   }
-  void FunctionCallArgs::codegen() {
-  }
+
   std::string FunctionCallArgs::get_name() {
     return "Function Call Args";
   }
@@ -90,8 +85,7 @@ namespace ast {
 
   FunctionCallArglist::FunctionCallArglist(std::shared_ptr<FunctionCallArgs> args) 
   : args(args) {}
-  void FunctionCallArglist::codegen() {
-  }
+
   std::string FunctionCallArglist::get_name() {
     return "Function Call Arglist";
   }
@@ -106,8 +100,7 @@ namespace ast {
   llvm::Value* FunctionCallExpr::eval() {
     //TODO: make args accessible so that we can make a call
   }
-  void FunctionCallExpr::codegen() {
-  }
+
   std::string FunctionCallExpr::get_name() {
     return "Function Call Expression";
   }

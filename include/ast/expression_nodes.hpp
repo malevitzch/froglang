@@ -25,7 +25,6 @@ namespace ast {
   public: 
     BinaryOperator(std::string operator_type, std::shared_ptr<ExprNode> left, std::shared_ptr<ExprNode> right);
     virtual llvm::Value* eval() override;
-    virtual void codegen() override;
     virtual std::string get_type() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
@@ -38,9 +37,8 @@ namespace ast {
     // so that we can have arbitrary size integers later
   public:
     IntegerConstant(std::string data, std::string type);
-    virtual ~IntegerConstant() = default;
     virtual llvm::Value* eval() override;
-    virtual void codegen() override;
+    virtual ~IntegerConstant() = default;
     virtual std::string get_name() override;
   };
 
@@ -50,7 +48,6 @@ namespace ast {
   public:
     VariableIdentifier(std::string var_name, std::string type);
     virtual llvm::Value* eval() override;
-    virtual void codegen() override;
     virtual std::string get_name() override;
   };
 
@@ -61,7 +58,6 @@ namespace ast {
     FunctionCallArgs() = default;
     ~FunctionCallArgs() = default;
     void add_arg(std::shared_ptr<ExprNode> arg);
-    virtual void codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
@@ -73,7 +69,6 @@ namespace ast {
     FunctionCallArglist() = default;
     FunctionCallArglist(std::shared_ptr<FunctionCallArgs> args);
     virtual ~FunctionCallArglist() = default;
-    virtual void codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
@@ -86,7 +81,6 @@ namespace ast {
     FunctionCallExpr(std::string function_name, std::shared_ptr<FunctionCallArglist> args);
     virtual ~FunctionCallExpr() = default;
     virtual llvm::Value* eval() override;
-    virtual void codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };

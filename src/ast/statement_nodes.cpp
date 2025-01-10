@@ -13,9 +13,6 @@ namespace ast {
     return "Statements Node";
   }
 
-  void Statements::codegen() {
-  }
-
   void Statements::add_statement(std::shared_ptr<StatementNode> statement) {
     statements.push_back(statement);
   }
@@ -36,9 +33,6 @@ namespace ast {
 
   DeclarationNode::DeclarationNode(std::string var_type, std::string var_name) 
   : var_type(var_type), var_name(var_name) {final = true;}
-  void DeclarationNode::codegen() {
-
-  }
   std::string DeclarationNode::get_name() {
     return "Declaration Node";
   }

@@ -10,9 +10,9 @@ namespace ast {
   protected:
     StatementNode() = default;
     virtual ~StatementNode() = default;
+    virtual void codegen() = 0;
   public:
     virtual std::string get_name() override;
-    virtual void codegen() override;
   };
 
   // This inherits from Node directly because a bundle of statements is not a statement.
@@ -23,7 +23,6 @@ namespace ast {
     Statements() = default;
     virtual ~Statements() = default;
     virtual std::string get_name() override;
-    virtual void codegen() override;
     void add_statement(std::shared_ptr<StatementNode> statement);
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
@@ -46,7 +45,7 @@ namespace ast {
     std::string var_name;
   public:
     DeclarationNode(std::string var_type, std::string var_name);
-    virtual void codegen() override;
+
     std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   friend class DeclarationStatement;

@@ -20,7 +20,6 @@ namespace ast {
     virtual ~Node() = default;
   public:
     bool final = false;
-    virtual void codegen();
     virtual std::string get_name();
     virtual std::vector<std::shared_ptr<Node>> get_children();
   };

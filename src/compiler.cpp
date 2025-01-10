@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
   //std::shared_ptr<ast::Node> root;
   yy::parser p(lexer);
   p();
-  ast_root->codegen();
+  dynamic_pointer_cast<ast::ProgramNode>(ast_root)->codegen();
 
   std::ofstream ast_out("tree_output.txt");
 

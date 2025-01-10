@@ -2,9 +2,6 @@
 
 namespace ast {
 
-  void GlobjectNode::codegen() {
-    //TODO: implement
-  }
   std::string GlobjectNode::get_name() {
     return "Globject Node";
   }
@@ -30,9 +27,6 @@ namespace ast {
   void FunctionArgs::add_arg(std::shared_ptr<DeclarationNode> arg) {
     args.push_back(arg);
   }
-  void FunctionArgs::codegen() {
-    //TODO: implement
-  }
   std::string FunctionArgs::get_name() {
     return "Function Args";
   }
@@ -45,8 +39,6 @@ namespace ast {
 
   FunctionArglist::FunctionArglist(std::shared_ptr<FunctionArgs> args)
   : args(args) {}
-  void FunctionArglist::codegen() {
-  }
   std::string FunctionArglist::get_name() {
     return "Function Arglist";
   }
@@ -56,8 +48,6 @@ namespace ast {
 
   FunctionDeclaration::FunctionDeclaration(std::string name, std::shared_ptr<FunctionArglist> args, std::string return_type) 
   : name(name), args(args), return_type(return_type) {}
-  void FunctionDeclaration::codegen() {
-  }
   std::string FunctionDeclaration::get_name() {
     return "Function Declaration";
   }
@@ -67,6 +57,8 @@ namespace ast {
 
   FunctionGlobject::FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body) 
   : decl(decl), body(body) {}
+  void FunctionGlobject::codegen() {
+  }
   std::string FunctionGlobject::get_name() {
     return "Function Globject";
   }
