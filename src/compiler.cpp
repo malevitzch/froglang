@@ -36,9 +36,8 @@ void lex_file(std::string filename) {
   }
 }
 
-
-int main(int argc, char** argv) {
-
+void compile(std::istream* input_stream, std::string out_filename, std::ostream* out_debug_stream = &std::cerr) {
+  diagnostic_stream = out_debug_stream;
   auto TargetTriple = llvm::sys::getDefaultTargetTriple();
   llvm::InitializeAllTargetInfos();
   llvm::InitializeAllTargets();
@@ -59,26 +58,8 @@ int main(int argc, char** argv) {
   llvm::TargetOptions opt;
   auto TargetMachine = Target->createTargetMachine(TargetTriple, CPU, Features, opt, llvm::Reloc::PIC_);
 
-  std::istream* in;
-  std::ifstream file;
-  if(argc > 1) {
-    // If a file is provided, open it and set as input stream
-    file = std::ifstream(argv[1]);
-    if(!file.is_open()) {
-      std::cerr << "Cannot open file: " << argv[1] << "\n";
-      return 1;
-    }
-    //in = file;
-  } else {
-    std::cerr << "No file input given\n";
-    return 0;
-  }
-
-  std::ofstream debug_out("compilation_log.txt");
-  diagnostic_stream = &debug_out;
-  
-  // Create a lexer object
-  FrogLexer lexer(&file);
+ // Create a lexer object
+  FrogLexer lexer(input_stream);
   // Call the lexer
   Tokens::Token *yylval = new Tokens::Token();
   //std::shared_ptr<ast::Node> root;
@@ -88,7 +69,7 @@ int main(int argc, char** argv) {
 
   std::ofstream ast_out("tree_output.txt");
 
-  // codegen goes here 
+  // codegen goes here
   CompilerContext::Builder->SetInsertPoint(EntryBB);
   llvm::FunctionType *printfType = llvm::FunctionType::get(
   llvm::Type::getInt32Ty(*CompilerContext::TheContext), {llvm::Type::getInt8PtrTy(*CompilerContext::TheContext)}, true);
@@ -100,21 +81,35 @@ int main(int argc, char** argv) {
 
   CompilerContext::TheModule->setDataLayout(TargetMachine->createDataLayout());
   CompilerContext::TheModule->setTargetTriple(TargetTriple);
-
-  auto filename = "out.o";
   std::error_code EC;
-  llvm::raw_fd_ostream dest(filename, EC, llvm::sys::fs::OF_None);
+  
+  llvm::raw_fd_ostream dest(out_filename, EC, llvm::sys::fs::OF_None);
   llvm::legacy::PassManager pass;
   // This is the version used by modern LLVM
   auto FileType = llvm::CGFT_ObjectFile;
   if(TargetMachine->addPassesToEmitFile(pass, dest, nullptr, FileType)) {
-    std::cout<<"BUG";
-    return 1;
+    *diagnostic_stream << "BUG\n";
+    return;
   }
   pass.run(*CompilerContext::TheModule);
   dest.flush();
-  //CompilerContext::TheContext;
-  ast::Node* node = new ast::ProgramNode();
-  std::cout<<node->get_name()<<"\n";
 
+}
+
+
+int main(int argc, char** argv) {
+  std::ifstream file;
+  if(argc > 1) {
+    // If a file is provided, open it and set as input stream
+    file = std::ifstream(argv[1]);
+    if(!file.is_open()) {
+      std::cerr << "Cannot open file: " << argv[1] << "\n";
+      return 1;
+    }
+    std::ofstream debug_stream("debug.txt");
+    compile(&file, "out.o", &debug_stream);
+  } else {
+    std::cerr << "No file input given\n";
+    return 0;
+  }
 }
