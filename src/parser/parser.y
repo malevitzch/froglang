@@ -6,9 +6,11 @@
 %parse-param { FrogLexer& lexer }
 %code requires { 
   #include <memory>
+  #include <fstream>
   #include "ast.hpp"
   #include "froglexer.hpp"
   #include "tokens.hpp"
+  extern std::ostream* diagnostic_stream;
 }
 %code {
   extern std::shared_ptr<ast::Node> ast_root;
@@ -57,19 +59,19 @@
 program: /* */ {
     ast_root = std::make_shared<ast::ProgramNode>();
     $$ = ast_root;
-    std::cout<<"FINISHED\n";
+    *diagnostic_stream<<"FINISHED\n";
   }
   | program global_obj {
     auto prog_node = dynamic_pointer_cast<ast::ProgramNode>($1);
     auto globject = dynamic_pointer_cast<ast::GlobjectNode>($2);
     prog_node->add_obj(globject);
-    std::cout<<"Added globject to program"<<std::endl;
+    *diagnostic_stream<<"Added globject to program"<<std::endl;
     $$ = $1;
   }
   ;
 
 global_obj: function {
-    std::cout<<"FUNCTION\n";
+    *diagnostic_stream<<"FUNCTION\n";
     $$ = dynamic_pointer_cast<ast::GlobjectNode>($1);
   }
   ;
@@ -84,14 +86,14 @@ function: function_declaration block {
 function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
     //FIXME: TYPE_ID, add void functions as well
     $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), "int32");
-    std::cout<<"DECLARED function("<<$2->metadata<<")\n";
+    *diagnostic_stream<<"DECLARED function("<<$2->metadata<<")\n";
   }
   ;
 
 block: LBRACE statements RBRACE {
     auto statements = dynamic_pointer_cast<ast::Statements>($2);
     $$ = std::make_shared<ast::Block>(statements);
-    std::cout<<"BLOCK\n";
+    *diagnostic_stream<<"BLOCK\n";
   }
   ;
 
@@ -102,14 +104,14 @@ statements: /* empty */ {
     auto statements = dynamic_pointer_cast<ast::Statements>($1);
     auto statement = dynamic_pointer_cast<ast::StatementNode>($2); 
     statements->add_statement(statement);
-    std::cout<<"combined\n";
+    *diagnostic_stream<<"combined\n";
     $$ = $1;
   }
   ;
 
 statement: expression SEMICOLON {
     $$ = std::make_shared<ast::ExpressionStatement>(dynamic_pointer_cast<ast::ExprNode>($1));
-    std::cout<<"Expression Statement\n";
+    *diagnostic_stream<<"Expression Statement\n";
   }
   | declaration SEMICOLON {
     $$ = std::make_shared<ast::DeclarationStatement>(dynamic_pointer_cast<ast::DeclarationNode>($1));
@@ -122,17 +124,17 @@ statement: expression SEMICOLON {
   | RETURN expression SEMICOLON {
     auto expr = dynamic_pointer_cast<ast::ExprNode>($2);
     $$ = std::make_shared<ast::ReturnStatement>(expr->get_type(), expr);
-    std::cout<<"RETURNED\n";
+    *diagnostic_stream<<"RETURNED\n";
   }
   | RETURN SEMICOLON {
-    std::cout<<"RETURNED (void)\n";
+    *diagnostic_stream<<"RETURNED (void)\n";
   }
   ;
 
 declaration: IDENTIFIER COLON TYPE_ID {
     //FIXME: TYPES
     $$ = std::make_shared<ast::DeclarationNode>("int32", $1->metadata);
-    std::cout<<"DECLARED\n";
+    *diagnostic_stream<<"DECLARED\n";
   }
   ;
 
@@ -162,7 +164,7 @@ call_args: /* empty */ {
 expression: NUMBER {
     //TODO: solve the type issue
     $$ = std::make_shared<ast::IntegerConstant>($1->metadata, "int32");
-    std::cout<<"Converted\n";
+    *diagnostic_stream<<"Converted\n";
   }
   | IDENTIFIER {
     //TODO: solve the type issue (actually it's only during codegen)
@@ -176,19 +178,19 @@ expression: NUMBER {
   | LPAREN expression RPAREN {$$ = $2;}
   | expression PLUS expression {
     $$ = std::make_shared<ast::BinaryOperator>("+", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    std::cout<<"Added\n";
+    *diagnostic_stream<<"Added\n";
   }
   | expression MINUS expression {
     $$ = std::make_shared<ast::BinaryOperator>("-", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    std::cout<<"Subtracted\n";
+    *diagnostic_stream<<"Subtracted\n";
   }
   | expression STAR expression {
     $$ = std::make_shared<ast::BinaryOperator>("*", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    std::cout<<"Multiplied\n";
+    *diagnostic_stream<<"Multiplied\n";
   }
   | expression SLASH expression {
     $$ = std::make_shared<ast::BinaryOperator>("+", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    std::cout<<"Divided\n";
+    *diagnostic_stream<<"Divided\n";
   }
   ;
 
@@ -212,7 +214,7 @@ args: /* */ {
 arglist: LPAREN args RPAREN {
     auto args = dynamic_pointer_cast<ast::FunctionArgs>($2);
     $$ = std::make_shared<ast::FunctionArglist>(args);
-    std::cout<<"FUNCTION ARGLIST\n";
+    *diagnostic_stream<<"FUNCTION ARGLIST\n";
   }
   ;
 %%

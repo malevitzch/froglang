@@ -24,6 +24,8 @@
 #include "llvm/Target/TargetOptions.h"
 #include "llvm/TargetParser/Host.h"
 
+extern std::ostream* diagnostic_stream;
+
 std::shared_ptr<ast::Node> ast_root;
 
 void lex_file(std::string filename) {
@@ -72,6 +74,9 @@ int main(int argc, char** argv) {
     return 0;
   }
 
+  std::ofstream debug_out("compilation_log.txt");
+  diagnostic_stream = &debug_out;
+  
   // Create a lexer object
   FrogLexer lexer(&file);
   // Call the lexer
