@@ -36,7 +36,8 @@ void lex_file(std::string filename) {
   }
 }
 
-void compile(std::istream* input_stream, std::string out_filename, std::ostream* out_debug_stream = &std::cerr) {
+void compile(std::istream* input_stream, std::string out_filename,
+             std::ostream* out_debug_stream = &std::cerr) {
   diagnostic_stream = out_debug_stream;
   auto TargetTriple = llvm::sys::getDefaultTargetTriple();
   llvm::InitializeAllTargetInfos();
@@ -82,7 +83,7 @@ void compile(std::istream* input_stream, std::string out_filename, std::ostream*
   CompilerContext::TheModule->setDataLayout(TargetMachine->createDataLayout());
   CompilerContext::TheModule->setTargetTriple(TargetTriple);
   std::error_code EC;
-  
+
   llvm::raw_fd_ostream dest(out_filename, EC, llvm::sys::fs::OF_None);
   llvm::legacy::PassManager pass;
   // This is the version used by modern LLVM

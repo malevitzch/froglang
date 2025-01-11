@@ -48,6 +48,9 @@ namespace ast {
 
   FunctionDeclaration::FunctionDeclaration(std::string name, std::shared_ptr<FunctionArglist> args, std::string return_type) 
   : name(name), args(args), return_type(return_type) {}
+  void FunctionDeclaration::codegen() {
+    //TODO: implement
+  }
   std::string FunctionDeclaration::get_name() {
     return "Function Declaration";
   }
