@@ -3,10 +3,9 @@ Toolchain experiments
 # todo
 - Move the lexer/parser outputs to a stream of choice rather than printing them to cout
 
-- Redesign the codegen function because we did something very stupid
 - Find all the dependencies using docker or something
 
-- Figure out how llvm works
 - Generate code with llvm
+- Find a good way to use the print function from C in a way that does not look like a band-aid fix
 
 - Add control flow
