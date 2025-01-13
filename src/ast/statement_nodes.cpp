@@ -29,6 +29,15 @@ namespace ast {
   void Block::codegen() {
     std::vector<std::string> block_named_values;
     for(std::shared_ptr<StatementNode> statement : statements->get()) {
+      if(statement->get_name() == "Declaration Satatement") {
+        auto decl_statement = dynamic_pointer_cast<DeclarationStatement>(statement);
+        //TODO: impl
+      }
+      else if(statement->get_name() == "Declaration Assignment Statement") {
+        auto decl_assignment_statement = dynamic_pointer_cast<DeclarationStatement>(statement);
+        //CompilerContext::NamedValues->add_val();
+        //TODO: impl
+      }
       //TODO: process statements, taking special care of declarations
     }
     //TODO: remove all block named values from the NamedValues data structure
@@ -76,7 +85,7 @@ namespace ast {
   void DeclarationAssignmentStatement::codegen() {
   }
   std::string DeclarationAssignmentStatement::get_name() {
-    return "Declaration Assignment Node";
+    return "Declaration Assignment Statement";
   }
   std::vector<std::shared_ptr<Node>> DeclarationAssignmentStatement::get_children() {
     return {decl, expr};

@@ -11,7 +11,9 @@ namespace DSA {
   public:
     bool has_val(std::string name);
     llvm::Value* get_val(std::string name);
+    void add_val(std::string name);
     void add_val(std::string name, llvm::Value* val);
+    void set_val(std::string name, llvm::Value* val);
     void remove_val(std::string name);
   };
 }

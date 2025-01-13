@@ -83,6 +83,8 @@ namespace ast {
     virtual void codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+  //FIXME: this might not be a good idea
+  friend class Block;
   };
 
   class ReturnStatement : public StatementNode {
