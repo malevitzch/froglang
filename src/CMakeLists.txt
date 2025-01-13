@@ -37,6 +37,7 @@ set(LEXER_SOURCES
   ast/statement_nodes.cpp
   ast/globject_nodes.cpp
   ast/globals.cpp
+  dsa/named_values.cpp
 )
 
 add_executable(lexer ${LEXER_SOURCES})
@@ -49,8 +50,6 @@ set(COMPILER_SOURCES
   tokens/tokens.cpp
   compiler.cpp
   ast/node.cpp
-  ast/expression_nodes.cpp
-  ast/globals.cpp
   ast/expression_nodes.cpp
   ast/statement_nodes.cpp
   ast/globject_nodes.cpp
