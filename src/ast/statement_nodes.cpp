@@ -9,20 +9,29 @@ namespace ast {
   void StatementNode::codegen() {
   }
 
+  const std::vector<std::shared_ptr<StatementNode>>& Statements::get() {
+    return statements;
+  }
   std::string Statements::get_name() {
     return "Statements Node";
   }
-
   void Statements::add_statement(std::shared_ptr<StatementNode> statement) {
     statements.push_back(statement);
   }
   std::vector<std::shared_ptr<Node>> Statements::get_children() {
-    return statements;
+    std::vector<std::shared_ptr<Node>> children;
+    for(std::shared_ptr<StatementNode> child : statements) children.push_back(child);
+    return children;
   }
 
   Block::Block(std::shared_ptr<Statements> statements) 
   : statements(statements) {}
   void Block::codegen() {
+    std::vector<std::string> block_named_values;
+    for(std::shared_ptr<StatementNode> statement : statements->get()) {
+      //TODO: process statements, taking special care of declarations
+    }
+    //TODO: remove all block named values from the NamedValues data structure
   }
   std::string Block::get_name() {
     return "Block";

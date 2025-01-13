@@ -18,10 +18,11 @@ namespace ast {
   // This inherits from Node directly because a bundle of statements is not a statement.
   class Statements : public Node {
   private:
-    std::vector<std::shared_ptr<Node>> statements;
+    std::vector<std::shared_ptr<StatementNode>> statements;
   public:
     Statements() = default;
     virtual ~Statements() = default;
+    const std::vector<std::shared_ptr<StatementNode>>& get();
     virtual std::string get_name() override;
     void add_statement(std::shared_ptr<StatementNode> statement);
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
