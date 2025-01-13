@@ -55,6 +55,7 @@ set(COMPILER_SOURCES
   ast/statement_nodes.cpp
   ast/globject_nodes.cpp
   ast/globals.cpp
+  dsa/named_values.cpp
 )
 
 
