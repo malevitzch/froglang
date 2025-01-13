@@ -61,10 +61,10 @@ namespace ast {
   VariableIdentifier::VariableIdentifier(std::string var_name, std::string type) 
   : ExprNode(type), var_name(var_name) { final = true; }
   llvm::Value* VariableIdentifier::eval() {
-    if(!CompilerContext::NamedValues->contains(var_name)) {
+    if(!CompilerContext::NamedValues->has_val(var_name)) {
       //TODO: some kind of exception?
     }
-    return CompilerContext::NamedValues->at(var_name);
+    return CompilerContext::NamedValues->get_val(var_name);
   }
 
   std::string VariableIdentifier::get_name() {
