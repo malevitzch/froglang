@@ -39,6 +39,7 @@ namespace ast {
       }
       statement->codegen();
     }
+    //TODO: in the future, when we want to do typechecks, this should probably be in reverse order or smth
     for(std::string value_name : block_named_values) {
       CompilerContext::NamedValues->remove_val(value_name);
     }
@@ -53,7 +54,7 @@ namespace ast {
   DeclarationNode::DeclarationNode(std::string var_type, std::string var_name) 
   : var_type(var_type), var_name(var_name) {final = true;}
   void DeclarationNode::codegen() {
-    //TODO: implement
+    CompilerContext::NamedValues->add_val(var_name);
   }
   std::string DeclarationNode::get_name() {
     return "Declaration Node";
@@ -68,6 +69,7 @@ namespace ast {
   ExpressionStatement::ExpressionStatement(std::shared_ptr<ExprNode> expr) 
   : expr(expr) {}
   void ExpressionStatement::codegen() {
+    expr->eval();
   }
   std::string ExpressionStatement::get_name() {
     return "Expression Statement";
@@ -79,6 +81,7 @@ namespace ast {
   DeclarationStatement::DeclarationStatement(std::shared_ptr<DeclarationNode> decl)
   : decl(decl) {}
   void DeclarationStatement::codegen() {
+    CompilerContext::NamedValues->add_val(get_varname());
   }
   std::string DeclarationStatement::get_name() {
     return "Declaration Statement";
@@ -93,6 +96,7 @@ namespace ast {
   DeclarationAssignmentStatement::DeclarationAssignmentStatement(std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr)
   : decl(decl), expr(expr) {}
   void DeclarationAssignmentStatement::codegen() {
+    CompilerContext::NamedValues->add_val(decl->get_varname(), expr->eval());
   }
   std::string DeclarationAssignmentStatement::get_name() {
     return "Declaration Assignment Statement";
@@ -109,6 +113,7 @@ namespace ast {
   ReturnStatement::ReturnStatement(std::string type, std::shared_ptr<ExprNode> val)
   : type(type), val(val) {}
   void ReturnStatement::codegen() {
+    //TODO: this is not that easy to do I'm pretty sure
   }
   std::string ReturnStatement::get_name() {
     return "Return Statement";

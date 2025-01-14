@@ -51,7 +51,6 @@ namespace ast {
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
     std::string get_varname();
-  friend class DeclarationStatement;
 
   };
 
