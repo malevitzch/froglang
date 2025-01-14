@@ -51,13 +51,19 @@ namespace ast {
 
   DeclarationNode::DeclarationNode(std::string var_type, std::string var_name) 
   : var_type(var_type), var_name(var_name) {final = true;}
+  void DeclarationNode::codegen() {
+    //TODO: implement
+  }
   std::string DeclarationNode::get_name() {
     return "Declaration Node";
   }
   std::vector<std::shared_ptr<Node>> DeclarationNode::get_children() {
     return {};
   }
-  
+  std::string DeclarationNode::get_varname() {
+    return var_name;
+  }
+
   ExpressionStatement::ExpressionStatement(std::shared_ptr<ExprNode> expr) 
   : expr(expr) {}
   void ExpressionStatement::codegen() {
@@ -79,6 +85,9 @@ namespace ast {
   std::vector<std::shared_ptr<Node>> DeclarationStatement::get_children() {
     return {decl};
   }
+  std::string DeclarationStatement::get_varname() {
+    return decl->get_varname();
+  }
 
   DeclarationAssignmentStatement::DeclarationAssignmentStatement(std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr)
   : decl(decl), expr(expr) {}
@@ -89,6 +98,9 @@ namespace ast {
   }
   std::vector<std::shared_ptr<Node>> DeclarationAssignmentStatement::get_children() {
     return {decl, expr};
+  }
+  std::string DeclarationAssignmentStatement::get_varname() {
+    return decl->get_varname();
   }
 
   ReturnStatement::ReturnStatement()

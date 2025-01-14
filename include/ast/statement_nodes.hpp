@@ -46,9 +46,11 @@ namespace ast {
     std::string var_name;
   public:
     DeclarationNode(std::string var_type, std::string var_name);
-
+    virtual void codegen();
     std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    std::string get_varname();
   friend class DeclarationStatement;
 
   };
@@ -71,6 +73,8 @@ namespace ast {
     virtual void codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    std::string get_varname();
   };
 
   class DeclarationAssignmentStatement : public StatementNode {
@@ -83,8 +87,8 @@ namespace ast {
     virtual void codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
-  //FIXME: this might not be a good idea
-  friend class Block;
+
+    std::string get_varname();
   };
 
   class ReturnStatement : public StatementNode {
