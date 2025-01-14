@@ -24,9 +24,6 @@ namespace ast {
     return children;
   }
 
-  void FunctionArgs::add_arg(std::shared_ptr<DeclarationNode> arg) {
-    args.push_back(arg);
-  }
   std::string FunctionArgs::get_name() {
     return "Function Args";
   }
@@ -35,6 +32,15 @@ namespace ast {
     for(std::shared_ptr<DeclarationNode> arg : args) 
       children.push_back(arg);
     return children;
+  }
+  void FunctionArgs::add_arg(std::shared_ptr<DeclarationNode> arg) {
+    args.push_back(arg);
+  }
+  std::vector<std::shared_ptr<DeclarationNode>> FunctionArgs::get_args() {
+    return args;
+  }
+  std::vector<std::shared_ptr<DeclarationNode>> FunctionArglist::get_args() {
+    return args->get_args();
   }
 
   FunctionArglist::FunctionArglist(std::shared_ptr<FunctionArgs> args)
@@ -49,7 +55,16 @@ namespace ast {
   FunctionDeclaration::FunctionDeclaration(std::string name, std::shared_ptr<FunctionArglist> args, std::string return_type) 
   : name(name), args(args), return_type(return_type) {}
   void FunctionDeclaration::codegen() {
-    //TODO: implement
+    std::vector<std::string> variables_to_clean_up;
+    for(std::shared_ptr<DeclarationNode> arg : args->get_args()) {
+      variables_to_clean_up.push_back(arg->get_varname());
+    }
+    //TODO: IMPLEMENT everything that actually matters
+    
+    for(std::string varname : variables_to_clean_up) {
+      CompilerContext::NamedValues->remove_val(varname);
+    }
+    //TODO: Probably in reverse in the future in case of type checks? Doesn't really matter though on a second thought. Stil, better to keep this in mind
   }
   std::string FunctionDeclaration::get_name() {
     return "Function Declaration";

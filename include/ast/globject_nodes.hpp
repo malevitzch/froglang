@@ -32,9 +32,11 @@ namespace ast {
   public:
     FunctionArgs() = default;
     virtual ~FunctionArgs() = default;
-    void add_arg(std::shared_ptr<DeclarationNode> arg);
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    void add_arg(std::shared_ptr<DeclarationNode> arg);
+    std::vector<std::shared_ptr<DeclarationNode>> get_args();
   };
   
   class FunctionArglist : public Node {
@@ -46,6 +48,8 @@ namespace ast {
     virtual ~FunctionArglist() = default;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    std::vector<std::shared_ptr<DeclarationNode>> get_args();
   };
 
   class FunctionDeclaration : public GlobjectNode {
