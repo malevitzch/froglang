@@ -6,9 +6,6 @@ namespace ast {
     return "Statement Node";
   }
 
-  void StatementNode::codegen() {
-  }
-
   const std::vector<std::shared_ptr<StatementNode>>& Statements::get() {
     return statements;
   }
