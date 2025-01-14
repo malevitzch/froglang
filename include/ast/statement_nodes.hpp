@@ -10,8 +10,8 @@ namespace ast {
   protected:
     StatementNode() = default;
     virtual ~StatementNode() = default;
-    virtual void codegen() = 0;
   public:
+    virtual void codegen() = 0;
     virtual std::string get_name() override;
   };
 

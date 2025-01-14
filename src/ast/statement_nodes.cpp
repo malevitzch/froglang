@@ -31,16 +31,17 @@ namespace ast {
     for(std::shared_ptr<StatementNode> statement : statements->get()) {
       if(statement->get_name() == "Declaration Satatement") {
         auto decl_statement = dynamic_pointer_cast<DeclarationStatement>(statement);
-        //TODO: impl
+        block_named_values.push_back(decl_statement->get_varname());
       }
       else if(statement->get_name() == "Declaration Assignment Statement") {
         auto decl_assignment_statement = dynamic_pointer_cast<DeclarationStatement>(statement);
-        //CompilerContext::NamedValues->add_val();
-        //TODO: impl
+        block_named_values.push_back(decl_assignment_statement->get_varname());
       }
-      //TODO: process statements, taking special care of declarations
+      statement->codegen();
     }
-    //TODO: remove all block named values from the NamedValues data structure
+    for(std::string value_name : block_named_values) {
+      CompilerContext::NamedValues->remove_val(value_name);
+    }
   }
   std::string Block::get_name() {
     return "Block";
