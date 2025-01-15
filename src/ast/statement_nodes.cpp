@@ -106,8 +106,8 @@ namespace ast {
   }
 
   ReturnStatement::ReturnStatement()
-  : type("void"), val(nullptr) {}
-  ReturnStatement::ReturnStatement(std::string type, std::shared_ptr<ExprNode> val)
+  : type(llvm::Type::getVoidTy(*CompilerContext::TheContext)), val(nullptr) {}
+  ReturnStatement::ReturnStatement(llvm::Type* type, std::shared_ptr<ExprNode> val)
   : type(type), val(val) {}
   void ReturnStatement::codegen() {
     //TODO: this is not that easy to do I'm pretty sure
@@ -116,7 +116,7 @@ namespace ast {
     return "Return Statement";
   }
   std::vector<std::shared_ptr<Node>> ReturnStatement::get_children() {
-    if(type == "void") return {};
+    if(type == llvm::Type::getVoidTy(*CompilerContext::TheContext)) return {};
     return {val};
   }
 }

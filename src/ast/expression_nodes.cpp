@@ -7,12 +7,12 @@
 
 
 namespace ast {
-  ExprNode::ExprNode(std::string type)
+  ExprNode::ExprNode(llvm::Type* type)
   : type(type) {}
   std::string ExprNode::get_name() {
     return "Expression Node";
   }
-  std::string ExprNode::get_type() {
+  llvm::Type* ExprNode::get_type() {
     return type;
   }
   
@@ -35,9 +35,9 @@ namespace ast {
   //TODO: the BinaryOperator uses deduce_type() to find out what type it should be. 
   // There will be no implicit conversions because those sound like a very bad idea
   BinaryOperator::BinaryOperator(std::string operator_type, std::shared_ptr<ExprNode> left, std::shared_ptr<ExprNode> right)
-  : ExprNode("int32"), operator_type(operator_type), left(left), right(right) {}
+  : ExprNode(llvm::Type::getInt32Ty(*CompilerContext::TheContext)), operator_type(operator_type), left(left), right(right) {}
   // TODO: This needs complex logic for result type deduction once we want to use more than just integers.
-  std::string BinaryOperator::get_type() {
+  llvm::Type* BinaryOperator::get_type() {
     //FIXME: This is a very bad idea, even when we just introduce if statements (unless we use integers as bools, then it's fine for if statements but bad for everything else).
     return type;
   }
@@ -48,7 +48,7 @@ namespace ast {
     return {left, right};
   }
 
-  IntegerConstant::IntegerConstant(std::string data, std::string type) 
+  IntegerConstant::IntegerConstant(std::string data, llvm::Type* type) 
   : ExprNode(type), value(std::stoi(data)) { final = true; }
   llvm::Value* IntegerConstant::eval() {
     return llvm::ConstantInt::get(*CompilerContext::TheContext, llvm::APInt(32, value));
@@ -58,7 +58,7 @@ namespace ast {
     return "Integer Constant";
   }
 
-  VariableIdentifier::VariableIdentifier(std::string var_name, std::string type) 
+  VariableIdentifier::VariableIdentifier(std::string var_name, llvm::Type* type) 
   : ExprNode(type), var_name(var_name) { final = true; }
   llvm::Value* VariableIdentifier::eval() {
     if(!CompilerContext::NamedValues->has_val(var_name)) {
@@ -98,7 +98,7 @@ namespace ast {
 
   //FIXME: crimes are being committed here
   FunctionCallExpr::FunctionCallExpr(std::string function_name, std::shared_ptr<FunctionCallArglist> args)
-  : ExprNode("int32"), function_name(function_name), args(args) {}
+  : ExprNode(llvm::Type::getInt32Ty(*CompilerContext::TheContext)), function_name(function_name), args(args) {}
   llvm::Value* FunctionCallExpr::eval() {
     //TODO: make args accessible so that we can make a call
   }

@@ -2,6 +2,8 @@
 #include "node.hpp"
 #include "expression_nodes.hpp"
 
+#include "llvm/IR/Type.h"
+
 namespace ast {
 
   // Abstract class
@@ -92,11 +94,11 @@ namespace ast {
 
   class ReturnStatement : public StatementNode {
   private:
-    std::string type;
+  llvm::Type* type;
     std::shared_ptr<ExprNode> val;
   public:
     ReturnStatement(); // For void returns
-    ReturnStatement(std::string type, std::shared_ptr<ExprNode> val); // For everything else
+    ReturnStatement(llvm::Type*, std::shared_ptr<ExprNode> val); // For everything else
     virtual ~ReturnStatement() = default;
     virtual void codegen() override;
     virtual std::string get_name() override;

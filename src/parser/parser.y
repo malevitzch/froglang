@@ -163,12 +163,12 @@ call_args: /* empty */ {
 
 expression: NUMBER {
     //TODO: solve the type issue
-    $$ = std::make_shared<ast::IntegerConstant>($1->metadata, "int32");
+    $$ = std::make_shared<ast::IntegerConstant>($1->metadata, llvm::Type::getInt32Ty(*CompilerContext::TheContext));
     *diagnostic_stream<<"Converted\n";
   }
   | IDENTIFIER {
     //TODO: solve the type issue (actually it's only during codegen)
-    $$ = std::make_shared<ast::VariableIdentifier>($1->metadata, "int32");
+    $$ = std::make_shared<ast::VariableIdentifier>($1->metadata, llvm::Type::getInt32Ty(*CompilerContext::TheContext));
   }
   | IDENTIFIER call_arglist {
     auto call_arglist = dynamic_pointer_cast<ast::FunctionCallArglist>($2);

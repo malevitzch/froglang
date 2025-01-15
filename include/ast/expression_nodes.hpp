@@ -1,6 +1,8 @@
 #pragma once
 #include "ast/node.hpp"
 
+#include "llvm/IR/Type.h"
+
 namespace ast {
 
   class ExprNode : public Node {
@@ -9,13 +11,13 @@ namespace ast {
     ExprNode() = default;
     virtual ~ExprNode() = default;
     //TODO: this might not exist in the future
-    ExprNode(std::string type);
+    ExprNode(llvm::Type* type);
     // TODO: Type might eventually become something more complicated than a string
-    std::string type;
+    llvm::Type* type;
   public:
     virtual llvm::Value* eval() = 0;
     virtual std::string get_name() override;
-    virtual std::string get_type();
+    virtual llvm::Type* get_type();
   };
 
   class BinaryOperator : public ExprNode {
@@ -25,7 +27,7 @@ namespace ast {
   public: 
     BinaryOperator(std::string operator_type, std::shared_ptr<ExprNode> left, std::shared_ptr<ExprNode> right);
     virtual llvm::Value* eval() override;
-    virtual std::string get_type() override;
+    virtual llvm::Type* get_type() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
@@ -36,7 +38,7 @@ namespace ast {
     // TODO: This might be replaced by an arbitrarily-large bit array
     // so that we can have arbitrary size integers later
   public:
-    IntegerConstant(std::string data, std::string type);
+    IntegerConstant(std::string data, llvm::Type* type);
     virtual llvm::Value* eval() override;
     virtual ~IntegerConstant() = default;
     virtual std::string get_name() override;
@@ -46,7 +48,7 @@ namespace ast {
   private:
     std::string var_name;
   public:
-    VariableIdentifier(std::string var_name, std::string type);
+    VariableIdentifier(std::string var_name, llvm::Type* type);
     virtual llvm::Value* eval() override;
     virtual std::string get_name() override;
   };
