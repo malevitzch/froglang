@@ -62,6 +62,9 @@ namespace ast {
   std::string DeclarationNode::get_varname() {
     return var_name;
   }
+  llvm::Type* DeclarationNode::get_var_type() {
+    return var_type;
+  }
 
   ExpressionStatement::ExpressionStatement(std::shared_ptr<ExprNode> expr) 
   : expr(expr) {}

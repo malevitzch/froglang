@@ -51,6 +51,13 @@ namespace ast {
   std::vector<std::shared_ptr<Node>> FunctionArglist::get_children() {
     return {args};
   }
+  std::vector<llvm::Type*> FunctionArglist::get_arg_types() {
+    std::vector<llvm::Type*> types;
+    for(std::shared_ptr<DeclarationNode> arg : get_args()) {
+      types.push_back(arg->get_var_type());
+    }
+    return types;
+  }
 
   FunctionDeclaration::FunctionDeclaration(std::string name, std::shared_ptr<FunctionArglist> args, llvm::Type* return_type) 
   : name(name), args(args), return_type(return_type) {}
@@ -60,7 +67,7 @@ namespace ast {
       variables_to_clean_up.push_back(arg->get_varname());
     }
     //TODO: IMPLEMENT everything that actually matters
-    
+    std::vector<llvm::Type*> arg_types = args->get_arg_types();
     for(std::string varname : variables_to_clean_up) {
       CompilerContext::NamedValues->remove_val(varname);
     }

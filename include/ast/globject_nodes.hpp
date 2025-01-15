@@ -50,6 +50,7 @@ namespace ast {
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
     std::vector<std::shared_ptr<DeclarationNode>> get_args();
+    std::vector<llvm::Type*> get_arg_types();
   };
 
   class FunctionDeclaration : public GlobjectNode {
