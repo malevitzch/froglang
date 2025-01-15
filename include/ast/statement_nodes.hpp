@@ -44,10 +44,10 @@ namespace ast {
 
   class DeclarationNode : public Node {
   private:
-    std::string var_type;
+    llvm::Type* var_type;
     std::string var_name;
   public:
-    DeclarationNode(std::string var_type, std::string var_name);
+    DeclarationNode(llvm::Type* var_type, std::string var_name);
     virtual void codegen();
     std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;

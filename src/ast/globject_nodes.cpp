@@ -52,7 +52,7 @@ namespace ast {
     return {args};
   }
 
-  FunctionDeclaration::FunctionDeclaration(std::string name, std::shared_ptr<FunctionArglist> args, std::string return_type) 
+  FunctionDeclaration::FunctionDeclaration(std::string name, std::shared_ptr<FunctionArglist> args, llvm::Type* return_type) 
   : name(name), args(args), return_type(return_type) {}
   void FunctionDeclaration::codegen() {
     std::vector<std::string> variables_to_clean_up;

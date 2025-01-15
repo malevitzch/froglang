@@ -48,7 +48,7 @@ namespace ast {
     return {statements};
   }
 
-  DeclarationNode::DeclarationNode(std::string var_type, std::string var_name) 
+  DeclarationNode::DeclarationNode(llvm::Type* var_type, std::string var_name) 
   : var_type(var_type), var_name(var_name) {final = true;}
   void DeclarationNode::codegen() {
     CompilerContext::NamedValues->add_val(var_name);
