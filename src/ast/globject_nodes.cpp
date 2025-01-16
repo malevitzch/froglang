@@ -62,6 +62,8 @@ namespace ast {
   FunctionDeclaration::FunctionDeclaration(std::string name, std::shared_ptr<FunctionArglist> args, llvm::Type* return_type) 
   : name(name), args(args), return_type(return_type) {}
   void FunctionDeclaration::codegen() {
+  }
+  llvm::Function* FunctionDeclaration::get_func() {
 
     std::vector<llvm::Type*> arg_types = args->get_arg_types();
 
@@ -70,6 +72,7 @@ namespace ast {
 
     llvm::Function* this_function =
       llvm::Function::Create(func_type, llvm::Function::ExternalLinkage, name, CompilerContext::TheModule.get());
+    return this_function;
 
   }
   std::string FunctionDeclaration::get_name() {
@@ -90,7 +93,7 @@ namespace ast {
     for(std::shared_ptr<DeclarationNode> arg : decl->args->get_args()) {
       variables_to_clean_up.push_back(arg->get_varname());
     }
-
+    llvm::BasicBlock *EntryBlock = llvm::BasicBlock::Create(*CompilerContext::TheContext, decl->name, decl->get_func());
     body->codegen();
 
     //TODO: Probably in reverse in the future in case of type checks? Doesn't really matter though on a second thought. Stil, better to keep this in mind
