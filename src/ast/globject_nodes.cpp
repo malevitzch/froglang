@@ -62,12 +62,20 @@ namespace ast {
   FunctionDeclaration::FunctionDeclaration(std::string name, std::shared_ptr<FunctionArglist> args, llvm::Type* return_type) 
   : name(name), args(args), return_type(return_type) {}
   void FunctionDeclaration::codegen() {
+
     std::vector<std::string> variables_to_clean_up;
+
     for(std::shared_ptr<DeclarationNode> arg : args->get_args()) {
       variables_to_clean_up.push_back(arg->get_varname());
     }
-    //TODO: IMPLEMENT everything that actually matters
     std::vector<llvm::Type*> arg_types = args->get_arg_types();
+
+    llvm::FunctionType* func_type =
+      llvm::FunctionType::get(return_type, arg_types, false);
+
+    llvm::Function* this_function =
+      llvm::Function::Create(func_type, llvm::Function::ExternalLinkage, name, CompilerContext::TheModule.get());
+
     for(std::string varname : variables_to_clean_up) {
       CompilerContext::NamedValues->remove_val(varname);
     }
