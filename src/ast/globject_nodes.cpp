@@ -76,6 +76,10 @@ namespace ast {
     llvm::Function* this_function =
       llvm::Function::Create(func_type, llvm::Function::ExternalLinkage, name, CompilerContext::TheModule.get());
 
+    // FIXME: whoops, the variables_to_clean_up should not be here
+    // they should be a part of the FunctionGlobject instead since 
+    // they need to be cleaned up once the body goes out of scope
+
     for(std::string varname : variables_to_clean_up) {
       CompilerContext::NamedValues->remove_val(varname);
     }
