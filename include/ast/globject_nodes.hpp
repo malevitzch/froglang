@@ -64,6 +64,8 @@ namespace ast {
     virtual void codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    friend class FunctionGlobject;
   };
 
   class FunctionGlobject : public GlobjectNode {

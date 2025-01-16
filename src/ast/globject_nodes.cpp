@@ -63,11 +63,6 @@ namespace ast {
   : name(name), args(args), return_type(return_type) {}
   void FunctionDeclaration::codegen() {
 
-    std::vector<std::string> variables_to_clean_up;
-
-    for(std::shared_ptr<DeclarationNode> arg : args->get_args()) {
-      variables_to_clean_up.push_back(arg->get_varname());
-    }
     std::vector<llvm::Type*> arg_types = args->get_arg_types();
 
     llvm::FunctionType* func_type =
@@ -76,14 +71,6 @@ namespace ast {
     llvm::Function* this_function =
       llvm::Function::Create(func_type, llvm::Function::ExternalLinkage, name, CompilerContext::TheModule.get());
 
-    // FIXME: whoops, the variables_to_clean_up should not be here
-    // they should be a part of the FunctionGlobject instead since 
-    // they need to be cleaned up once the body goes out of scope
-
-    for(std::string varname : variables_to_clean_up) {
-      CompilerContext::NamedValues->remove_val(varname);
-    }
-    //TODO: Probably in reverse in the future in case of type checks? Doesn't really matter though on a second thought. Stil, better to keep this in mind
   }
   std::string FunctionDeclaration::get_name() {
     return "Function Declaration";
@@ -95,6 +82,22 @@ namespace ast {
   FunctionGlobject::FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body) 
   : decl(decl), body(body) {}
   void FunctionGlobject::codegen() {
+
+    std::vector<std::string> variables_to_clean_up;
+
+    //TODO: maybe add a FunctionDeclarationg get_args instead of having it
+    // have function globject as a friend 
+    for(std::shared_ptr<DeclarationNode> arg : decl->args->get_args()) {
+      variables_to_clean_up.push_back(arg->get_varname());
+    }
+
+    body->codegen();
+
+    //TODO: Probably in reverse in the future in case of type checks? Doesn't really matter though on a second thought. Stil, better to keep this in mind
+    for(std::string varname : variables_to_clean_up) {
+      CompilerContext::NamedValues->remove_val(varname);
+    }
+
   }
   std::string FunctionGlobject::get_name() {
     return "Function Globject";
