@@ -85,7 +85,6 @@ namespace ast {
   std::vector<std::shared_ptr<DeclarationNode>> FunctionDeclaration::get_args() {
     return args->get_args();
   }
-
   FunctionGlobject::FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body) 
   : decl(decl), body(body) {}
   void FunctionGlobject::codegen() {
@@ -94,9 +93,17 @@ namespace ast {
 
     for(std::shared_ptr<DeclarationNode> arg : decl->get_args()) {
       variables_to_clean_up.push_back(arg->get_varname());
-      CompilerContext::NamedValues->add_val(arg->get_varname());
     }
-    llvm::BasicBlock *EntryBlock = llvm::BasicBlock::Create(*CompilerContext::TheContext, decl->get_name(), decl->get_func());
+
+    llvm::Function* f = decl->get_func();
+    //FIXME: I did something dumb but it does not show the same error as before 
+    int i = 0;
+    for(auto& arg : f->args()) {
+      CompilerContext::NamedValues->add_val(variables_to_clean_up[i], &arg);
+      i++;
+    }
+
+    llvm::BasicBlock *EntryBlock = llvm::BasicBlock::Create(*CompilerContext::TheContext, decl->get_name(), f);
     body->codegen();
 
     //TODO: Probably in reverse in the future in case of type checks? Doesn't really matter though on a second thought. Stil, better to keep this in mind
