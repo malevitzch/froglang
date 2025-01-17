@@ -64,9 +64,9 @@ namespace ast {
     virtual void codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
-    
+
+    std::vector<std::shared_ptr<DeclarationNode>> get_args();
     llvm::Function* get_func();
-    friend class FunctionGlobject;
   };
 
   class FunctionGlobject : public GlobjectNode {

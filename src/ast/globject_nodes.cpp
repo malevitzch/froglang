@@ -82,6 +82,9 @@ namespace ast {
   std::vector<std::shared_ptr<Node>> FunctionDeclaration::get_children() {
     return {args};
   }
+  std::vector<std::shared_ptr<DeclarationNode>> FunctionDeclaration::get_args() {
+    return args->get_args();
+  }
 
   FunctionGlobject::FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body) 
   : decl(decl), body(body) {}
@@ -89,12 +92,10 @@ namespace ast {
 
     std::vector<std::string> variables_to_clean_up;
 
-    //TODO: maybe add a FunctionDeclarationg get_args instead of having it
-    // have function globject as a friend 
-    for(std::shared_ptr<DeclarationNode> arg : decl->args->get_args()) {
+    for(std::shared_ptr<DeclarationNode> arg : decl->get_args()) {
       variables_to_clean_up.push_back(arg->get_varname());
     }
-    llvm::BasicBlock *EntryBlock = llvm::BasicBlock::Create(*CompilerContext::TheContext, decl->name, decl->get_func());
+    llvm::BasicBlock *EntryBlock = llvm::BasicBlock::Create(*CompilerContext::TheContext, decl->get_name(), decl->get_func());
     body->codegen();
 
     //TODO: Probably in reverse in the future in case of type checks? Doesn't really matter though on a second thought. Stil, better to keep this in mind
