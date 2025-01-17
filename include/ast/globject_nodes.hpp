@@ -61,9 +61,6 @@ namespace ast {
     llvm::Type* return_type;
   public:
     FunctionDeclaration(std::string name, std::shared_ptr<FunctionArglist> args, llvm::Type* return_type);
-    //FIXME: this is iffy but will work for now
-    // in the future codegen is just the initial function that creates the block and stores the pointer to the function in a private variable
-    // if get_func is called without codegen it just calls codegen before returning
     virtual void codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;

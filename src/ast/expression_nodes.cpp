@@ -29,7 +29,7 @@ namespace ast {
       return CompilerContext::Builder->CreateMul(L, R, "multmp");
     }
   //TODO: division is not as simple as the others
-
+    throw std::runtime_error("Unimplemented binary operator: \"" + operator_type + "\"");
   }
 
   //TODO: the BinaryOperator uses deduce_type() to find out what type it should be. 

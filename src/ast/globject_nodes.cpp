@@ -62,9 +62,6 @@ namespace ast {
   FunctionDeclaration::FunctionDeclaration(std::string name, std::shared_ptr<FunctionArglist> args, llvm::Type* return_type) 
   : name(name), args(args), return_type(return_type) {}
   void FunctionDeclaration::codegen() {
-  }
-  llvm::Function* FunctionDeclaration::get_func() {
-
     std::vector<llvm::Type*> arg_types = args->get_arg_types();
 
     llvm::FunctionType* func_type =
@@ -72,8 +69,12 @@ namespace ast {
 
     llvm::Function* this_function =
       llvm::Function::Create(func_type, llvm::Function::ExternalLinkage, name, CompilerContext::TheModule.get());
-    return this_function;
-
+    (*CompilerContext::Functions)["name"] = this_function;
+  }
+  llvm::Function* FunctionDeclaration::get_func() {
+    if(!CompilerContext::Functions->contains(name))
+      codegen();
+    return CompilerContext::Functions->at(name); 
   }
   std::string FunctionDeclaration::get_name() {
     return "Function Declaration";
