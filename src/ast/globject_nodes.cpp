@@ -69,7 +69,7 @@ namespace ast {
 
     llvm::Function* this_function =
       llvm::Function::Create(func_type, llvm::Function::ExternalLinkage, name, CompilerContext::TheModule.get());
-    (*CompilerContext::Functions)["name"] = this_function;
+    (*CompilerContext::Functions)[name] = this_function;
   }
   llvm::Function* FunctionDeclaration::get_func() {
     if(!CompilerContext::Functions->contains(name))
@@ -94,6 +94,7 @@ namespace ast {
 
     for(std::shared_ptr<DeclarationNode> arg : decl->get_args()) {
       variables_to_clean_up.push_back(arg->get_varname());
+      CompilerContext::NamedValues->add_val(arg->get_varname());
     }
     llvm::BasicBlock *EntryBlock = llvm::BasicBlock::Create(*CompilerContext::TheContext, decl->get_name(), decl->get_func());
     body->codegen();

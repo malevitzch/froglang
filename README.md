@@ -1,7 +1,7 @@
 # flex-lr1-llvm
 Toolchain experiments
 # todo
-- Move the lexer/parser outputs to a stream of choice rather than printing them to cout
+- The call values are not properly referenced in functions oh my god this is a disaster
 
 - Find all the dependencies using docker or something
 

@@ -84,6 +84,9 @@ namespace ast {
       children.push_back(arg);
     return children;
   }
+  std::vector<std::shared_ptr<ExprNode>> FunctionCallArgs::get_args() {
+    return args;
+  }
 
   FunctionCallArglist::FunctionCallArglist(std::shared_ptr<FunctionCallArgs> args) 
   : args(args) {}
@@ -95,12 +98,22 @@ namespace ast {
     if(args == nullptr) return {};
     return {args};
   }
+  std::vector<std::shared_ptr<ExprNode>> FunctionCallArglist::get_args() {
+    return args->get_args();
+  }
 
   //FIXME: crimes are being committed here
   FunctionCallExpr::FunctionCallExpr(std::string function_name, std::shared_ptr<FunctionCallArglist> args)
   : ExprNode(llvm::Type::getInt32Ty(*CompilerContext::TheContext)), function_name(function_name), args(args) {}
   llvm::Value* FunctionCallExpr::eval() {
-    //TODO: make args accessible so that we can make a call
+    //TODO: check for availability?
+    if(!CompilerContext::Functions->contains(function_name))
+      throw std::runtime_error("Unregisterd function \"" + function_name + "\"");
+    llvm::Function* to_call = CompilerContext::Functions->at(function_name);
+    std::vector<llvm::Value*> call_args;
+    for(std::shared_ptr<ExprNode> arg : args->get_args())
+      call_args.push_back(arg->eval());
+    return CompilerContext::Builder->CreateCall(to_call, call_args);
   }
 
   std::string FunctionCallExpr::get_name() {
