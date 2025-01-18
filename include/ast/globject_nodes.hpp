@@ -55,18 +55,18 @@ namespace ast {
 
   class FunctionDeclaration : public GlobjectNode {
   private:
-    //TODO: replace with type representation system
-    std::string name;
+    std::string var_name;
     std::shared_ptr<FunctionArglist> args;
     llvm::Type* return_type;
   public:
-    FunctionDeclaration(std::string name, std::shared_ptr<FunctionArglist> args, llvm::Type* return_type);
+    FunctionDeclaration(std::string var_name, std::shared_ptr<FunctionArglist> args, llvm::Type* return_type);
     virtual void codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
     std::vector<std::shared_ptr<DeclarationNode>> get_args();
     llvm::Function* get_func();
+    std::string get_varname();
   };
 
   class FunctionGlobject : public GlobjectNode {

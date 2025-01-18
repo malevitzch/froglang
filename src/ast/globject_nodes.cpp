@@ -59,8 +59,8 @@ namespace ast {
     return types;
   }
 
-  FunctionDeclaration::FunctionDeclaration(std::string name, std::shared_ptr<FunctionArglist> args, llvm::Type* return_type) 
-  : name(name), args(args), return_type(return_type) {}
+  FunctionDeclaration::FunctionDeclaration(std::string var_name, std::shared_ptr<FunctionArglist> args, llvm::Type* return_type) 
+  : var_name(var_name), args(args), return_type(return_type) {}
   void FunctionDeclaration::codegen() {
     std::vector<llvm::Type*> arg_types = args->get_arg_types();
 
@@ -68,13 +68,13 @@ namespace ast {
       llvm::FunctionType::get(return_type, arg_types, false);
 
     llvm::Function* this_function =
-      llvm::Function::Create(func_type, llvm::Function::ExternalLinkage, name, CompilerContext::TheModule.get());
-    (*CompilerContext::Functions)[name] = this_function;
+      llvm::Function::Create(func_type, llvm::Function::ExternalLinkage, var_name, CompilerContext::TheModule.get());
+    (*CompilerContext::Functions)[var_name] = this_function;
   }
   llvm::Function* FunctionDeclaration::get_func() {
-    if(!CompilerContext::Functions->contains(name))
+    if(!CompilerContext::Functions->contains(var_name))
       codegen();
-    return CompilerContext::Functions->at(name); 
+    return CompilerContext::Functions->at(var_name); 
   }
   std::string FunctionDeclaration::get_name() {
     return "Function Declaration";
@@ -85,6 +85,10 @@ namespace ast {
   std::vector<std::shared_ptr<DeclarationNode>> FunctionDeclaration::get_args() {
     return args->get_args();
   }
+  std::string FunctionDeclaration::get_varname() {
+    return var_name;
+  }
+
   FunctionGlobject::FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body) 
   : decl(decl), body(body) {}
   void FunctionGlobject::codegen() {
@@ -103,7 +107,7 @@ namespace ast {
       i++;
     }
 
-    llvm::BasicBlock *EntryBlock = llvm::BasicBlock::Create(*CompilerContext::TheContext, decl->get_name(), f);
+    llvm::BasicBlock *EntryBlock = llvm::BasicBlock::Create(*CompilerContext::TheContext, decl->get_varname(), f);
     body->codegen();
 
     //TODO: Probably in reverse in the future in case of type checks? Doesn't really matter though on a second thought. Stil, better to keep this in mind

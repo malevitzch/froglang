@@ -49,11 +49,6 @@ void compile(std::istream* input_stream, std::string out_filename,
   std::string Error;
   auto Target = llvm::TargetRegistry::lookupTarget(TargetTriple, Error);
 
-  llvm::FunctionType *MainFuncType = llvm::FunctionType::get(llvm::Type::getInt32Ty(*CompilerContext::TheContext), false);
-  llvm::Function *MainFunc = llvm::Function::Create(MainFuncType, llvm::Function::ExternalLinkage, "main", CompilerContext::TheModule.get());
-
-  llvm::BasicBlock *EntryBB = llvm::BasicBlock::Create(*CompilerContext::TheContext, "entry", MainFunc);
-
   auto CPU = "generic";
   auto Features = "";
   llvm::TargetOptions opt;
@@ -71,14 +66,6 @@ void compile(std::istream* input_stream, std::string out_filename,
   std::ofstream ast_out("tree_output.txt");
 
   // codegen goes here
-  CompilerContext::Builder->SetInsertPoint(EntryBB);
-  llvm::FunctionType *printfType = llvm::FunctionType::get(
-  llvm::Type::getInt32Ty(*CompilerContext::TheContext), {llvm::Type::getInt8PtrTy(*CompilerContext::TheContext)}, true);
-  llvm::FunctionCallee printfFunc = CompilerContext::TheModule->getOrInsertFunction("printf", printfType);
-
-  llvm::Value *HelloStr = CompilerContext::Builder->CreateGlobalStringPtr("Hello, LLVM!\n");
-  CompilerContext::Builder->CreateCall(printfFunc, {HelloStr});
-  CompilerContext::Builder->CreateRet(llvm::ConstantInt::get(llvm::Type::getInt32Ty(*CompilerContext::TheContext), 0));
 
   CompilerContext::TheModule->setDataLayout(TargetMachine->createDataLayout());
   CompilerContext::TheModule->setTargetTriple(TargetTriple);
@@ -92,6 +79,8 @@ void compile(std::istream* input_stream, std::string out_filename,
     *diagnostic_stream << "BUG\n";
     return;
   }
+  llvm::raw_fd_ostream IR_out("IRdump", EC, llvm::sys::fs::OF_None);
+  CompilerContext::TheModule->print(IR_out, nullptr);
   pass.run(*CompilerContext::TheModule);
   dest.flush();
 
