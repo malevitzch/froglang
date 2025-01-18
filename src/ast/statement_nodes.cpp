@@ -113,7 +113,7 @@ namespace ast {
   ReturnStatement::ReturnStatement(llvm::Type* type, std::shared_ptr<ExprNode> val)
   : type(type), val(val) {}
   void ReturnStatement::codegen() {
-    //TODO: this is not that easy to do I'm pretty sure
+    CompilerContext::Builder->CreateRet(val->eval());
   }
   std::string ReturnStatement::get_name() {
     return "Return Statement";

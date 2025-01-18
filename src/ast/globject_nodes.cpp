@@ -108,6 +108,7 @@ namespace ast {
     }
 
     llvm::BasicBlock *EntryBlock = llvm::BasicBlock::Create(*CompilerContext::TheContext, decl->get_varname(), f);
+    CompilerContext::Builder->SetInsertPoint(EntryBlock);
     body->codegen();
 
     //TODO: Probably in reverse in the future in case of type checks? Doesn't really matter though on a second thought. Stil, better to keep this in mind
