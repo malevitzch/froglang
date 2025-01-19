@@ -4,7 +4,6 @@
 
 namespace ast {
 
-  // Maybe should be an abstract class
   class GlobjectNode : public Node {
   private:
   protected:
