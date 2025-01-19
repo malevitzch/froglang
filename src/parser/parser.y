@@ -48,6 +48,7 @@
 
 %left PLUS MINUS
 %left STAR SLASH
+%right UMINUS
 
 %type <node>
   expression program global_obj function
@@ -172,6 +173,9 @@ expression: NUMBER {
     // perhaps the type information is not even needed here?
     // the ExprNode codegen should likely just return a <Value*, Type*> pair
     $$ = std::make_shared<ast::VariableIdentifier>($1->metadata, llvm::Type::getInt32Ty(*CompilerContext::TheContext));
+  }
+  | MINUS expression %prec UMINUS {
+    $$ = std::make_shared<ast::UnaryOperator>("-", dynamic_pointer_cast<ast::ExprNode>($2));
   }
   | IDENTIFIER call_arglist {
     auto call_arglist = dynamic_pointer_cast<ast::FunctionCallArglist>($2);

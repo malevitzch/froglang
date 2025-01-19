@@ -17,7 +17,6 @@ Toolchain experiments
 - Find a good way to use the print function from C in a way that does not look like a band-aid fix
 
 # features to add
-- unary "-" operator
 - division operator
 - booleans, floats, strings, unsigned integers
 - if statements, else statements (maybe elif instead of else if)
