@@ -1,4 +1,5 @@
 #include "ast/globject_nodes.hpp"
+#include "libgen/print.hpp"
 
 namespace ast {
 
@@ -7,6 +8,9 @@ namespace ast {
   }
 
   void ProgramNode::codegen() {
+
+    libgen::register_print_i32();
+
     for(std::shared_ptr<GlobjectNode> globject : globjects)
       globject->codegen();
   }

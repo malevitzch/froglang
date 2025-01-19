@@ -19,7 +19,9 @@ namespace libgen {
     llvm::Constant* format_str = Builder->CreateGlobalStringPtr("%d\n", ".str");
 
     Builder->CreateCall(printf, {format_str, to_print});
+    Builder->CreateRetVoid();
 
     (*Functions)["print_i32"] = print_i32;
+
   }
 }
