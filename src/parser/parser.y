@@ -168,12 +168,14 @@ expression: NUMBER {
   }
   | IDENTIFIER {
     //TODO: solve the type issue (actually it's only during codegen)
+    // the type should probably be retrieved from ValueHolder
+    // perhaps the type information is not even needed here?
+    // the ExprNode codegen should likely just return a <Value*, Type*> pair
     $$ = std::make_shared<ast::VariableIdentifier>($1->metadata, llvm::Type::getInt32Ty(*CompilerContext::TheContext));
   }
   | IDENTIFIER call_arglist {
     auto call_arglist = dynamic_pointer_cast<ast::FunctionCallArglist>($2);
     $$ = std::make_shared<ast::FunctionCallExpr>($1->metadata, call_arglist);
-    /*This is a function call, i'll implement it later cause its hard*/
   }
   | LPAREN expression RPAREN {$$ = $2;}
   | expression PLUS expression {
@@ -194,7 +196,7 @@ expression: NUMBER {
   }
   ;
 
-args: /* */ {
+args: /* empty */ {
     $$ = std::make_shared<ast::FunctionArgs>();
   }
   | declaration {
@@ -219,7 +221,6 @@ arglist: LPAREN args RPAREN {
   ;
 %%
 
-void yy::parser::error(const std::string &message)
-{
+void yy::parser::error(const std::string &message) {
   std::cerr << "Error: " << message << std::endl;
 }

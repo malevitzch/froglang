@@ -20,6 +20,18 @@ namespace ast {
     virtual llvm::Type* get_type();
   };
 
+  class UnaryOperator : public ExprNode {
+  private:
+    std::string operator_type;
+    std::shared_ptr<ExprNode> operand;
+  public:
+    UnaryOperator(std::string operator_type, std::shared_ptr<ExprNode> operand);
+    virtual llvm::Value* eval() override;
+    virtual llvm::Type* get_type() override;
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
+};
+
   class BinaryOperator : public ExprNode {
   private:
     std::string operator_type;

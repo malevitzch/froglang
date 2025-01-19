@@ -7,6 +7,7 @@
 
 
 namespace ast {
+
   ExprNode::ExprNode(llvm::Type* type)
   : type(type) {}
   std::string ExprNode::get_name() {
@@ -15,7 +16,28 @@ namespace ast {
   llvm::Type* ExprNode::get_type() {
     return type;
   }
-  
+
+  UnaryOperator::UnaryOperator(std::string operator_type, std::shared_ptr<ExprNode> operand) 
+  : operator_type(operator_type), operand(operand) {}
+  llvm::Value* UnaryOperator::eval() {
+    if(operator_type == "-") {
+      llvm::Value* operand_val = operand->eval();
+      llvm::Value* zero = llvm::ConstantInt::get(operand_val->getType(), 0);
+
+      return CompilerContext::Builder->CreateSub(zero, operand_val, "neg");
+    }
+    throw std::runtime_error("Unimplemented unary operator: \"" + operator_type + "\"");
+  }
+  llvm::Type* UnaryOperator::get_type() {
+    return type;
+  }
+  std::string UnaryOperator::get_name() {
+    return "Unary Operator";
+  }
+  std::vector<std::shared_ptr<Node>> UnaryOperator::get_children() {
+    return {operand};
+  }
+
   llvm::Value* BinaryOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
@@ -28,7 +50,7 @@ namespace ast {
     if(operator_type == "*") {
       return CompilerContext::Builder->CreateMul(L, R, "multmp");
     }
-  //TODO: division is not as simple as the others
+    //TODO: division is not as simple as the others
     throw std::runtime_error("Unimplemented binary operator: \"" + operator_type + "\"");
   }
 
