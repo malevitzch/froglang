@@ -27,7 +27,7 @@ llvm_map_components_to_libnames(llvm_libs
     asmprinter
 )
 
-set(LEXER_SOURCES 
+set(LIB_SOURCES 
   ${BISON_OUTPUT} 
   ${FLEX_OUTPUT} 
   tokens/tokens.cpp 
@@ -41,24 +41,12 @@ set(LEXER_SOURCES
   libgen/print.cpp
 )
 
-add_executable(lexer ${LEXER_SOURCES})
-target_link_libraries(lexer PUBLIC fl)
+add_library(app_lib ${LIB_SOURCES})
+
+add_executable(lexer main.cpp)
 target_link_libraries(lexer PRIVATE ${llvm_libs})
+target_link_libraries(lexer PRIVATE app_lib)
 
-set(COMPILER_SOURCES
-  ${BISON_OUTPUT} 
-  ${FLEX_OUTPUT} 
-  tokens/tokens.cpp
-  compiler.cpp
-  ast/node.cpp
-  ast/expression_nodes.cpp
-  ast/statement_nodes.cpp
-  ast/globject_nodes.cpp
-  ast/globals.cpp
-  dsa/named_values.cpp
-  libgen/print.cpp
-)
-
-
-add_executable(compiler ${COMPILER_SOURCES})
+add_executable(compiler compiler.cpp)
 target_link_libraries(compiler PRIVATE LLVM)
+target_link_libraries(compiler PRIVATE app_lib)
