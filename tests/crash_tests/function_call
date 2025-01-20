@@ -1,0 +1,9 @@
+function f(x: int) -> int {
+  return x;
+}
+
+function main() -> int {
+  x: int = 42;
+  y: int = f(x);
+  return 0;
+}
