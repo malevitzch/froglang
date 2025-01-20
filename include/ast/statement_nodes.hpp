@@ -95,11 +95,10 @@ namespace ast {
 
   class ReturnStatement : public StatementNode {
   private:
-  llvm::Type* type;
     std::shared_ptr<ExprNode> val;
   public:
     ReturnStatement(); // For void returns
-    ReturnStatement(llvm::Type*, std::shared_ptr<ExprNode> val); // For everything else
+    ReturnStatement(std::shared_ptr<ExprNode> val); // For everything else
     virtual ~ReturnStatement() = default;
     virtual void codegen() override;
     virtual std::string get_name() override;

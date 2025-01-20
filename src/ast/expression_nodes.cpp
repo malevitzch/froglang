@@ -8,13 +8,8 @@
 
 namespace ast {
 
-  ExprNode::ExprNode(llvm::Type* type)
-  : type(type) {}
   std::string ExprNode::get_name() {
     return "Expression Node";
-  }
-  llvm::Type* ExprNode::get_type() {
-    return type;
   }
 
   UnaryOperator::UnaryOperator(std::string operator_type, std::shared_ptr<ExprNode> operand) 
@@ -27,9 +22,6 @@ namespace ast {
       return CompilerContext::Builder->CreateSub(zero, operand_val, "neg");
     }
     throw std::runtime_error("Unimplemented unary operator: \"" + operator_type + "\"");
-  }
-  llvm::Type* UnaryOperator::get_type() {
-    return type;
   }
   std::string UnaryOperator::get_name() {
     return "Unary Operator";
@@ -59,12 +51,8 @@ namespace ast {
   //TODO: the BinaryOperator uses deduce_type() to find out what type it should be. 
   // There will be no implicit conversions because those sound like a very bad idea
   BinaryOperator::BinaryOperator(std::string operator_type, std::shared_ptr<ExprNode> left, std::shared_ptr<ExprNode> right)
-  : ExprNode(llvm::Type::getInt32Ty(*CompilerContext::TheContext)), operator_type(operator_type), left(left), right(right) {}
+  : operator_type(operator_type), left(left), right(right) {}
   // TODO: This needs complex logic for result type deduction once we want to use more than just integers.
-  llvm::Type* BinaryOperator::get_type() {
-    //FIXME: This is a very bad idea, even when we just introduce if statements (unless we use integers as bools, then it's fine for if statements but bad for everything else).
-    return type;
-  }
   std::string BinaryOperator::get_name() {
     return "Binary Operator";
   }
@@ -73,7 +61,7 @@ namespace ast {
   }
 
   IntegerConstant::IntegerConstant(std::string data, llvm::Type* type) 
-  : ExprNode(type), value(std::stoi(data)) { final = true; }
+  : value(std::stoi(data)) { final = true; }
   llvm::Value* IntegerConstant::eval() {
     return llvm::ConstantInt::get(*CompilerContext::TheContext, llvm::APInt(32, value));
   }
@@ -83,7 +71,7 @@ namespace ast {
   }
 
   VariableIdentifier::VariableIdentifier(std::string var_name, llvm::Type* type) 
-  : ExprNode(type), var_name(var_name) { final = true; }
+  : var_name(var_name) { final = true; }
   llvm::Value* VariableIdentifier::eval() {
     if(!CompilerContext::NamedValues->has_val(var_name)) {
       //TODO: some kind of exception?
@@ -128,7 +116,7 @@ namespace ast {
 
   //FIXME: crimes are being committed here
   FunctionCallExpr::FunctionCallExpr(std::string function_name, std::shared_ptr<FunctionCallArglist> args)
-  : ExprNode(llvm::Type::getInt32Ty(*CompilerContext::TheContext)), function_name(function_name), args(args) {}
+  : function_name(function_name), args(args) {}
   llvm::Value* FunctionCallExpr::eval() {
     //TODO: check for availability?
     if(!CompilerContext::Functions->contains(function_name))

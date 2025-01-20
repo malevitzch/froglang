@@ -5,12 +5,9 @@ Toolchain experiments
 - Split the main compiler.cpp file into a header and a main file
 - Add a command-line interface for the compiler
 
-- Solve the ExprNode type issue (maybe make eval return a <Value*, Type*> pair for compile-time type verification)
 - Create automated tests
 
 - Find all the dependencies using docker or something
-
-- Update the ValueHolder data structure to hold type information as well
 
 - Implement name-mangling
 

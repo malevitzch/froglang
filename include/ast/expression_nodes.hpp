@@ -11,13 +11,9 @@ namespace ast {
     ExprNode() = default;
     virtual ~ExprNode() = default;
     //TODO: this might not exist in the future
-    ExprNode(llvm::Type* type);
-    // TODO: Type might eventually become something more complicated than a string
-    llvm::Type* type;
   public:
     virtual llvm::Value* eval() = 0;
     virtual std::string get_name() override;
-    virtual llvm::Type* get_type();
   };
 
   class UnaryOperator : public ExprNode {
@@ -27,7 +23,6 @@ namespace ast {
   public:
     UnaryOperator(std::string operator_type, std::shared_ptr<ExprNode> operand);
     virtual llvm::Value* eval() override;
-    virtual llvm::Type* get_type() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 };
@@ -39,7 +34,6 @@ namespace ast {
   public: 
     BinaryOperator(std::string operator_type, std::shared_ptr<ExprNode> left, std::shared_ptr<ExprNode> right);
     virtual llvm::Value* eval() override;
-    virtual llvm::Type* get_type() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };

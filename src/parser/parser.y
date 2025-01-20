@@ -124,10 +124,11 @@ statement: expression SEMICOLON {
   }
   | RETURN expression SEMICOLON {
     auto expr = dynamic_pointer_cast<ast::ExprNode>($2);
-    $$ = std::make_shared<ast::ReturnStatement>(expr->get_type(), expr);
+    $$ = std::make_shared<ast::ReturnStatement>(expr);
     *diagnostic_stream<<"RETURNED\n";
   }
   | RETURN SEMICOLON {
+    //TODO: add void return
     *diagnostic_stream<<"RETURNED (void)\n";
   }
   ;
