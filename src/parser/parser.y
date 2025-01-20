@@ -195,7 +195,7 @@ expression: NUMBER {
     *diagnostic_stream<<"Multiplied\n";
   }
   | expression SLASH expression {
-    $$ = std::make_shared<ast::BinaryOperator>("+", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    $$ = std::make_shared<ast::BinaryOperator>("/", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
     *diagnostic_stream<<"Divided\n";
   }
   ;

@@ -50,7 +50,9 @@ namespace ast {
     if(operator_type == "*") {
       return CompilerContext::Builder->CreateMul(L, R, "multmp");
     }
-    //TODO: division is not as simple as the others
+    if(operator_type == "/" ) {
+      return CompilerContext::Builder->CreateSDiv(L, R, "sdiv");
+    }
     throw std::runtime_error("Unimplemented binary operator: \"" + operator_type + "\"");
   }
 
