@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
     }
     std::ofstream debug_stream("debug.txt");
     Compiler compiler(&debug_stream);
-    compiler.compile_to_obj(&file, "out.o");
+    compiler.compile_to_exec("test", "exec1");
   } else {
     std::cerr << "No file input given\n";
     return 0;

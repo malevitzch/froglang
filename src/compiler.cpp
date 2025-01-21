@@ -89,13 +89,13 @@ void Compiler::compile_to_obj(std::string input_filename, std::string output_fil
 
 void Compiler::compile_to_exec(std::string input_filename, std::string output_filename) {
   compile_to_obj(input_filename, "out.o");
-  std::string compiler = "clang";
-  std::string compiler_path = llvm::sys::findProgramByName(compiler).get();
-  if(compiler_path.empty()) {
+  std::string compiler = "gcc";
+  auto compiler_path = llvm::sys::findProgramByName(compiler);
+  if(!compiler_path) {
     //FIXME: do NOT throw an exception, be graceful
     throw std::runtime_error("Can't find clang");
   }
-  std::vector<std::string> args = {compiler_path, "-o", output_filename, "out.o"};
+  std::vector<std::string> args = {compiler_path.get(), "-o", output_filename, "out.o"};
   llvm::SmallVector<llvm::StringRef, 16> argv;
   for(auto& arg : args) {
     argv.push_back(arg);
