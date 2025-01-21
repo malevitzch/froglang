@@ -47,6 +47,6 @@ add_executable(lexer main.cpp)
 target_link_libraries(lexer PRIVATE ${llvm_libs})
 target_link_libraries(lexer PRIVATE app_lib)
 
-add_executable(compiler compiler.cpp)
+add_executable(compiler compiler.cpp compiler_driver.cpp)
 target_link_libraries(compiler PRIVATE LLVM)
 target_link_libraries(compiler PRIVATE app_lib)

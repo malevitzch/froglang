@@ -1,40 +1,8 @@
-#include <iostream>
-#include <fstream>
-#include <FlexLexer.h>
-#include "tokens.hpp"
-#include "parser.hpp"
-
-#include "llvm/ADT/APFloat.h"
-#include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Constants.h"
-#include "llvm/IR/DerivedTypes.h"
-#include "llvm/IR/Function.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/Instructions.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/Type.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/MC/TargetRegistry.h"
-#include "llvm/Support/FileSystem.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Target/TargetMachine.h"
-#include "llvm/Target/TargetOptions.h"
-#include "llvm/TargetParser/Host.h"
+#include "compiler.hpp"
 
 extern std::ostream* diagnostic_stream;
-
 std::shared_ptr<ast::Node> ast_root;
 
-void lex_file(std::string filename) {
-  std::shared_ptr<std::ifstream> in = std::make_shared<std::ifstream>(std::ifstream(filename));
-  if(!in->is_open()) {
-    std::cerr << "Cannot open file: " << filename << "\n";
-    return;
-  }
-}
 
 void compile(std::istream* input_stream, std::string out_filename,
              std::ostream* out_debug_stream = &std::cerr) {
