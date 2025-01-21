@@ -1,4 +1,5 @@
 #include "compiler.hpp"
+#include <fstream>
 
 //FIXME: the driver can be simplified a lot
 int main(int argc, char** argv) {
