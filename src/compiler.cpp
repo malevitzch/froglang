@@ -22,7 +22,8 @@
 #include "llvm/Target/TargetMachine.h"
 #include "llvm/Target/TargetOptions.h"
 #include "llvm/TargetParser/Host.h"
-
+#include "llvm/Support/Program.h"
+#include "llvm/Support/Host.h"
 #include <iostream>
 #include <fstream>
 
@@ -84,4 +85,22 @@ void Compiler::compile_to_obj(std::string input_filename, std::string output_fil
   //FIXME: this should validate the stream
   std::ifstream input_file(input_filename);
   compile_to_obj(&input_file, output_filename, IR_out_filename);
+}
+
+void Compiler::compile_to_exec(std::string input_filename, std::string output_filename) {
+  compile_to_obj(input_filename, "out.o");
+  std::string compiler = "clang";
+  std::string compiler_path = llvm::sys::findProgramByName(compiler).get();
+  if(compiler_path.empty()) {
+    //FIXME: do NOT throw an exception, be graceful
+    throw std::runtime_error("Can't find clang");
+  }
+  std::vector<std::string> args = {compiler_path, "-o", output_filename, "out.o"};
+  llvm::SmallVector<llvm::StringRef, 16> argv;
+  for(auto& arg : args) {
+    argv.push_back(arg);
+  }
+  std::string error_message;
+  int result = llvm::sys::ExecuteAndWait(argv[0], argv, std::nullopt, {}, 0, 0, &error_message);
+
 }
