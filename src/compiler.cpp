@@ -29,17 +29,27 @@
 
 std::shared_ptr<ast::Node> ast_root;
 
+void Compiler::prepare_llvm() {
+  static bool initialized = false;
+  if(!initialized) {
+    llvm::InitializeAllTargetInfos();
+    llvm::InitializeAllTargets();
+    llvm::InitializeAllTargetMCs();
+    llvm::InitializeAllAsmParsers();
+    llvm::InitializeAllAsmPrinters();
+  }
+}
+
 Compiler::Compiler(std::ostream* debug_output_stream) {
   diagnostic_stream = debug_output_stream;
 }
 
+//FIXME: split the huge functions into multiple smaller ones
+
 void Compiler::compile_to_obj(std::istream* input_stream, std::string output_filename, std::string IR_out_filename) {
   auto TargetTriple = llvm::sys::getDefaultTargetTriple();
-  llvm::InitializeAllTargetInfos();
-  llvm::InitializeAllTargets();
-  llvm::InitializeAllTargetMCs();
-  llvm::InitializeAllAsmParsers();
-  llvm::InitializeAllAsmPrinters();
+
+  prepare_llvm();
 
   std::string Error;
   auto Target = llvm::TargetRegistry::lookupTarget(TargetTriple, Error);
@@ -49,13 +59,11 @@ void Compiler::compile_to_obj(std::istream* input_stream, std::string output_fil
   llvm::TargetOptions opt;
   auto TargetMachine = Target->createTargetMachine(TargetTriple, CPU, Features, opt, llvm::Reloc::PIC_);
 
- // Create a lexer object
   FrogLexer lexer(input_stream);
-  // Call the lexer
   Tokens::Token *yylval = new Tokens::Token();
-  //std::shared_ptr<ast::Node> root;
   yy::parser p(lexer);
   p();
+  delete yylval;
   dynamic_pointer_cast<ast::ProgramNode>(ast_root)->codegen();
   
   //FIXME: we do not necessarily want to emit the tree_output.txt every time in the finished compiler
@@ -67,14 +75,16 @@ void Compiler::compile_to_obj(std::istream* input_stream, std::string output_fil
 
   llvm::raw_fd_ostream dest(output_filename, EC, llvm::sys::fs::OF_None);
   llvm::legacy::PassManager pass;
+
   // This is the version used by modern LLVM
   auto FileType = llvm::CGFT_ObjectFile;
   if(TargetMachine->addPassesToEmitFile(pass, dest, nullptr, FileType)) {
     *diagnostic_stream << "BUG\n";
     return;
   }
+  //FIXME: printing IR can be its own function maybe
   if(!IR_out_filename.empty()) {
-    llvm::raw_fd_ostream IR_out("IRdump", EC, llvm::sys::fs::OF_None);
+    llvm::raw_fd_ostream IR_out(IR_out_filename, EC, llvm::sys::fs::OF_None);
     CompilerContext::TheModule->print(IR_out, nullptr);
   }
   pass.run(*CompilerContext::TheModule);
@@ -87,9 +97,8 @@ void Compiler::compile_to_obj(std::string input_filename, std::string output_fil
   compile_to_obj(&input_file, output_filename, IR_out_filename);
 }
 
-void Compiler::compile_to_exec(std::string input_filename, std::string output_filename) {
-  compile_to_obj(input_filename, "out.o");
-  //FIXME: split the huge functions into multiple ones
+void Compiler::compile_to_exec(std::istream* input_stream, std::string output_filename) {
+  compile_to_obj(input_stream, "out.o");
   std::vector<std::string> possible_compilers = {"clang", "gcc", "cc", "cl"};
 
   std::string compiler_path = "";
@@ -112,4 +121,10 @@ void Compiler::compile_to_exec(std::string input_filename, std::string output_fi
   std::string error_message;
   int result = llvm::sys::ExecuteAndWait(argv[0], argv, std::nullopt, {}, 0, 0, &error_message);
 
+}
+
+void Compiler::compile_to_exec(std::string input_filename, std::string output_filename) {
+  std::ifstream input_stream(input_filename);
+  //TODO: validate the stream
+  compile_to_exec(&input_stream, output_filename);
 }

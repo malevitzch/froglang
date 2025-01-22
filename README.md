@@ -2,7 +2,8 @@
 Toolchain experiments
 # todo
 
-- Split the main compiler.cpp file into a header and a main file
+- Change int to i32
+
 - Add a command-line interface for the compiler
 
 - Create automated tests
