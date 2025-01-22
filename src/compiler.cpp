@@ -89,13 +89,22 @@ void Compiler::compile_to_obj(std::string input_filename, std::string output_fil
 
 void Compiler::compile_to_exec(std::string input_filename, std::string output_filename) {
   compile_to_obj(input_filename, "out.o");
-  std::string compiler = "gcc";
-  auto compiler_path = llvm::sys::findProgramByName(compiler);
-  if(!compiler_path) {
-    //FIXME: do NOT throw an exception, be graceful
-    throw std::runtime_error("Can't find clang");
+  //FIXME: split the huge functions into multiple ones
+  std::vector<std::string> possible_compilers = {"clang", "gcc", "cc", "cl"};
+
+  std::string compiler_path = "";
+  for(std::string compiler : possible_compilers) {
+    llvm::ErrorOr<std::string> error_or_compiler_path = llvm::sys::findProgramByName(compiler);
+    if(error_or_compiler_path) {
+      compiler_path = error_or_compiler_path.get();
+      break;
+    }
   }
-  std::vector<std::string> args = {compiler_path.get(), "-o", output_filename, "out.o"};
+  if(compiler_path.empty()) {
+    //FIXME: do NOT throw an exception, be graceful
+    throw std::runtime_error("Can't find a C compiler");
+  }
+  std::vector<std::string> args = {compiler_path, "-o", output_filename, "out.o"};
   llvm::SmallVector<llvm::StringRef, 16> argv;
   for(auto& arg : args) {
     argv.push_back(arg);
