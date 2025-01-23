@@ -128,7 +128,7 @@ statement: expression SEMICOLON {
     *diagnostic_stream<<"RETURNED\n";
   }
   | RETURN SEMICOLON {
-    //TODO: add void return
+    $$ = std::make_shared<ast::ReturnStatement>();
     *diagnostic_stream<<"RETURNED (void)\n";
   }
   ;

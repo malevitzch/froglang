@@ -113,7 +113,13 @@ namespace ast {
   ReturnStatement::ReturnStatement(std::shared_ptr<ExprNode> val)
   : val(val) {}
   void ReturnStatement::codegen() {
-    CompilerContext::Builder->CreateRet(val->eval());
+    // If there is no value, we create a void ret instruction
+    if(!val) {
+      CompilerContext::Builder->CreateRetVoid();
+    }
+    else {
+      CompilerContext::Builder->CreateRet(val->eval());
+    }
   }
   std::string ReturnStatement::get_name() {
     return "Return Statement";
