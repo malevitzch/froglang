@@ -16,8 +16,6 @@
 using namespace Tokens;
 
 const std::unordered_map<std::string, std::pair<Tokens::TokType, int> > keywords = {
-  //{"if", Tokens::TokType::IF},
-  //{"loop", Tokens::TokType::LOOP},
   {"return", {Tokens::TokType::RETURN, yy::parser::token::RETURN}},
   {"function", {Tokens::TokType::FUNCTION, yy::parser::token::FUNCTION}},
 };
@@ -25,7 +23,7 @@ const std::unordered_map<std::string, std::pair<Tokens::TokType, int> > keywords
 std::ostream* diagnostic_stream = &std::cout;
 
 std::unordered_set<std::string> types = {
-  "int",
+  "i32",
   "float",
 };
 %}

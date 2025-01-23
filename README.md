@@ -2,8 +2,6 @@
 Toolchain experiments
 # todo
 
-- Change int to i32
-
 - Add a command-line interface for the compiler
 
 - Create automated tests
@@ -15,7 +13,6 @@ Toolchain experiments
 - Find a good way to use the print function from C in a way that does not look like a band-aid fix
 
 # features to add
-- division operator
 - booleans, floats, strings, unsigned integers
 - if statements, else statements (maybe elif instead of else if)
 - for loops, while loops (called just loop), times loops (a loop that executes a given number of times, given as "times(unsigned integer)" ).

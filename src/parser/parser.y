@@ -12,6 +12,7 @@
   #include "tokens.hpp"
   extern std::ostream* diagnostic_stream;
 }
+
 %code {
   extern std::shared_ptr<ast::Node> ast_root;
   #define yylex lexer.yylex
@@ -20,7 +21,7 @@
 %{
 
 %}
-//TODO: finish inputting tokens
+
 %token <token> NUMBER
 %token <token> IDENTIFIER
 %token <token> TYPE_ID
