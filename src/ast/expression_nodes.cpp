@@ -70,7 +70,7 @@ namespace ast {
     return "Integer Constant";
   }
 
-  VariableIdentifier::VariableIdentifier(std::string var_name, llvm::Type* type) 
+  VariableIdentifier::VariableIdentifier(std::string var_name) 
   : var_name(var_name) { final = true; }
   llvm::Value* VariableIdentifier::eval() {
     if(!CompilerContext::NamedValues->has_val(var_name)) {

@@ -54,7 +54,7 @@ namespace ast {
   private:
     std::string var_name;
   public:
-    VariableIdentifier(std::string var_name, llvm::Type* type);
+    VariableIdentifier(std::string var_name);
     virtual llvm::Value* eval() override;
     virtual std::string get_name() override;
   };

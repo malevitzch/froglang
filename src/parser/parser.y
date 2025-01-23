@@ -85,9 +85,12 @@ function: function_declaration block {
   ;
 
 function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
-    //FIXME: TYPE_ID, add void functions as well
+    //FIXME: TYPE_ID
     $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), llvm::Type::getInt32Ty(*CompilerContext::TheContext));
     *diagnostic_stream<<"DECLARED function("<<$2->metadata<<")\n";
+  }
+  | FUNCTION IDENTIFIER arglist {
+    $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), llvm::Type::getVoidTy(*CompilerContext::TheContext));
   }
   ;
 
@@ -169,11 +172,7 @@ expression: NUMBER {
     *diagnostic_stream<<"Converted\n";
   }
   | IDENTIFIER {
-    //TODO: solve the type issue (actually it's only during codegen)
-    // the type should probably be retrieved from ValueHolder
-    // perhaps the type information is not even needed here?
-    // the ExprNode codegen should likely just return a <Value*, Type*> pair
-    $$ = std::make_shared<ast::VariableIdentifier>($1->metadata, llvm::Type::getInt32Ty(*CompilerContext::TheContext));
+    $$ = std::make_shared<ast::VariableIdentifier>($1->metadata);
   }
   | MINUS expression %prec UMINUS {
     $$ = std::make_shared<ast::UnaryOperator>("-", dynamic_pointer_cast<ast::ExprNode>($2));
