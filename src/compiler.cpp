@@ -92,9 +92,11 @@ void Compiler::compile_to_obj(std::istream* input_stream, std::string output_fil
 }
 
 void Compiler::compile_to_obj(std::string input_filename, std::string output_filename, std::string IR_out_filename) {
-  //FIXME: this should validate the stream
-  std::ifstream input_file(input_filename);
-  compile_to_obj(&input_file, output_filename, IR_out_filename);
+  std::ifstream input_stream(input_filename);
+  if(!input_stream.is_open()) {
+    throw std::runtime_error("Cannot open file \"" + input_filename + "\"");
+  }
+  compile_to_obj(&input_stream, output_filename, IR_out_filename);
 }
 
 void Compiler::compile_to_exec(std::istream* input_stream, std::string output_filename) {
@@ -125,6 +127,8 @@ void Compiler::compile_to_exec(std::istream* input_stream, std::string output_fi
 
 void Compiler::compile_to_exec(std::string input_filename, std::string output_filename) {
   std::ifstream input_stream(input_filename);
-  //TODO: validate the stream
+    if(!input_stream.is_open()) {
+    throw std::runtime_error("Cannot open file \"" + input_filename + "\"");
+  } 
   compile_to_exec(&input_stream, output_filename);
 }
