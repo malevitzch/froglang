@@ -1,6 +1,7 @@
 # flex-lr1-llvm
 Toolchain experiments
 # todo
+- Fix the print test output
 
 - Add a command-line interface for the compiler
 

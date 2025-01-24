@@ -3,9 +3,9 @@ set(BISON_OUTPUT ${CMAKE_BINARY_DIR}/parser.cpp)
 set(BISON_HEADER ${CMAKE_BINARY_DIR}/parser.hpp)
 
 add_custom_command(
-    MAIN_DEPENDENCY ${BISON_INPUT}
-    OUTPUT ${BISON_OUTPUT} ${BISON_HEADER}
-    COMMAND ${BISON_EXECUTABLE} -d --defines=${BISON_HEADER} -o ${BISON_OUTPUT} ${BISON_INPUT}
+  MAIN_DEPENDENCY ${BISON_INPUT}
+  OUTPUT ${BISON_OUTPUT} ${BISON_HEADER}
+  COMMAND ${BISON_EXECUTABLE} -d --defines=${BISON_HEADER} -o ${BISON_OUTPUT} ${BISON_INPUT}
 )
 
 set(FLEX_INPUT ${CMAKE_SOURCE_DIR}/src/lexer/lexer.l)
@@ -18,13 +18,13 @@ add_custom_command(
 )
 
 llvm_map_components_to_libnames(llvm_libs
-    core
-    support
-    irreader
-    target
-    native
-    asmparser
-    asmprinter
+  core
+  support
+  irreader
+  target
+  native
+  asmparser
+  asmprinter
 )
 
 set(LIB_SOURCES 
