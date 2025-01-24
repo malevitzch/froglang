@@ -40,6 +40,20 @@ void Compiler::prepare_llvm() {
   }
 }
 
+std::optional<std::string> Compiler::get_compiler_path() {
+
+  static const std::vector<std::string> possible_compilers = {"clang", "gcc", "cc", "cl"};
+  std::optional<std::string> compiler_path = "";
+  for(const std::string& compiler : possible_compilers) {
+    llvm::ErrorOr<std::string> error_or_compiler_path = llvm::sys::findProgramByName(compiler);
+    if(error_or_compiler_path) {
+      compiler_path = error_or_compiler_path.get();
+      break;
+    }
+  }
+  return compiler_path;
+}
+
 Compiler::Compiler(std::ostream* debug_output_stream) {
   diagnostic_stream = debug_output_stream;
 }
@@ -103,20 +117,11 @@ std::optional<std::string> Compiler::compile_to_obj(std::string input_filename, 
 
 std::optional<std::string> Compiler::compile_to_exec(std::istream* input_stream, std::string output_filename) {
   compile_to_obj(input_stream, "out.o");
-  std::vector<std::string> possible_compilers = {"clang", "gcc", "cc", "cl"};
-
-  std::string compiler_path = "";
-  for(std::string compiler : possible_compilers) {
-    llvm::ErrorOr<std::string> error_or_compiler_path = llvm::sys::findProgramByName(compiler);
-    if(error_or_compiler_path) {
-      compiler_path = error_or_compiler_path.get();
-      break;
-    }
-  }
-  if(compiler_path.empty()) {
+  std::optional<std::string> compiler_path = get_compiler_path();
+  if(!compiler_path) {
     return "Can't find a C compiler";
   }
-  std::vector<std::string> args = {compiler_path, "-o", output_filename, "out.o"};
+  std::vector<std::string> args = {*compiler_path, "-o", output_filename, "out.o"};
   llvm::SmallVector<llvm::StringRef, 16> argv;
   for(auto& arg : args) {
     argv.push_back(arg);

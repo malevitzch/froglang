@@ -8,6 +8,7 @@ extern std::ostream* diagnostic_stream;
 class Compiler {
 private:
   void prepare_llvm();
+  std::optional<std::string> get_compiler_path();
 public:
   Compiler();
   Compiler(std::ostream* debug_output_stream);
