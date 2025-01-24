@@ -17,3 +17,12 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 include_directories(${CMAKE_BINARY_DIR})
 
 add_subdirectory(src)
+
+enable_testing()
+file(GLOB CRASH_TESTS "${CMAKE_SOURCE_DIR}/tests/crash_tests/*")
+
+foreach(TEST_FILE ${CRASH_TESTS})
+    get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
+    add_test(NAME CrashTest_${TEST_NAME} 
+             COMMAND ${CMAKE_BINARY_DIR}/src/compiler ${TEST_FILE})
+endforeach()
