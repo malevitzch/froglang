@@ -69,8 +69,7 @@ std::optional<std::string> Compiler::compile_to_obj(std::istream* input_stream, 
   std::ofstream ast_out("tree_output.txt");
   //TODO: bring back the tree_output dfs because it was a cool thing to have
 
-  dynamic_pointer_cast<ast::ProgramNode>(ast_root)->codegen();
-  
+  dynamic_pointer_cast<ast::ProgramNode>(ast_root)->codegen(); 
 
   CompilerContext::TheModule->setDataLayout(TargetMachine->createDataLayout());
   CompilerContext::TheModule->setTargetTriple(TargetTriple);
@@ -124,15 +123,19 @@ std::optional<std::string> Compiler::compile_to_exec(std::istream* input_stream,
   }
   std::string error_message;
   int result = llvm::sys::ExecuteAndWait(argv[0], argv, std::nullopt, {}, 0, 0, &error_message);
-  //FIXME: do something about the error message
+  if(result == -1) {
+    return "Cannot execute the compilation command";
+  }
+  else if(result == -2) {
+    return "The compiler used for linking crashed";
+  }
   return std::nullopt;
 }
 
 std::optional<std::string> Compiler::compile_to_exec(std::string input_filename, std::string output_filename) {
   std::ifstream input_stream(input_filename);
     if(!input_stream.is_open()) {
-    //TODO: output debug in a reasonable way
-    return "Cannot open file: \"" + input_filename + "\"";
+      return "Cannot open file: \"" + input_filename + "\"";
   } 
   return compile_to_exec(&input_stream, output_filename);
 }
