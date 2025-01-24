@@ -46,7 +46,7 @@ Compiler::Compiler(std::ostream* debug_output_stream) {
 
 //FIXME: split the huge functions into multiple smaller ones
 
-void Compiler::compile_to_obj(std::istream* input_stream, std::string output_filename, std::string IR_out_filename) {
+std::optional<std::string> Compiler::compile_to_obj(std::istream* input_stream, std::string output_filename, std::string IR_out_filename) {
   auto TargetTriple = llvm::sys::getDefaultTargetTriple();
 
   prepare_llvm();
@@ -64,10 +64,13 @@ void Compiler::compile_to_obj(std::istream* input_stream, std::string output_fil
   yy::parser p(lexer);
   p();
   delete yylval;
-  dynamic_pointer_cast<ast::ProgramNode>(ast_root)->codegen();
-  
+
   //FIXME: we do not necessarily want to emit the tree_output.txt every time in the finished compiler
   std::ofstream ast_out("tree_output.txt");
+  //TODO: bring back the tree_output dfs because it was a cool thing to have
+
+  dynamic_pointer_cast<ast::ProgramNode>(ast_root)->codegen();
+  
 
   CompilerContext::TheModule->setDataLayout(TargetMachine->createDataLayout());
   CompilerContext::TheModule->setTargetTriple(TargetTriple);
@@ -79,8 +82,7 @@ void Compiler::compile_to_obj(std::istream* input_stream, std::string output_fil
   // This is the version used by modern LLVM
   auto FileType = llvm::CGFT_ObjectFile;
   if(TargetMachine->addPassesToEmitFile(pass, dest, nullptr, FileType)) {
-    *diagnostic_stream << "BUG\n";
-    return;
+    return "Something went wrong with LLVM during compilation";
   }
   //FIXME: printing IR can be its own function maybe
   if(!IR_out_filename.empty()) {
@@ -89,17 +91,18 @@ void Compiler::compile_to_obj(std::istream* input_stream, std::string output_fil
   }
   pass.run(*CompilerContext::TheModule);
   dest.flush();
+  return std::nullopt;
 }
 
-void Compiler::compile_to_obj(std::string input_filename, std::string output_filename, std::string IR_out_filename) {
+std::optional<std::string> Compiler::compile_to_obj(std::string input_filename, std::string output_filename, std::string IR_out_filename) {
   std::ifstream input_stream(input_filename);
   if(!input_stream.is_open()) {
-    throw std::runtime_error("Cannot open file \"" + input_filename + "\"");
+    return "Cannot open file \"" + input_filename + "\"";
   }
-  compile_to_obj(&input_stream, output_filename, IR_out_filename);
+  return compile_to_obj(&input_stream, output_filename, IR_out_filename);
 }
 
-void Compiler::compile_to_exec(std::istream* input_stream, std::string output_filename) {
+std::optional<std::string> Compiler::compile_to_exec(std::istream* input_stream, std::string output_filename) {
   compile_to_obj(input_stream, "out.o");
   std::vector<std::string> possible_compilers = {"clang", "gcc", "cc", "cl"};
 
@@ -112,8 +115,7 @@ void Compiler::compile_to_exec(std::istream* input_stream, std::string output_fi
     }
   }
   if(compiler_path.empty()) {
-    //FIXME: do NOT throw an exception, be graceful
-    throw std::runtime_error("Can't find a C compiler");
+    return "Can't find a C compiler";
   }
   std::vector<std::string> args = {compiler_path, "-o", output_filename, "out.o"};
   llvm::SmallVector<llvm::StringRef, 16> argv;
@@ -122,13 +124,15 @@ void Compiler::compile_to_exec(std::istream* input_stream, std::string output_fi
   }
   std::string error_message;
   int result = llvm::sys::ExecuteAndWait(argv[0], argv, std::nullopt, {}, 0, 0, &error_message);
-
+  //FIXME: do something about the error message
+  return std::nullopt;
 }
 
-void Compiler::compile_to_exec(std::string input_filename, std::string output_filename) {
+std::optional<std::string> Compiler::compile_to_exec(std::string input_filename, std::string output_filename) {
   std::ifstream input_stream(input_filename);
     if(!input_stream.is_open()) {
-    throw std::runtime_error("Cannot open file \"" + input_filename + "\"");
+    //TODO: output debug in a reasonable way
+    return "Cannot open file: \"" + input_filename + "\"";
   } 
-  compile_to_exec(&input_stream, output_filename);
+  return compile_to_exec(&input_stream, output_filename);
 }

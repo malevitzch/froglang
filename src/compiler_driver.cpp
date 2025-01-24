@@ -10,5 +10,8 @@ int main(int argc, char** argv) {
   std::string filename = argv[1];
   std::ofstream debug_stream("debug.txt");
   Compiler compiler(&debug_stream);
-  compiler.compile_to_exec(filename, "exec");
+  std::optional<std::string> compilation_error = compiler.compile_to_exec(filename, "exec");
+  if(compilation_error) {
+    std::cerr << "Error: " << *compilation_error << "\n";
+  }
 }
