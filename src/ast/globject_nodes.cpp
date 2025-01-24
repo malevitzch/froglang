@@ -104,10 +104,10 @@ namespace ast {
     }
 
     llvm::Function* f = decl->get_func();
-    //FIXME: I did something dumb but it does not show the same error as before 
+
     int i = 0;
     for(auto& arg : f->args()) {
-      CompilerContext::NamedValues->add_val(variables_to_clean_up[i], &arg);
+      CompilerContext::NamedValues->add_val(variables_to_clean_up[i++], &arg);
       i++;
     }
 
