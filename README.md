@@ -1,17 +1,19 @@
 # flex-lr1-llvm
-Toolchain experiments
+The project requires CMake, LLVM 16+, a C compiler (prferably clang or gcc) to run.\\
+The repository contains tests that can be run using CTest.\\
 # todo
-- Fix the print test output
+- Booleans
 
 - Add a command-line interface for the compiler
 
-- Create automated tests
-
 - Find all the dependencies using docker or something
+
+- Add multi-file support
 
 - Implement name-mangling
 
 - Find a good way to use the print function from C in a way that does not look like a band-aid fix
+- Move the print function to a standard library rather than than manually adding it to every object
 
 # features to add
 - booleans, floats, strings, unsigned integers

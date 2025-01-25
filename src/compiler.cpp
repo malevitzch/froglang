@@ -41,9 +41,8 @@ void Compiler::prepare_llvm() {
 }
 
 std::optional<std::string> Compiler::get_compiler_path() {
-
   static const std::vector<std::string> possible_compilers = {"clang", "gcc", "cc", "cl"};
-  std::optional<std::string> compiler_path = "";
+  std::optional<std::string> compiler_path = std::nullopt;
   for(const std::string& compiler : possible_compilers) {
     llvm::ErrorOr<std::string> error_or_compiler_path = llvm::sys::findProgramByName(compiler);
     if(error_or_compiler_path) {
@@ -141,6 +140,33 @@ std::optional<std::string> Compiler::compile_to_exec(std::string input_filename,
   std::ifstream input_stream(input_filename);
     if(!input_stream.is_open()) {
       return "Cannot open file: \"" + input_filename + "\"";
-  } 
+  }
   return compile_to_exec(&input_stream, output_filename);
+}
+
+std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> args) {
+  std::vector<std::string>::iterator arg_it = args.begin();
+  std::string output_name = "exec";
+  std::optional<std::string> input_name = std::nullopt;
+  while(arg_it != args.end()) {
+    std::string arg = *arg_it;
+    arg_it++;
+    if(arg == "-o") {
+      if(arg_it == args.end()) {
+        return "The \"-o\" option requires an argument";
+      }
+      //TODO: validate the arg as valid output name
+      arg = *arg_it;
+      output_name = arg;
+      arg_it++;
+    }
+    else {
+      input_name = arg;
+      //TODO: change this to an else if, validate the filename
+    }
+  }
+  if(!input_name) {
+    return "No source file given";
+  }
+  return compile_to_exec(*input_name, output_name);
 }

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <optional>
+#include <vector>
 
 #include <FlexLexer.h>
 
@@ -17,4 +18,5 @@ public:
   //FIXME: IR?
   std::optional<std::string> compile_to_exec(std::istream* input_stream, std::string output_filename);
   std::optional<std::string> compile_to_exec(std::string input_filename, std::string output_filename);
+  std::optional<std::string> compile_from_args(std::vector<std::string> args);
 };
