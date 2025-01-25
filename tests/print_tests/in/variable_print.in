@@ -1,0 +1,5 @@
+function main() -> i32 {
+  x: i32 = 64;
+  print_i32(x);
+  return 0;
+}
