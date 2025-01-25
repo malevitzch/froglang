@@ -1,14 +1,14 @@
 # flex-lr1-llvm
-The project requires CMake, LLVM 16+, a C compiler (prferably clang or gcc) to run.\\
-The repository contains tests that can be run using CTest.\\
+The project requires CMake, LLVM 16+, a C compiler (prferably clang or gcc) to run.\
+The repository contains tests that can be run using CTest.\
 # todo
 - Booleans
-
-- Add a command-line interface for the compiler
 
 - Find all the dependencies using docker or something
 
 - Add multi-file support
+
+- Extend the CLI, allowing the compilation of object files without linking them to executable
 
 - Implement name-mangling
 
