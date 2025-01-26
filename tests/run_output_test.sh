@@ -1,5 +1,10 @@
 #!/bin/bash
 
+cleanup() {
+  rm -f "$exec_name" "${test_path}_output"
+}
+trap cleanup EXIT
+
 if [ "$#" -ne "3" ]; then
   echo "Usage: $0 <executable_path> <test_path> <expected_output_path>"
   echo "You provided $# arguments, but 3 are required."
@@ -33,8 +38,3 @@ if ! diff -w "$expected_output_path" "${test_path}_output"; then
   echo "Test failed: Output differs from expected."
   exit 1
 fi
-
-rm $exec_name
-rm "${test_path}_output"
-
-

@@ -1,0 +1,9 @@
+function main() -> i32 {
+  x: i32 = 42;
+  {
+    x: i32 = -42;
+    print_i32(x);
+  }
+  print_i32(x);
+  return 0;
+}

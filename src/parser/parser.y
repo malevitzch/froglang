@@ -135,6 +135,9 @@ statement: expression SEMICOLON {
     $$ = std::make_shared<ast::ReturnStatement>();
     *diagnostic_stream<<"RETURNED (void)\n";
   }
+  | block {
+    $$ = $1;
+  } 
   ;
 
 declaration: IDENTIFIER COLON TYPE_ID {
