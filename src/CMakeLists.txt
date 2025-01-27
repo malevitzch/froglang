@@ -32,12 +32,15 @@ set(LIB_SOURCES
   ${FLEX_OUTPUT} 
   tokens/tokens.cpp 
   main.cpp 
+
   ast/node.cpp
   ast/expression_nodes.cpp
   ast/statement_nodes.cpp
   ast/globject_nodes.cpp
   ast/globals.cpp
-  dsa/named_values.cpp
+
+  dsa/value_holder.cpp
+
   libgen/print.cpp
 )
 

@@ -6,8 +6,6 @@
 
 #include "ast/globals.hpp"
 
-#include "dsa/named_values.hpp"
-
 namespace CompilerContext {
   std::unique_ptr<llvm::LLVMContext> TheContext = std::make_unique<llvm::LLVMContext>();
   std::unique_ptr<llvm::Module> TheModule = std::make_unique<llvm::Module>("MyModule", *CompilerContext::TheContext);

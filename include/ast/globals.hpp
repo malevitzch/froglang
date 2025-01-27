@@ -6,7 +6,7 @@
 #include "llvm/IR/Value.h"
 #include "llvm/IR/Function.h"
 
-#include "dsa/named_values.hpp"
+#include "dsa/value_holder.hpp"
 
 namespace CompilerContext {
   extern std::unique_ptr<llvm::LLVMContext> TheContext;
