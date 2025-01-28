@@ -4,6 +4,9 @@
 
 namespace DSA {
 
+  TypeHolder::TypeHolder(std::vector<std::pair<std::string, llvm::Type*>> data) 
+  : types(data.begin(), data.end()) {}
+
   bool TypeHolder::contains(std::string type_name) {
     return types.contains(type_name);
   }

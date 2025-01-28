@@ -14,4 +14,7 @@ namespace CompilerContext {
   std::unique_ptr<std::map<std::string, llvm::Function*>> Functions = std::make_unique<std::map<std::string, llvm::Function*>>();
   std::unique_ptr<DSA::TypeHolder> Types = std::make_unique<DSA::TypeHolder>();
   //TODO: call a constructor that takes a vector and populates the map with it
+  //FIXME: add register_primitive_types or something
+  //FIXME: also maybe this should be cleaned up at the end of compilation?
+  //FIXME: add init/cleanup to globals
 }
