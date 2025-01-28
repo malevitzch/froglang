@@ -1,3 +1,5 @@
+#pragma once
+
 #include <memory>
 #include <map>
 
@@ -7,6 +9,7 @@
 #include "llvm/IR/Function.h"
 
 #include "dsa/value_holder.hpp"
+#include "dsa/type_holder.hpp"
 
 namespace CompilerContext {
   extern std::unique_ptr<llvm::LLVMContext> TheContext;
@@ -14,5 +17,5 @@ namespace CompilerContext {
   extern std::unique_ptr<llvm::IRBuilder<>> Builder;
   extern std::unique_ptr<DSA::ValueHolder> NamedValues;
   extern std::unique_ptr<std::map<std::string, llvm::Function*>> Functions;
-
+  extern std::unique_ptr<DSA::TypeHolder> Types;
 }

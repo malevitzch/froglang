@@ -40,6 +40,7 @@ set(LIB_SOURCES
   ast/globals.cpp
 
   dsa/value_holder.cpp
+  dsa/type_holder.cpp
 
   libgen/print.cpp
 )

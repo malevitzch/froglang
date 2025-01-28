@@ -12,4 +12,6 @@ namespace CompilerContext {
   std::unique_ptr<llvm::IRBuilder<>> Builder = std::make_unique<llvm::IRBuilder<>>(*CompilerContext::TheContext);
   std::unique_ptr<DSA::ValueHolder> NamedValues = std::make_unique<DSA::ValueHolder>();
   std::unique_ptr<std::map<std::string, llvm::Function*>> Functions = std::make_unique<std::map<std::string, llvm::Function*>>();
+  std::unique_ptr<DSA::TypeHolder> Types = std::make_unique<DSA::TypeHolder>();
+  //TODO: call a constructor that takes a vector and populates the map with it
 }

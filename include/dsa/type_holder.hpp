@@ -1,3 +1,5 @@
+#pragma once
+
 #include <map>
 #include <llvm/IR/Type.h>
 
