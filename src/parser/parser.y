@@ -51,6 +51,9 @@
 %token <token> COMMA
 %token <token> COLON
 
+%token <token> IF
+%token <token> ELSE
+
 %left PLUS MINUS
 %left STAR SLASH
 %left LESS MORE EQUALITY
@@ -142,6 +145,17 @@ statement: expression SEMICOLON {
   | block {
     $$ = $1;
   } 
+  | IF LPAREN expression RPAREN statement {
+    auto condition = dynamic_pointer_cast<ast::ExprNode>($3);
+    auto body = dynamic_pointer_cast<ast::StatementNode>($5);
+    $$ = std::make_shared<ast::IfStatement>(condition, body);
+  }
+  | IF LPAREN expression RPAREN block ELSE block {
+    auto condition = dynamic_pointer_cast<ast::ExprNode>($3);
+    auto if_body = dynamic_pointer_cast<ast::StatementNode>($5);
+    auto else_body = dynamic_pointer_cast<ast::StatementNode>($7);
+    $$ = std::make_shared<ast::IfStatement>(condition, if_body, else_body);
+  }
   ;
 
 declaration: IDENTIFIER COLON TYPE_ID {
