@@ -86,8 +86,7 @@ function: function_declaration block {
   ;
 
 function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
-    //FIXME: TYPE_ID
-    $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), llvm::Type::getInt32Ty(*CompilerContext::TheContext));
+    $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), CompilerContext::Types->get_type($5->metadata));
     *diagnostic_stream<<"DECLARED function("<<$2->metadata<<")\n";
   }
   | FUNCTION IDENTIFIER arglist {
@@ -141,8 +140,7 @@ statement: expression SEMICOLON {
   ;
 
 declaration: IDENTIFIER COLON TYPE_ID {
-    //FIXME: TYPES
-    $$ = std::make_shared<ast::DeclarationNode>(llvm::Type::getInt32Ty(*CompilerContext::TheContext), $1->metadata);
+    $$ = std::make_shared<ast::DeclarationNode>(CompilerContext::Types->get_type($3->metadata), $1->metadata);
     *diagnostic_stream<<"DECLARED\n";
   }
   ;
