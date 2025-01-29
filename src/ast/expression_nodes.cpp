@@ -4,8 +4,6 @@
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/DerivedTypes.h"
 
-
-
 namespace ast {
 
   std::string ExprNode::get_name() {
@@ -49,7 +47,10 @@ namespace ast {
       return CompilerContext::Builder->CreateICmpSLT(L, R, "lesstmp");
     }
     if(operator_type == ">") {
-      return CompilerContext::Builder->CreateICmpSGT(L, R, "lesstmp");
+      return CompilerContext::Builder->CreateICmpSGT(L, R, "moretmp");
+    }
+    if(operator_type == "==") {
+      return CompilerContext::Builder->CreateICmpEQ(L, R, "equaltmp");
     }
     throw std::runtime_error("Unimplemented binary operator: \"" + operator_type + "\"");
   }

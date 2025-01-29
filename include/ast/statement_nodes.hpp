@@ -105,4 +105,17 @@ namespace ast {
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
+  class IfStatement : public StatementNode {
+  private:
+    std::shared_ptr<ExprNode> condition;
+    std::shared_ptr<StatementNode> if_body;
+    std::shared_ptr<StatementNode> else_body;
+  public:
+    IfStatement(std::shared_ptr<ExprNode> condition, std::shared_ptr<StatementNode> if_body);
+    IfStatement(std::shared_ptr<ExprNode> condition, std::shared_ptr<StatementNode> if_body, std::shared_ptr<StatementNode> else_body);
+    virtual ~IfStatement() = default;
+    virtual void codegen() override;
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
+  };
 }

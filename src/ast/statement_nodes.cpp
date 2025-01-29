@@ -1,4 +1,5 @@
 #include "ast/statement_nodes.hpp"
+#include <llvm/IR/BasicBlock.h>
 
 namespace ast {
 
@@ -126,5 +127,45 @@ namespace ast {
   }
   std::vector<std::shared_ptr<Node>> ReturnStatement::get_children() {
     return {val};
+  }
+  IfStatement::IfStatement(std::shared_ptr<ExprNode> condition, std::shared_ptr<StatementNode> if_body) 
+  : condition(condition), if_body(if_body), else_body(nullptr) {}
+  IfStatement::IfStatement(std::shared_ptr<ExprNode> condition, std::shared_ptr<StatementNode> if_body, std::shared_ptr<StatementNode> else_body) 
+  : condition(condition), if_body(if_body), else_body(else_body) {}
+  void IfStatement::codegen() {
+    llvm::Function* function = CompilerContext::Builder->GetInsertBlock()->getParent();
+
+    llvm::BasicBlock *if_body_BB = llvm::BasicBlock::Create(*CompilerContext::TheContext, "then", function);
+    llvm::BasicBlock *merge_BB = llvm::BasicBlock::Create(*CompilerContext::TheContext, "ifcont", function);
+    llvm::BasicBlock *else_body_BB;
+
+    if(else_body) {
+      else_body_BB = llvm::BasicBlock::Create(*CompilerContext::TheContext, "else", function); 
+      CompilerContext::Builder->CreateCondBr(condition->eval(), if_body_BB, else_body_BB);
+    }
+    else {
+      CompilerContext::Builder->CreateCondBr(condition->eval(), if_body_BB, merge_BB);
+    }
+
+    CompilerContext::Builder->SetInsertPoint(if_body_BB);
+    if_body->codegen();
+    CompilerContext::Builder->CreateBr(merge_BB);
+
+    if(else_body) {
+      CompilerContext::Builder->SetInsertPoint(else_body_BB);
+      else_body->codegen();
+      CompilerContext::Builder->CreateBr(merge_BB);
+    }
+    CompilerContext::Builder->SetInsertPoint(merge_BB);
+  }
+  std::string IfStatement::get_name() {
+    return "If Statement";
+  }
+  std::vector<std::shared_ptr<Node>> IfStatement::get_children() {
+    std::vector<std::shared_ptr<Node>> children = {condition, if_body};
+    if(else_body) {
+      children.push_back(else_body);
+    }
+    return children;
   }
 }
