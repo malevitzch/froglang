@@ -124,6 +124,18 @@ std::unordered_set<std::string> types = {
   yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::SEMICOLON, yytext);
   return yy::parser::token::SEMICOLON;
 }
+"<" {
+  yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::LESS, yytext);
+  return yy::parser::token::LESS;
+}
+">" {
+  yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::MORE, yytext);
+  return yy::parser::token::MORE;
+}
+"==" {
+  yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::EQUALITY, yytext);
+  return yy::parser::token::EQUALITY;
+}
 [ \t\n]+ {
   /* Ignore whitespace */ 
 }

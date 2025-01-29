@@ -15,6 +15,10 @@ namespace Tokens {
     SLASH,
     ASSIGNMENT,
 
+    LESS,
+    MORE,
+    EQUALITY,
+
     LPAREN,
     RPAREN,
     LBRACE,

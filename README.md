@@ -2,9 +2,15 @@
 The project requires CMake, LLVM 16+, a C compiler (prferably clang or gcc) to run.\
 The repository contains tests that can be run using CTest.
 # todo
-- Integrate TypeHolder with the project
-
 - Booleans
+
+- Rename more to greater or smth like that
+
+- Inequality, logical and, logical or
+
+- Remove the outdated TokType which is not used for anything beside token creation
+
+- Make Binary Operators have their own classes for each. Or maybe make them take a void function pointer as codegen? We need a good way to solve the problem of having a huge block of code inside the binary operator eval function
 
 - Find all the dependencies using docker or something
 

@@ -45,6 +45,12 @@ namespace ast {
     if(operator_type == "/" ) {
       return CompilerContext::Builder->CreateSDiv(L, R, "sdiv");
     }
+    if(operator_type == "<") {
+      return CompilerContext::Builder->CreateICmpSLT(L, R, "lesstmp");
+    }
+    if(operator_type == ">") {
+      return CompilerContext::Builder->CreateICmpSGT(L, R, "lesstmp");
+    }
     throw std::runtime_error("Unimplemented binary operator: \"" + operator_type + "\"");
   }
 
