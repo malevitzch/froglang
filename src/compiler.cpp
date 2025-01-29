@@ -53,8 +53,33 @@ std::optional<std::string> Compiler::get_compiler_path() {
   return compiler_path;
 }
 
+std::optional<std::string> Compiler::generate_IR(std::istream* input_stream) {
+  FrogLexer lexer(input_stream);
+  Tokens::Token *yylval = new Tokens::Token();
+  yy::parser p(lexer);
+  p();
+  delete yylval;
+  dynamic_pointer_cast<ast::ProgramNode>(ast_root)->codegen();
+  //TODO: maybe some error handling here because something might fail
+  return std::nullopt;
+}
+
+std::optional<std::string> Compiler::compile_to_IR(std::string input_filename, std::string output_filename) {
+  std::ifstream input_stream(input_filename);
+  return compile_to_IR(&input_stream, output_filename);
+}
+
 Compiler::Compiler(std::ostream* debug_output_stream) {
   diagnostic_stream = debug_output_stream;
+}
+
+std::optional<std::string> Compiler::compile_to_IR(std::istream* input_stream, std::string output_filename) {
+  generate_IR(input_stream);
+  std::error_code EC;
+  //FIXME: do something about the EC
+  llvm::raw_fd_ostream IR_out(output_filename, EC, llvm::sys::fs::OF_None);
+  CompilerContext::TheModule->print(IR_out, nullptr);
+  return std::nullopt;
 }
 
 //FIXME: split the huge functions into multiple smaller ones
@@ -72,17 +97,11 @@ std::optional<std::string> Compiler::compile_to_obj(std::istream* input_stream, 
   llvm::TargetOptions opt;
   auto TargetMachine = Target->createTargetMachine(TargetTriple, CPU, Features, opt, llvm::Reloc::PIC_);
 
-  FrogLexer lexer(input_stream);
-  Tokens::Token *yylval = new Tokens::Token();
-  yy::parser p(lexer);
-  p();
-  delete yylval;
+  generate_IR(input_stream);
 
   //FIXME: we do not necessarily want to emit the tree_output.txt every time in the finished compiler
-  std::ofstream ast_out("tree_output.txt");
+  //std::ofstream ast_out("tree_output.txt");
   //TODO: bring back the tree_output dfs because it was a cool thing to have
-
-  dynamic_pointer_cast<ast::ProgramNode>(ast_root)->codegen(); 
 
   CompilerContext::TheModule->setDataLayout(TargetMachine->createDataLayout());
   CompilerContext::TheModule->setTargetTriple(TargetTriple);
@@ -146,8 +165,9 @@ std::optional<std::string> Compiler::compile_to_exec(std::string input_filename,
 
 std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> args) {
   std::vector<std::string>::iterator arg_it = args.begin();
-  std::string output_name = "exec";
+  std::string output_name = "";
   std::optional<std::string> input_name = std::nullopt;
+  std::string mode = "exec";
   while(arg_it != args.end()) {
     std::string arg = *arg_it;
     arg_it++;
@@ -160,6 +180,9 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
       output_name = arg;
       arg_it++;
     }
+    else if(arg == "-ir") {
+      mode = "IR";
+    }
     else {
       input_name = arg;
       //TODO: change this to an else if, validate the filename
@@ -168,5 +191,14 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
   if(!input_name) {
     return "No source file given";
   }
-  return compile_to_exec(*input_name, output_name);
-}
+
+  if(mode == "exec") {
+    if(output_name.empty()) output_name = "exec";
+    return compile_to_exec(*input_name, output_name);
+  }
+  if(mode == "IR") {
+    if(output_name.empty()) output_name = "IR";
+    return compile_to_IR(*input_name, output_name);
+  }
+  return "The compiler couldn't deduce the compilation mode";
+  }

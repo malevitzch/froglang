@@ -9,6 +9,7 @@ int main(int argc, char** argv) {
   }
   std::vector<std::string> compiler_args(argv+1, argv + argc);
 
+  //TODO: maybe replace this with some sort of nullstream
   std::ofstream debug_stream("debug.txt");
   Compiler compiler(&debug_stream);
 
