@@ -22,6 +22,7 @@ namespace Tokens {
 
     LOGICAL_AND,
     LOGICAL_OR,
+    NEGATION,
 
     LPAREN,
     RPAREN,

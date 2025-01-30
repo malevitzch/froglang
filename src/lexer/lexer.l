@@ -150,6 +150,11 @@ std::unordered_set<std::string> types = {
   yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::LOGICAL_OR, yytext);
   return yy::parser::token::LOGICAL_OR;
 }
+"~" {
+  yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::NEGATION, yytext);
+  return yy::parser::token::NEGATION;
+}
+
 [ \t\n]+ {
   /* Ignore whitespace */ 
 }

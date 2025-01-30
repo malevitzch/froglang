@@ -4,8 +4,6 @@ The repository contains tests that can be run using CTest.
 # todo
 - Booleans
 
-- Negation
-
 - Greater or equal, less or equal operators
 
 - Remove the outdated TokType which is not used for anything beside token creation

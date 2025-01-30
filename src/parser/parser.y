@@ -40,6 +40,7 @@
 
 %token <token> LOGICAL_AND
 %token <token> LOGICAL_OR
+%token <token> NEGATION
 
 %token <token> ASSIGNMENT
 
@@ -65,6 +66,7 @@
 %left STAR SLASH
 
 %right UMINUS
+%right NEGATION
 
 %type <node>
   expression program global_obj function
@@ -204,6 +206,9 @@ expression: NUMBER {
   }
   | MINUS expression %prec UMINUS {
     $$ = std::make_shared<ast::UnaryOperator>("-", dynamic_pointer_cast<ast::ExprNode>($2));
+  }
+  | NEGATION expression {
+    $$ = std::make_shared<ast::UnaryOperator>("~", dynamic_pointer_cast<ast::ExprNode>($2));
   }
   | IDENTIFIER call_arglist {
     auto call_arglist = dynamic_pointer_cast<ast::FunctionCallArglist>($2);

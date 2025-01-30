@@ -14,10 +14,10 @@ namespace ast {
   : operator_type(operator_type), operand(operand) {}
   llvm::Value* UnaryOperator::eval() {
     if(operator_type == "-") {
-      llvm::Value* operand_val = operand->eval();
-      llvm::Value* zero = llvm::ConstantInt::get(operand_val->getType(), 0);
-
-      return CompilerContext::Builder->CreateSub(zero, operand_val, "neg");
+      return CompilerContext::Builder->CreateNeg(operand->eval(), "uminus");
+    }
+    if(operator_type == "~") {
+      return CompilerContext::Builder->CreateNot(operand->eval(), "not");
     }
     throw std::runtime_error("Unimplemented unary operator: \"" + operator_type + "\"");
   }
