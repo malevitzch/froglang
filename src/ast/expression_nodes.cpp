@@ -52,6 +52,9 @@ namespace ast {
     if(operator_type == "==") {
       return CompilerContext::Builder->CreateICmpEQ(L, R, "equaltmp");
     }
+    if(operator_type == "!=") {
+      return CompilerContext::Builder->CreateICmpNE(L, R, "inequaltmp");
+    }
     throw std::runtime_error("Unimplemented binary operator: \"" + operator_type + "\"");
   }
 

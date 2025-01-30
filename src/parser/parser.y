@@ -34,8 +34,9 @@
 %token <token> SLASH
 
 %token <token> LESS
-%token <token> MORE
+%token <token> GREATER
 %token <token> EQUALITY
+%token <token> INEQUALITY
 
 %token <token> ASSIGNMENT
 
@@ -54,9 +55,10 @@
 %token <token> IF
 %token <token> ELSE
 
+%left LESS GREATER EQUALITY INEQUALITY
 %left PLUS MINUS
 %left STAR SLASH
-%left LESS MORE EQUALITY
+
 %right UMINUS
 
 %type <node>
@@ -223,13 +225,17 @@ expression: NUMBER {
     $$ = std::make_shared<ast::BinaryOperator>("<", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
     *diagnostic_stream<<"Compared (less)\n";
   }
-  | expression MORE expression {
+  | expression GREATER expression {
     $$ = std::make_shared<ast::BinaryOperator>(">", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
     *diagnostic_stream<<"Compared (more)\n";
   }
   | expression EQUALITY expression {
     $$ = std::make_shared<ast::BinaryOperator>("==", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
     *diagnostic_stream<<"Compared (equality)\n";
+  }
+  | expression INEQUALITY expression {
+    $$ = std::make_shared<ast::BinaryOperator>("!=", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    *diagnostic_stream<<"Compared (inequality)\n";
   }
   ;
 

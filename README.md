@@ -6,7 +6,7 @@ The repository contains tests that can be run using CTest.
 
 - Rename more to greater or smth like that
 
-- Inequality, logical and, logical or
+- Negation, logical and, logical or
 
 - Remove the outdated TokType which is not used for anything beside token creation
 

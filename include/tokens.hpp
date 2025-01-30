@@ -16,8 +16,9 @@ namespace Tokens {
     ASSIGNMENT,
 
     LESS,
-    MORE,
+    GREATER,
     EQUALITY,
+    INEQUALITY,
 
     LPAREN,
     RPAREN,

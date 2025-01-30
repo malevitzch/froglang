@@ -131,12 +131,16 @@ std::unordered_set<std::string> types = {
   return yy::parser::token::LESS;
 }
 ">" {
-  yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::MORE, yytext);
-  return yy::parser::token::MORE;
+  yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::GREATER, yytext);
+  return yy::parser::token::GREATER;
 }
 "==" {
   yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::EQUALITY, yytext);
   return yy::parser::token::EQUALITY;
+}
+"!=" {
+  yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::INEQUALITY, yytext);
+  return yy::parser::token::INEQUALITY;
 }
 [ \t\n]+ {
   /* Ignore whitespace */ 
