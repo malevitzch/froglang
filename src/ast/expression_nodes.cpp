@@ -55,6 +55,12 @@ namespace ast {
     if(operator_type == "!=") {
       return CompilerContext::Builder->CreateICmpNE(L, R, "inequaltmp");
     }
+    if(operator_type == "&&") {
+      return CompilerContext::Builder->CreateAnd(L, R, "and");
+    }
+    if(operator_type == "||") {
+      return CompilerContext::Builder->CreateOr(L, R, "or");
+    }
     throw std::runtime_error("Unimplemented binary operator: \"" + operator_type + "\"");
   }
 

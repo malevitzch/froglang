@@ -20,6 +20,9 @@ namespace Tokens {
     EQUALITY,
     INEQUALITY,
 
+    LOGICAL_AND,
+    LOGICAL_OR,
+
     LPAREN,
     RPAREN,
     LBRACE,

@@ -142,6 +142,14 @@ std::unordered_set<std::string> types = {
   yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::INEQUALITY, yytext);
   return yy::parser::token::INEQUALITY;
 }
+"&&" {
+  yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::LOGICAL_AND, yytext);
+  return yy::parser::token::LOGICAL_AND;
+}
+"||" {
+  yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::LOGICAL_OR, yytext);
+  return yy::parser::token::LOGICAL_OR;
+}
 [ \t\n]+ {
   /* Ignore whitespace */ 
 }

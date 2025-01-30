@@ -38,6 +38,9 @@
 %token <token> EQUALITY
 %token <token> INEQUALITY
 
+%token <token> LOGICAL_AND
+%token <token> LOGICAL_OR
+
 %token <token> ASSIGNMENT
 
 %token <token> FUNCTION
@@ -55,6 +58,8 @@
 %token <token> IF
 %token <token> ELSE
 
+%left LOGICAL_OR
+%left LOGICAL_AND
 %left LESS GREATER EQUALITY INEQUALITY
 %left PLUS MINUS
 %left STAR SLASH
@@ -236,6 +241,14 @@ expression: NUMBER {
   | expression INEQUALITY expression {
     $$ = std::make_shared<ast::BinaryOperator>("!=", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
     *diagnostic_stream<<"Compared (inequality)\n";
+  }
+  | expression LOGICAL_AND expression {
+    $$ = std::make_shared<ast::BinaryOperator>("&&", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    *diagnostic_stream<<"Logical AND\n";
+  }
+  | expression LOGICAL_OR expression {
+    $$ = std::make_shared<ast::BinaryOperator>("||", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    *diagnostic_stream<<"Logical OR\n";
   }
   ;
 
