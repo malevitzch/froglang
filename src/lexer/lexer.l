@@ -27,7 +27,7 @@ std::ostream* diagnostic_stream = &std::cout;
 std::unordered_set<std::string> types = {
   "i32",
   "f32",
-  "bool",
+  "i1",
 };
 %}
 

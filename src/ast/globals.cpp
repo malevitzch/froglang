@@ -14,7 +14,7 @@ namespace CompilerContext {
   std::unique_ptr<std::map<std::string, llvm::Function*>> Functions = std::make_unique<std::map<std::string, llvm::Function*>>();
   std::unique_ptr<DSA::TypeHolder> Types = std::make_unique<DSA::TypeHolder>(std::vector<std::pair<std::string, llvm::Type*>>({
     {"i32", llvm::Type::getInt32Ty(*TheContext)},
-    {"bool", llvm::Type::getInt1Ty(*TheContext)},
+    {"i1", llvm::Type::getInt1Ty(*TheContext)},
   }));
 
   //FIXME: add register_primitive_types or something

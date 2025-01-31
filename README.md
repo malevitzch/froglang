@@ -2,9 +2,11 @@
 The project requires CMake, LLVM 16+, a C compiler (prferably clang or gcc) to run.\
 The repository contains tests that can be run using CTest.
 # todo
-- Booleans
-
 - Greater or equal, less or equal operators
+
+- Add code coverage tests
+
+- Add some more tests (there are large chunks of code that are not tested yet, mostly boolean-related stuff)
 
 - Remove the outdated TokType which is not used for anything beside token creation
 
