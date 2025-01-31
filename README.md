@@ -1,5 +1,5 @@
 # flex-lr1-llvm
-The project requires CMake, LLVM 16+, a C compiler (prferably clang or gcc) to run.\
+The project requires CMake, a C++ compiler, LLVM 16+, a C compiler (prferably clang or gcc) to run.\
 The repository contains tests that can be run using CTest.
 # todo
 - Greater or equal, less or equal operators
