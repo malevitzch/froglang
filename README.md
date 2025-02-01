@@ -4,6 +4,10 @@ The repository contains tests that can be run using CTest.
 # todo
 - Greater or equal, less or equal operators
 
+- Change the ValueHolder interface to support Allocas
+
+- Add mutable variables
+
 - Add code coverage tests
 
 - Do something about the function keyword because it's a bit too long
