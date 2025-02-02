@@ -84,7 +84,7 @@ std::optional<std::string> Compiler::compile_to_IR(std::istream* input_stream, s
 
 //FIXME: split the huge functions into multiple smaller ones
 
-std::optional<std::string> Compiler::compile_to_obj(std::istream* input_stream, std::string output_filename, std::string IR_out_filename) {
+std::optional<std::string> Compiler::compile_to_obj(std::istream* input_stream, std::string output_filename) {
   auto TargetTriple = llvm::sys::getDefaultTargetTriple();
 
   prepare_llvm();
@@ -115,22 +115,17 @@ std::optional<std::string> Compiler::compile_to_obj(std::istream* input_stream, 
   if(TargetMachine->addPassesToEmitFile(pass, dest, nullptr, FileType)) {
     return "Something went wrong with LLVM during compilation";
   }
-  //FIXME: printing IR can be its own function maybe
-  if(!IR_out_filename.empty()) {
-    llvm::raw_fd_ostream IR_out(IR_out_filename, EC, llvm::sys::fs::OF_None);
-    CompilerContext::TheModule->print(IR_out, nullptr);
-  }
   pass.run(*CompilerContext::TheModule);
   dest.flush();
   return std::nullopt;
 }
 
-std::optional<std::string> Compiler::compile_to_obj(std::string input_filename, std::string output_filename, std::string IR_out_filename) {
+std::optional<std::string> Compiler::compile_to_obj(std::string input_filename, std::string output_filename) {
   std::ifstream input_stream(input_filename);
   if(!input_stream.is_open()) {
     return "Cannot open file \"" + input_filename + "\"";
   }
-  return compile_to_obj(&input_stream, output_filename, IR_out_filename);
+  return compile_to_obj(&input_stream, output_filename);
 }
 
 std::optional<std::string> Compiler::compile_to_exec(std::istream* input_stream, std::string output_filename) {
