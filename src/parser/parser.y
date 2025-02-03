@@ -103,7 +103,8 @@ function: function_declaration block {
   ;
 
 function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
-    $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), CompilerContext::Types->get_type($5->metadata));
+    //TODO: handle the "error" which is just undeclared type
+    $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), *CompilerContext::Types->get_type($5->metadata));
     *diagnostic_stream<<"DECLARED function("<<$2->metadata<<")\n";
   }
   | FUNCTION IDENTIFIER arglist {
@@ -168,7 +169,8 @@ statement: expression SEMICOLON {
   ;
 
 declaration: IDENTIFIER COLON TYPE_ID {
-    $$ = std::make_shared<ast::DeclarationNode>(CompilerContext::Types->get_type($3->metadata), $1->metadata);
+    //TODO: do something about the possible error here
+    $$ = std::make_shared<ast::DeclarationNode>(*CompilerContext::Types->get_type($3->metadata), $1->metadata);
     *diagnostic_stream<<"DECLARED\n";
   }
   ;
