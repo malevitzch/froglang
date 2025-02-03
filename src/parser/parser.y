@@ -5,6 +5,7 @@
 
 %parse-param { FrogLexer& lexer }
 %code requires { 
+  #include <optional>
   #include <memory>
   #include <fstream>
   #include "ast.hpp"
@@ -103,8 +104,12 @@ function: function_declaration block {
   ;
 
 function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
-    //TODO: handle the "error" which is just undeclared type
-    $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), *CompilerContext::Types->get_type($5->metadata));
+    std::optional<llvm::Type*> type_ref = CompilerContext::Types->get_type($5->metadata);
+    if(!type_ref) {
+      yy::parser::error("Undeclared_type: \"" + $5->metadata + "\"");
+      YYERROR;
+    }
+    $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), *type_ref);
     *diagnostic_stream<<"DECLARED function("<<$2->metadata<<")\n";
   }
   | FUNCTION IDENTIFIER arglist {
@@ -169,8 +174,12 @@ statement: expression SEMICOLON {
   ;
 
 declaration: IDENTIFIER COLON TYPE_ID {
-    //TODO: do something about the possible error here
-    $$ = std::make_shared<ast::DeclarationNode>(*CompilerContext::Types->get_type($3->metadata), $1->metadata);
+    std::optional<llvm::Type*> type_ref = CompilerContext::Types->get_type($3->metadata);
+    if(!type_ref) {
+      yy::parser::error("Undeclared_type: \"" + $3->metadata + "\"");
+      YYERROR;
+    }
+    $$ = std::make_shared<ast::DeclarationNode>(*type_ref, $1->metadata);
     *diagnostic_stream<<"DECLARED\n";
   }
   ;
