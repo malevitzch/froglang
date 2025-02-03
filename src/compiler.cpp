@@ -57,8 +57,11 @@ std::optional<std::string> Compiler::generate_IR(std::istream* input_stream) {
   FrogLexer lexer(input_stream);
   Tokens::Token *yylval = new Tokens::Token();
   yy::parser p(lexer);
-  p();
+  int parser_return_val = p();
   delete yylval;
+  if(parser_return_val != 0) {
+    return "Parsing error";
+  }
   dynamic_pointer_cast<ast::ProgramNode>(ast_root)->codegen();
   //TODO: maybe some error handling here because something might fail
   return std::nullopt;
@@ -97,7 +100,11 @@ std::optional<std::string> Compiler::compile_to_obj(std::istream* input_stream, 
   llvm::TargetOptions opt;
   auto TargetMachine = Target->createTargetMachine(TargetTriple, CPU, Features, opt, llvm::Reloc::PIC_);
 
-  generate_IR(input_stream);
+  std::optional<std::string> parsing_error = generate_IR(input_stream);
+
+  if(parsing_error) {
+    return "Parsing failed due to: \"" + *parsing_error + "\""; 
+  }
 
   //FIXME: we do not necessarily want to emit the tree_output.txt every time in the finished compiler
   //std::ofstream ast_out("tree_output.txt");
@@ -129,7 +136,12 @@ std::optional<std::string> Compiler::compile_to_obj(std::string input_filename, 
 }
 
 std::optional<std::string> Compiler::compile_to_exec(std::istream* input_stream, std::string output_filename) {
-  compile_to_obj(input_stream, "out.o");
+  std::optional<std::string> compilation_error = compile_to_obj(input_stream, "out.o");
+
+  if(compilation_error) {
+    return "Compilation to object failed due to: \"" + *compilation_error + "\"";
+  }
+
   std::optional<std::string> compiler_path = get_compiler_path();
   if(!compiler_path) {
     return "Can't find a C compiler";
