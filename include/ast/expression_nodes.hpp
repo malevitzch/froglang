@@ -40,11 +40,13 @@ namespace ast {
 
   class IntegerConstant : public ExprNode {
   private:
-    long long value;
+    std::string data;
+    unsigned precision;
     // TODO: This might be replaced by an arbitrarily-large bit array
     // so that we can have arbitrary size integers later
   public:
-    IntegerConstant(std::string data, llvm::Type* type);
+    //FIXME: stoi only parses int i'm pretty sure
+    IntegerConstant(unsigned precision, std::string data);
     virtual llvm::Value* eval() override;
     virtual ~IntegerConstant() = default;
     virtual std::string get_name() override;

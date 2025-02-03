@@ -76,10 +76,11 @@ namespace ast {
     return {left, right};
   }
 
-  IntegerConstant::IntegerConstant(std::string data, llvm::Type* type) 
-  : value(std::stoi(data)) { final = true; }
+  IntegerConstant::IntegerConstant(unsigned precision, std::string data) 
+  : precision(precision), data(data) { final = true; }
+
   llvm::Value* IntegerConstant::eval() {
-    return llvm::ConstantInt::get(*CompilerContext::TheContext, llvm::APInt(32, value));
+    return llvm::ConstantInt::get(*CompilerContext::TheContext, llvm::APInt(precision, data, 10));
   }
 
   std::string IntegerConstant::get_name() {

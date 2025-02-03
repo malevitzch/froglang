@@ -20,14 +20,16 @@ const std::unordered_map<std::string, std::pair<Tokens::TokType, int> > keywords
   {"function", {Tokens::TokType::FUNCTION, yy::parser::token::FUNCTION}},
   {"if", {Tokens::TokType::IF, yy::parser::token::IF}},
   {"else", {Tokens::TokType::ELSE, yy::parser::token::ELSE}},
+  {"true", {Tokens::TokType::TRUE, yy::parser::token::TRUE}},
+  {"false", {Tokens::TokType::FALSE, yy::parser::token::FALSE}},
 };
 
 std::ostream* diagnostic_stream = &std::cout;
 
 std::unordered_set<std::string> types = {
+  "i1",
   "i32",
   "f32",
-  "i1",
 };
 %}
 

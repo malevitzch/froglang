@@ -27,6 +27,9 @@
 %token <token> IDENTIFIER
 %token <token> TYPE_ID
 
+%token <token> TRUE
+%token <token> FALSE
+
 %token <token> ARROW
 
 %token <token> PLUS
@@ -106,7 +109,7 @@ function: function_declaration block {
 function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
     std::optional<llvm::Type*> type_ref = CompilerContext::Types->get_type($5->metadata);
     if(!type_ref) {
-      yy::parser::error("Undeclared_type: \"" + $5->metadata + "\"");
+      yy::parser::error("Undeclared type: \"" + $5->metadata + "\"");
       YYERROR;
     }
     $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), *type_ref);
@@ -176,7 +179,7 @@ statement: expression SEMICOLON {
 declaration: IDENTIFIER COLON TYPE_ID {
     std::optional<llvm::Type*> type_ref = CompilerContext::Types->get_type($3->metadata);
     if(!type_ref) {
-      yy::parser::error("Undeclared_type: \"" + $3->metadata + "\"");
+      yy::parser::error("Undeclared type: \"" + $3->metadata + "\"");
       YYERROR;
     }
     $$ = std::make_shared<ast::DeclarationNode>(*type_ref, $1->metadata);
@@ -209,8 +212,14 @@ call_args: /* empty */ {
 
 expression: NUMBER {
     //TODO: solve the type issue
-    $$ = std::make_shared<ast::IntegerConstant>($1->metadata, llvm::Type::getInt32Ty(*CompilerContext::TheContext));
+    $$ = std::make_shared<ast::IntegerConstant>(32, $1->metadata);
     *diagnostic_stream<<"Converted\n";
+  }
+  | TRUE {
+    $$ = std::make_shared<ast::IntegerConstant>(1, "0");
+  }
+  | FALSE {
+    $$ = std::make_shared<ast::IntegerConstant>(0, "1");
   }
   | IDENTIFIER {
     $$ = std::make_shared<ast::VariableIdentifier>($1->metadata);
