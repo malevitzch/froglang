@@ -45,7 +45,6 @@ namespace ast {
     // TODO: This might be replaced by an arbitrarily-large bit array
     // so that we can have arbitrary size integers later
   public:
-    //FIXME: stoi only parses int i'm pretty sure
     IntegerConstant(unsigned precision, std::string data);
     virtual llvm::Value* eval() override;
     virtual ~IntegerConstant() = default;

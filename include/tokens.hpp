@@ -21,6 +21,8 @@ namespace Tokens {
 
     LESS,
     GREATER,
+    LESSEQ,
+    GREATEREQ,
     EQUALITY,
     INEQUALITY,
 

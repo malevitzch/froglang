@@ -47,7 +47,13 @@ namespace ast {
       return CompilerContext::Builder->CreateICmpSLT(L, R, "lesstmp");
     }
     if(operator_type == ">") {
-      return CompilerContext::Builder->CreateICmpSGT(L, R, "moretmp");
+      return CompilerContext::Builder->CreateICmpSGT(L, R, "greatertmp");
+    }
+    if(operator_type == "<=") {
+      return CompilerContext::Builder->CreateICmpSLE(L, R, "lesseqtmp");
+    }
+    if(operator_type == ">=") {
+      return CompilerContext::Builder->CreateICmpSGE(L, R, "greatereqtmp");
     }
     if(operator_type == "==") {
       return CompilerContext::Builder->CreateICmpEQ(L, R, "equaltmp");

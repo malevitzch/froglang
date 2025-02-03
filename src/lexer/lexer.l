@@ -136,6 +136,14 @@ std::unordered_set<std::string> types = {
   yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::GREATER, yytext);
   return yy::parser::token::GREATER;
 }
+"<=" {
+  yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::LESSEQ, yytext);
+  return yy::parser::token::LESSEQ;
+}
+">=" {
+  yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::GREATEREQ, yytext);
+  return yy::parser::token::GREATEREQ;
+}
 "==" {
   yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::EQUALITY, yytext);
   return yy::parser::token::EQUALITY;
