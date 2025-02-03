@@ -29,7 +29,6 @@ void traverse(std::shared_ptr<ast::Node> node, int depth, std::ostream& out) {
 }
 
 int main(int argc, char** argv) {
-  std::istream* in;
   std::ifstream file;
   if(argc > 1) {
     // If a file is provided, open it and set as input stream
@@ -47,7 +46,6 @@ int main(int argc, char** argv) {
   // Create a lexer object
   FrogLexer lexer(&file);
   // Call the lexer
-  Tokens::Token *yylval = new Tokens::Token();
   //std::shared_ptr<ast::Node> root;
   yy::parser p(lexer);
   p();

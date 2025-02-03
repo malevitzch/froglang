@@ -1,8 +1,6 @@
 #pragma once
 #include "ast/node.hpp"
 
-#include "llvm/IR/Type.h"
-
 namespace ast {
 
   class ExprNode : public Node {
@@ -40,8 +38,8 @@ namespace ast {
 
   class IntegerConstant : public ExprNode {
   private:
-    std::string data;
     unsigned precision;
+    std::string data;
     // TODO: This might be replaced by an arbitrarily-large bit array
     // so that we can have arbitrary size integers later
   public:
