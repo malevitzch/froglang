@@ -18,4 +18,7 @@ namespace CompilerContext {
   extern std::unique_ptr<DSA::ValueHolder> NamedValues;
   extern std::unique_ptr<std::map<std::string, llvm::Function*>> Functions;
   extern std::unique_ptr<DSA::TypeHolder> Types;
+
+  const std::vector<std::pair<std::string, llvm::Type*>>& get_primitive_types();
+  void reset_context();
 }

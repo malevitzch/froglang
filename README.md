@@ -2,8 +2,6 @@
 The project requires CMake, a C++ compiler, LLVM 16+, a C compiler (prferably clang or gcc) to run.\
 The repository contains tests that can be run using CTest.
 # todo
-- Greater or equal, less or equal operators
-
 - Change the ValueHolder interface to support Allocas
 
 - Add mutable variables
@@ -31,7 +29,8 @@ The repository contains tests that can be run using CTest.
 
 # features to add
 - booleans, floats, strings, unsigned integers
-- if statements, else statements (maybe elif instead of else if)
+- casts of form "\<TYPE_ID\> expression", combined with a data structure that runs bfs on a graph to check if cast is possible and applies the correct functions in order
+- else if statements
 - for loops, while loops (called just loop), times loops (a loop that executes a given number of times, given as "times(unsigned integer)" ).
 - labels for loops, break statements
 - named function parameter calls, function f(x: int, y: int) can be called as f(y: 3, x: 8).

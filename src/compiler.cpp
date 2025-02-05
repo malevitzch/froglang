@@ -1,4 +1,5 @@
 #include "compiler.hpp"
+#include "ast/globals.hpp"
 #include "tokens.hpp"
 #include "parser.hpp"
 
@@ -201,11 +202,13 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
 
   if(mode == "exec") {
     if(output_name.empty()) output_name = "exec";
+    CompilerContext::reset_context();
     return compile_to_exec(*input_name, output_name);
   }
   if(mode == "IR") {
     if(output_name.empty()) output_name = "IR";
+    CompilerContext::reset_context();
     return compile_to_IR(*input_name, output_name);
   }
   return "The compiler couldn't deduce the compilation mode";
-  }
+}

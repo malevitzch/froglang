@@ -7,17 +7,27 @@
 #include "ast/globals.hpp"
 
 namespace CompilerContext {
-  std::unique_ptr<llvm::LLVMContext> TheContext = std::make_unique<llvm::LLVMContext>();
-  std::unique_ptr<llvm::Module> TheModule = std::make_unique<llvm::Module>("MyModule", *CompilerContext::TheContext);
-  std::unique_ptr<llvm::IRBuilder<>> Builder = std::make_unique<llvm::IRBuilder<>>(*CompilerContext::TheContext);
-  std::unique_ptr<DSA::ValueHolder> NamedValues = std::make_unique<DSA::ValueHolder>();
-  std::unique_ptr<std::map<std::string, llvm::Function*>> Functions = std::make_unique<std::map<std::string, llvm::Function*>>();
-  std::unique_ptr<DSA::TypeHolder> Types = std::make_unique<DSA::TypeHolder>(std::vector<std::pair<std::string, llvm::Type*>>({
-    {"i32", llvm::Type::getInt32Ty(*TheContext)},
-    {"i1", llvm::Type::getInt1Ty(*TheContext)},
-  }));
-
-  //FIXME: add register_primitive_types or something
-  //FIXME: also maybe this should be cleaned up at the end of compilation?
-  //FIXME: add init/cleanup to globals
+  std::unique_ptr<llvm::LLVMContext> TheContext;
+  std::unique_ptr<llvm::Module> TheModule;
+  std::unique_ptr<llvm::IRBuilder<>> Builder;
+  std::unique_ptr<DSA::ValueHolder> NamedValues;
+  std::unique_ptr<std::map<std::string, llvm::Function*>> Functions;
+  std::unique_ptr<DSA::TypeHolder> Types;
+  
+  const std::vector<std::pair<std::string, llvm::Type*>>& get_primitive_types() {
+    static const std::vector<std::pair<std::string, llvm::Type*>> types = {
+      {"i32", llvm::Type::getInt32Ty(*TheContext)},
+      {"i1", llvm::Type::getInt1Ty(*TheContext)},
+    };
+    return types;
+  }
+  
+  void reset_context() {
+    TheContext = std::make_unique<llvm::LLVMContext>();
+    TheModule = std::make_unique<llvm::Module>("ProgramModule", *CompilerContext::TheContext);
+    Builder = std::make_unique<llvm::IRBuilder<>>(*CompilerContext::TheContext);
+    NamedValues = std::make_unique<DSA::ValueHolder>();
+    Functions = std::make_unique<std::map<std::string, llvm::Function*>>();
+    Types = std::make_unique<DSA::TypeHolder>(get_primitive_types());
+  }
 }
