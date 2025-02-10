@@ -181,17 +181,25 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
   while(arg_it != args.end()) {
     std::string arg = *arg_it;
     arg_it++;
-    if(arg == "-o") {
-      if(arg_it == args.end()) {
-        return "The \"-o\" option requires an argument";
-      }
-      //TODO: validate the arg as valid output name
-      arg = *arg_it;
-      output_name = arg;
-      arg_it++;
+    if(arg.empty()) {
+      return "Empty argument";
     }
-    else if(arg == "-ir") {
-      mode = "IR";
+    if(arg[0] == '-') {
+      if(arg == "-o") {
+        if(arg_it == args.end()) {
+          return "The \"-o\" option requires an argument";
+        }
+        //TODO: validate the arg as valid output name
+        arg = *arg_it;
+        output_name = arg;
+        arg_it++;
+      }
+      else if(arg == "-ir") {
+        mode = "IR";
+      }
+      else {
+        return "Unknown option: \"" + arg + "\"";
+      }
     }
     else {
       input_name = arg;

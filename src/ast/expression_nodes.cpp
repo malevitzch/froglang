@@ -13,6 +13,7 @@ namespace ast {
   UnaryOperator::UnaryOperator(std::string operator_type, std::shared_ptr<ExprNode> operand) 
   : operator_type(operator_type), operand(operand) {}
   llvm::Value* UnaryOperator::eval() {
+    //FIXME: replace with operator subclasses
     if(operator_type == "-") {
       return CompilerContext::Builder->CreateNeg(operand->eval(), "uminus");
     }
@@ -31,6 +32,7 @@ namespace ast {
   llvm::Value* BinaryOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
+    //FIXME: replace this with operator subclasses because this is so unbeliveably ugly and stupid
     if(operator_type == "+") {
       return CompilerContext::Builder->CreateAdd(L, R, "addtmp");
     }
@@ -86,6 +88,7 @@ namespace ast {
   : precision(precision), data(data) { final = true; }
 
   llvm::Value* IntegerConstant::eval() {
+    //TODO: Precision can't be zero
     return llvm::ConstantInt::get(*CompilerContext::TheContext, llvm::APInt(precision, data, 10));
   }
 
@@ -97,7 +100,7 @@ namespace ast {
   : var_name(var_name) { final = true; }
   llvm::Value* VariableIdentifier::eval() {
     if(!CompilerContext::NamedValues->has_val(var_name)) {
-      //TODO: some kind of exception?
+      //TODO: Some kind of exception?
     }
     return CompilerContext::NamedValues->get_val(var_name);
   }
@@ -115,8 +118,8 @@ namespace ast {
   }
   std::vector<std::shared_ptr<Node>> FunctionCallArgs::get_children() {
     std::vector<std::shared_ptr<Node>> children;
-    for(std::shared_ptr<ExprNode> arg : args)
-      children.push_back(arg);
+    for(std::shared_ptr<ExprNode> child : args)
+      children.push_back(child);
     return children;
   }
   std::vector<std::shared_ptr<ExprNode>> FunctionCallArgs::get_args() {

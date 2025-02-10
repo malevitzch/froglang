@@ -2,6 +2,12 @@
 The project requires CMake, a C++ compiler, LLVM 16+, a C compiler (prferably clang or gcc) to run.\
 The repository contains tests that can be run using CTest.
 # todo
+- Extend the CLI, allowing the compilation of object files without linking them to executable through a "-c" option
+
+- Build the standard library through CMAKE and the compiler executable
+
+- Change the way operators are represented in code, they should just inherit from the Binary or Unary Operator superclass which should be abstract. Then the operators could be generated through a factory function that returns a shared pointer to the corresponding class (maybe a static function for Operator)
+
 - Add a reasonable compilation error/warning log to the AST
 
 - Change the ValueHolder interface to support Allocas
@@ -22,7 +28,6 @@ The repository contains tests that can be run using CTest.
 
 - Add multi-file support
 
-- Extend the CLI, allowing the compilation of object files without linking them to executable
 
 - Implement name-mangling
 
