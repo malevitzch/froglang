@@ -64,7 +64,7 @@ std::optional<std::string> Compiler::generate_IR(std::istream* input_stream) {
     return "Parsing error";
   }
   dynamic_pointer_cast<ast::ProgramNode>(ast_root)->codegen();
-  //TODO: maybe some error handling here because something might fail
+  //FIXME: implement AST error handling
   return std::nullopt;
 }
 
@@ -80,13 +80,15 @@ Compiler::Compiler(std::ostream* debug_output_stream) {
 std::optional<std::string> Compiler::compile_to_IR(std::istream* input_stream, std::string output_filename) {
   generate_IR(input_stream);
   std::error_code EC;
-  //FIXME: do something about the EC
   llvm::raw_fd_ostream IR_out(output_filename, EC, llvm::sys::fs::OF_None);
+
+  if(EC) {
+    return "Error opening file \"" + output_filename + "\": " + EC.message();
+  }
+
   CompilerContext::TheModule->print(IR_out, nullptr);
   return std::nullopt;
 }
-
-//FIXME: split the huge functions into multiple smaller ones
 
 std::optional<std::string> Compiler::compile_to_obj(std::istream* input_stream, std::string output_filename) {
   auto TargetTriple = llvm::sys::getDefaultTargetTriple();

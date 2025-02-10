@@ -137,11 +137,9 @@ namespace ast {
     return args->get_args();
   }
 
-  //FIXME: crimes are being committed here
   FunctionCallExpr::FunctionCallExpr(std::string function_name, std::shared_ptr<FunctionCallArglist> args)
   : function_name(function_name), args(args) {}
   llvm::Value* FunctionCallExpr::eval() {
-    //TODO: check for availability?
     if(!CompilerContext::Functions->contains(function_name))
       throw std::runtime_error("Unregisterd function \"" + function_name + "\"");
     llvm::Function* to_call = CompilerContext::Functions->at(function_name);
