@@ -174,6 +174,8 @@ std::optional<std::string> Compiler::compile_to_exec(std::string input_filename,
 }
 
 std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> args) {
+  //FIXME: maybe split it into smaller, iterator-based functions?
+  //TODO: setting a mode should only be done once (warn the user in case of multiple options that override each other)
   std::vector<std::string>::iterator arg_it = args.begin();
   std::string output_name = "";
   std::optional<std::string> input_name = std::nullopt;
@@ -185,20 +187,29 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
       return "Empty argument";
     }
     if(arg[0] == '-') {
-      if(arg == "-o") {
-        if(arg_it == args.end()) {
-          return "The \"-o\" option requires an argument";
+      if(arg.size() == 1) {
+        return "\"-\" is not a valid option";
+      }
+      if(arg.size() > 1) {
+        std::string option = arg.substr(1, arg.size() - 1);
+        if(option == "o") {
+          if(arg_it == args.end()) {
+            return "The \"-o\" option requires an argument";
+          }
+          //TODO: validate the arg as valid output name
+          arg = *arg_it;
+          output_name = arg;
+          arg_it++;
         }
-        //TODO: validate the arg as valid output name
-        arg = *arg_it;
-        output_name = arg;
-        arg_it++;
-      }
-      else if(arg == "-ir") {
-        mode = "IR";
-      }
-      else {
-        return "Unknown option: \"" + arg + "\"";
+        else if(option == "ir") {
+          mode = "IR";
+        }
+        else if(option == "c") {
+          mode = "obj";
+        }
+        else {
+          return "Unknown option: -\"" + option + "\"";
+        }
       }
     }
     else {
@@ -219,6 +230,11 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
     if(output_name.empty()) output_name = "IR";
     CompilerContext::reset_context();
     return compile_to_IR(*input_name, output_name);
+  }
+  if(mode == "obj") {
+    if(output_name.empty()) output_name = "obj.o";
+    CompilerContext::reset_context();
+    return compile_to_obj(*input_name, output_name);
   }
   return "The compiler couldn't deduce the compilation mode";
 }

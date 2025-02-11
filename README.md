@@ -2,7 +2,7 @@
 The project requires CMake, a C++ compiler, LLVM 16+, a C compiler (prferably clang or gcc) to run.\
 The repository contains tests that can be run using CTest.
 # todo
-- Extend the CLI, allowing the compilation of object files without linking them to executable through a "-c" option
+- Change the way function declarations work so that forward declaration is possible if you want to link a file
 
 - Build the standard library through CMAKE and the compiler executable
 
@@ -28,7 +28,6 @@ The repository contains tests that can be run using CTest.
 
 - Add multi-file support
 
-
 - Implement name-mangling
 
 - Find a good way to use the print function from C in a way that does not look like a band-aid fix
@@ -46,4 +45,3 @@ The repository contains tests that can be run using CTest.
 - a standard library
 - exceptions
 - classes
-
