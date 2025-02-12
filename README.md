@@ -2,9 +2,7 @@
 The project requires CMake, a C++ compiler, LLVM 16+, a C compiler (prferably clang or gcc) to run.\
 The repository contains tests that can be run using CTest.
 # todo
-- Change the way function declarations work so that forward declaration is possible if you want to link a file
-
-- Fix the prototype
+- Find a reliable way to get the stdlib path so that I can link stdlib
 
 - Build the standard library through CMAKE and the compiler executable
 
