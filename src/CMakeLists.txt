@@ -3,7 +3,7 @@ set(BISON_OUTPUT ${CMAKE_BINARY_DIR}/parser.cpp)
 set(BISON_HEADER ${CMAKE_BINARY_DIR}/parser.hpp)
 
 add_custom_command(
-  MAIN_DEPENDENCY ${BISON_INPUT}
+  DEPENDS ${BISON_INPUT}
   OUTPUT ${BISON_OUTPUT} ${BISON_HEADER}
   COMMAND ${BISON_EXECUTABLE} -d --defines=${BISON_HEADER} -o ${BISON_OUTPUT} ${BISON_INPUT}
 )
@@ -12,7 +12,7 @@ set(FLEX_INPUT ${CMAKE_SOURCE_DIR}/src/lexer/lexer.l)
 set(FLEX_OUTPUT ${CMAKE_BINARY_DIR}/lex.yy.cpp)
 
 add_custom_command(
-  MAIN_DEPENDENCY ${FLEX_INPUT}
+  DEPENDS ${FLEX_INPUT}
   OUTPUT ${FLEX_OUTPUT}
   COMMAND ${FLEX_EXECUTABLE} --c++ -o ${FLEX_OUTPUT} ${FLEX_INPUT}
 )
@@ -54,6 +54,16 @@ target_link_libraries(lexer PRIVATE app_lib)
 add_executable(compiler compiler.cpp compiler_driver.cpp)
 target_link_libraries(compiler PRIVATE LLVM)
 target_link_libraries(compiler PRIVATE app_lib)
+
+set(LIB_OUTPUT ${CMAKE_BINARY_DIR}/lib.o)
+
+add_custom_command(
+  DEPENDS compiler
+  OUTPUT ${LIB_OUTPUT}
+  COMMAND ${CMAKE_BINARY_DIR}/src/compiler -genstdlib -o ${LIB_OUTPUT}
+)
+
+add_custom_target(generate_lib ALL DEPENDS ${LIB_OUTPUT})
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")

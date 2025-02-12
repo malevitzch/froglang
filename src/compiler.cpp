@@ -207,6 +207,10 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
         else if(option == "c") {
           mode = "obj";
         }
+        else if(option == "genstdlib") {
+          mode = "stdlib";
+          //FIXME: this needs implementing
+        }
         else {
           return "Unknown option: -\"" + option + "\"";
         }
@@ -216,6 +220,9 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
       input_name = arg;
       //TODO: change this to an else if, validate the filename
     }
+  }
+  if(mode == "stdlib") {
+    return std::nullopt;
   }
   if(!input_name) {
     return "No source file given";
