@@ -79,6 +79,7 @@
   function_declaration block arglist
   statement statements declaration
   args call_args call_arglist
+  function_declaration_globject
 
 %%
 program: /* */ {
@@ -97,13 +98,21 @@ program: /* */ {
 
 global_obj: function {
     *diagnostic_stream<<"FUNCTION\n";
-    $$ = dynamic_pointer_cast<ast::GlobjectNode>($1);
+    $$ = $1;
+  }
+  | function_declaration_globject {
+    $$ = $1;
   }
   ;
 
+function_declaration_globject: function_declaration SEMICOLON {
+  auto decl = dynamic_pointer_cast<ast::FunctionDeclaration>($1);
+  $$ = std::make_shared<ast::FunctionDeclarationGlobject>(decl);
+}
+
 function: function_declaration block {
-    auto decl = std::dynamic_pointer_cast<ast::FunctionDeclaration>($1);
-    auto body = std::dynamic_pointer_cast<ast::Block>($2);
+    auto decl = dynamic_pointer_cast<ast::FunctionDeclaration>($1);
+    auto body = dynamic_pointer_cast<ast::Block>($2);
     $$ = std::make_shared<ast::FunctionGlobject>(decl, body);
   }
   ;

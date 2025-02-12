@@ -37,7 +37,7 @@ namespace ast {
     void add_arg(std::shared_ptr<DeclarationNode> arg);
     std::vector<std::shared_ptr<DeclarationNode>> get_args();
   };
-  
+
   class FunctionArglist : public Node {
   private:
     std::shared_ptr<FunctionArgs> args;
@@ -66,6 +66,16 @@ namespace ast {
     std::vector<std::shared_ptr<DeclarationNode>> get_args();
     llvm::Function* get_func();
     std::string get_varname();
+  };
+
+  class FunctionDeclarationGlobject : public GlobjectNode {
+  private:
+    std::shared_ptr<FunctionDeclaration> decl;
+  public:
+    FunctionDeclarationGlobject(std::shared_ptr<FunctionDeclaration> decl);
+    virtual void codegen() override;
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
   class FunctionGlobject : public GlobjectNode {

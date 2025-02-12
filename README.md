@@ -4,7 +4,11 @@ The repository contains tests that can be run using CTest.
 # todo
 - Change the way function declarations work so that forward declaration is possible if you want to link a file
 
+- Fix the prototype
+
 - Build the standard library through CMAKE and the compiler executable
+
+- Clean up the parser file, especially the diagnostics
 
 - Change the way operators are represented in code, they should just inherit from the Binary or Unary Operator superclass which should be abstract. Then the operators could be generated through a factory function that returns a shared pointer to the corresponding class (maybe a static function for Operator)
 

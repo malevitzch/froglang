@@ -66,6 +66,9 @@ namespace ast {
   FunctionDeclaration::FunctionDeclaration(std::string var_name, std::shared_ptr<FunctionArglist> args, llvm::Type* return_type) 
   : var_name(var_name), args(args), return_type(return_type) {}
   void FunctionDeclaration::codegen() {
+    if(CompilerContext::Functions->contains(var_name)) {
+      return;
+    }
     std::vector<llvm::Type*> arg_types = args->get_arg_types();
 
     llvm::FunctionType* func_type =
@@ -91,6 +94,18 @@ namespace ast {
   }
   std::string FunctionDeclaration::get_varname() {
     return var_name;
+  }
+
+  FunctionDeclarationGlobject::FunctionDeclarationGlobject(std::shared_ptr<FunctionDeclaration> decl)
+  : decl(decl) {}
+  void FunctionDeclarationGlobject::codegen() {
+    decl->codegen();
+  }
+  std::string FunctionDeclarationGlobject::get_name() {
+    return "Function Declaration Globject";
+  }
+  std::vector<std::shared_ptr<Node>> FunctionDeclarationGlobject::get_children() {
+    return {decl};
   }
 
   FunctionGlobject::FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body) 
