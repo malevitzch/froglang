@@ -2,6 +2,7 @@
 #include "ast/globals.hpp"
 #include "tokens.hpp"
 #include "parser.hpp"
+#include "libgen/print.hpp"
 
 #include <llvm/Support/raw_ostream.h>
 #include <llvm/Support/raw_os_ostream.h>
@@ -173,6 +174,39 @@ std::optional<std::string> Compiler::compile_to_exec(std::string input_filename,
   return compile_to_exec(&input_stream, output_filename);
 }
 
+std::optional<std::string> Compiler::compile_stdlib() {
+  auto TargetTriple = llvm::sys::getDefaultTargetTriple();
+
+  prepare_llvm();
+
+  std::string Error;
+  auto Target = llvm::TargetRegistry::lookupTarget(TargetTriple, Error);
+
+  auto CPU = "generic";
+  auto Features = "";
+  llvm::TargetOptions opt;
+  auto TargetMachine = Target->createTargetMachine(TargetTriple, CPU, Features, opt, llvm::Reloc::PIC_);
+
+  libgen::register_print_i32();
+  //TODO: here goes the thing
+
+  CompilerContext::TheModule->setDataLayout(TargetMachine->createDataLayout());
+  CompilerContext::TheModule->setTargetTriple(TargetTriple);
+  std::error_code EC;
+
+  llvm::raw_fd_ostream dest("froglib.o", EC, llvm::sys::fs::OF_None);
+  llvm::legacy::PassManager pass;
+
+  // This is the version used by modern LLVM
+  auto FileType = llvm::CGFT_ObjectFile;
+  if(TargetMachine->addPassesToEmitFile(pass, dest, nullptr, FileType)) {
+    return "Something went wrong with LLVM during compilation";
+  }
+  pass.run(*CompilerContext::TheModule);
+  dest.flush();
+  return std::nullopt;
+}
+
 std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> args) {
   //FIXME: maybe split it into smaller, iterator-based functions?
   //TODO: setting a mode should only be done once (warn the user in case of multiple options that override each other)
@@ -209,7 +243,6 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
         }
         else if(option == "genstdlib") {
           mode = "stdlib";
-          //FIXME: this needs implementing
         }
         else {
           return "Unknown option: -\"" + option + "\"";
@@ -222,6 +255,8 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
     }
   }
   if(mode == "stdlib") {
+    CompilerContext::reset_context();
+    compile_stdlib();
     return std::nullopt;
   }
   if(!input_name) {

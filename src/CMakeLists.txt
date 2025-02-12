@@ -55,7 +55,7 @@ add_executable(compiler compiler.cpp compiler_driver.cpp)
 target_link_libraries(compiler PRIVATE LLVM)
 target_link_libraries(compiler PRIVATE app_lib)
 
-set(LIB_OUTPUT ${CMAKE_BINARY_DIR}/lib.o)
+set(LIB_OUTPUT ${CMAKE_BINARY_DIR}/froglib.o)
 
 add_custom_command(
   DEPENDS compiler

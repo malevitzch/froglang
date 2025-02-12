@@ -24,4 +24,17 @@ namespace libgen {
     (*Functions)["print_i32"] = print_i32;
 
   }
+
+  void register_print_i32_decl() {
+    using namespace CompilerContext;
+
+    llvm::FunctionType* printf_type = llvm::FunctionType::get(Builder->getInt32Ty(), {Builder->getInt8PtrTy()}, true);
+    TheModule->getOrInsertFunction("printf", printf_type);
+
+    llvm::FunctionType* print_i32_type = llvm::FunctionType::get(Builder->getVoidTy(), {Builder->getInt32Ty()}, false);
+    llvm::Function* print_i32 = llvm::Function::Create(print_i32_type, llvm::Function::ExternalLinkage, "print_i32", TheModule.get());
+
+    // Store it in the function map
+    (*Functions)["print_i32"] = print_i32;
+  }
 }
