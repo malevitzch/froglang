@@ -2,9 +2,7 @@
 The project requires CMake, a C++ compiler, LLVM 16+, a C compiler (prferably clang or gcc) to run.\
 The repository contains tests that can be run using CTest.
 # todo
-- Find a reliable way to get the stdlib path so that I can link stdlib
-
-- Build the standard library through CMAKE and the compiler executable
+- Add multi-file support
 
 - Clean up the parser file, especially the diagnostics
 
@@ -28,7 +26,6 @@ The repository contains tests that can be run using CTest.
 
 - Find all the dependencies using docker or something
 
-- Add multi-file support
 
 - Implement name-mangling
 

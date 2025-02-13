@@ -150,7 +150,7 @@ std::optional<std::string> Compiler::compile_to_exec(std::istream* input_stream,
   if(!compiler_path) {
     return "Can't find a C compiler";
   }
-  std::vector<std::string> args = {*compiler_path, "-o", output_filename, "out.o"};
+  std::vector<std::string> args = {*compiler_path, "-o", output_filename, "out.o", STDLIB_PATH};
   llvm::SmallVector<llvm::StringRef, 16> argv;
   for(auto& arg : args) {
     argv.push_back(arg);

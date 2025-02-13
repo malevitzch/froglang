@@ -9,7 +9,7 @@ namespace ast {
 
   void ProgramNode::codegen() {
 
-    libgen::register_print_i32();
+    libgen::register_print_i32_decl();
 
     for(std::shared_ptr<GlobjectNode> globject : globjects)
       globject->codegen();
