@@ -32,14 +32,11 @@
 std::shared_ptr<ast::Node> ast_root;
 
 void Compiler::prepare_llvm() {
-  static bool initialized = false;
-  if(!initialized) {
-    llvm::InitializeAllTargetInfos();
-    llvm::InitializeAllTargets();
-    llvm::InitializeAllTargetMCs();
-    llvm::InitializeAllAsmParsers();
-    llvm::InitializeAllAsmPrinters();
-  }
+  llvm::InitializeAllTargetInfos();
+  llvm::InitializeAllTargets();
+  llvm::InitializeAllTargetMCs();
+  llvm::InitializeAllAsmParsers();
+  llvm::InitializeAllAsmPrinters();
 }
 
 std::optional<std::string> Compiler::get_compiler_path() {
@@ -65,6 +62,7 @@ std::optional<std::string> Compiler::generate_IR(std::istream* input_stream) {
     return "Parsing error";
   }
   dynamic_pointer_cast<ast::ProgramNode>(ast_root)->codegen();
+  ast_root = nullptr;
   //FIXME: implement AST error handling
   return std::nullopt;
 }
@@ -167,11 +165,8 @@ std::optional<std::string> Compiler::compile_to_exec(std::istream* input_stream,
 }
 
 std::optional<std::string> Compiler::compile_to_exec(std::vector<std::string> filenames, std::string output_filename) {
-  std::optional<std::string> compiler_path = get_compiler_path();
-  if(!compiler_path) {
-    return "Can't find a C compiler";
-  }
   for(std::string filename : filenames) {
+    CompilerContext::reset_context();
     //FIXME: validate the stream
     std::ifstream input_stream(filename);
     //FIXME: remove extension until first dot and add generate the object filename?
@@ -180,9 +175,13 @@ std::optional<std::string> Compiler::compile_to_exec(std::vector<std::string> fi
       return "Compilation of file \"" + filename + "\" to object failed due to: \"" + *compilation_error + "\"";
     }
   }
+  std::optional<std::string> compiler_path = get_compiler_path();
+  if(!compiler_path) {
+    return "Can't find a C compiler";
+  }
   std::vector<std::string> args = {*compiler_path, "-o", output_filename, STDLIB_PATH};
   for(std::string filename : filenames) {
-    args.push_back(filename);
+    args.push_back(filename + ".o");
   }
   llvm::SmallVector<llvm::StringRef, 16> argv;
   for(auto& arg : args) {
@@ -246,7 +245,7 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
   //TODO: setting a mode should only be done once (warn the user in case of multiple options that override each other)
   std::vector<std::string>::iterator arg_it = args.begin();
   std::string output_name = "";
-  std::optional<std::string> input_name = std::nullopt;
+  std::vector<std::string> sources;
   std::string mode = "exec";
   while(arg_it != args.end()) {
     std::string arg = *arg_it;
@@ -284,7 +283,7 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
       }
     }
     else {
-      input_name = arg;
+      sources.push_back(arg);
       //TODO: change this to an else if, validate the filename
     }
   }
@@ -293,24 +292,23 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
     compile_stdlib();
     return std::nullopt;
   }
-  if(!input_name) {
+  if(sources.empty()) {
     return "No source file given";
   }
-
   if(mode == "exec") {
     if(output_name.empty()) output_name = "exec";
     CompilerContext::reset_context();
-    return compile_to_exec(*input_name, output_name);
+    return compile_to_exec(sources, output_name);
   }
   if(mode == "IR") {
     if(output_name.empty()) output_name = "IR";
     CompilerContext::reset_context();
-    return compile_to_IR(*input_name, output_name);
+    return compile_to_IR(sources[0], output_name);
   }
   if(mode == "obj") {
     if(output_name.empty()) output_name = "obj.o";
     CompilerContext::reset_context();
-    return compile_to_obj(*input_name, output_name);
+    return compile_to_obj(sources[0], output_name);
   }
   return "The compiler couldn't deduce the compilation mode";
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cleanup() {
-  rm -f "$exec_name" "${test_path}_output"
+  rm -f "$exec_name" "${test_path}_output" "${test_path}.o"
 }
 trap cleanup EXIT
 
