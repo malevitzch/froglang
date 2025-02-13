@@ -20,6 +20,7 @@ public:
   std::optional<std::string> compile_to_obj(std::string input_filename, std::string output_filename);
   std::optional<std::string> compile_to_exec(std::istream* input_stream, std::string output_filename);
   std::optional<std::string> compile_to_exec(std::string input_filename, std::string output_filename);
+  std::optional<std::string> compile_to_exec(std::vector<std::string> filenames, std::string output_filename);
   std::optional<std::string> compile_stdlib();
   std::optional<std::string> compile_from_args(std::vector<std::string> args);
 };

@@ -4,6 +4,8 @@ The repository contains tests that can be run using CTest.
 # todo
 - Add multi-file support
 
+- Write functions that create a nice .o file name for a given string, change compiler functions so that they use that to generate object files
+
 - Clean up the parser file, especially the diagnostics
 
 - Change the way operators are represented in code, they should just inherit from the Binary or Unary Operator superclass which should be abstract. Then the operators could be generated through a factory function that returns a shared pointer to the corresponding class (maybe a static function for Operator)

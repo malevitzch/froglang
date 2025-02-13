@@ -166,6 +166,40 @@ std::optional<std::string> Compiler::compile_to_exec(std::istream* input_stream,
   return std::nullopt;
 }
 
+std::optional<std::string> Compiler::compile_to_exec(std::vector<std::string> filenames, std::string output_filename) {
+  std::optional<std::string> compiler_path = get_compiler_path();
+  if(!compiler_path) {
+    return "Can't find a C compiler";
+  }
+  for(std::string filename : filenames) {
+    //FIXME: validate the stream
+    std::ifstream input_stream(filename);
+    //FIXME: remove extension until first dot and add generate the object filename?
+    std::optional<std::string> compilation_error = compile_to_obj(&input_stream, filename + ".o");
+    if(compilation_error) {
+      return "Compilation of file \"" + filename + "\" to object failed due to: \"" + *compilation_error + "\"";
+    }
+  }
+  std::vector<std::string> args = {*compiler_path, "-o", output_filename, STDLIB_PATH};
+  for(std::string filename : filenames) {
+    args.push_back(filename);
+  }
+  llvm::SmallVector<llvm::StringRef, 16> argv;
+  for(auto& arg : args) {
+    argv.push_back(arg);
+  }
+  std::string error_message;
+  int result = llvm::sys::ExecuteAndWait(argv[0], argv, std::nullopt, {}, 0, 0, &error_message);
+  if(result == -1) {
+    return "Cannot execute the compilation command";
+  }
+  else if(result == -2) {
+    return "The compiler used for linking crashed";
+  }
+  return std::nullopt;
+
+}
+
 std::optional<std::string> Compiler::compile_to_exec(std::string input_filename, std::string output_filename) {
   std::ifstream input_stream(input_filename);
     if(!input_stream.is_open()) {
