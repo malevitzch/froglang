@@ -5,7 +5,7 @@ macro(EXEC_CHECK CMD)
   endif()
 endmacro()
 
-file(GLOB CRASH_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/crash_tests/*")
+file(GLOB CRASH_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/crash_tests/*.in")
 foreach(TEST_FILE ${CRASH_TESTS})
   get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
   add_test(NAME ${TEST_NAME} 
@@ -22,3 +22,8 @@ foreach(INPUT_FILE ${OUTPUT_TESTS})
           "${CMAKE_BINARY_DIR}/src/compiler" "${INPUT_FILE}" "${EXPECTED_FILE}")
   set_tests_properties(${TEST_NAME} PROPERTIES LABELS "Print")
 endforeach()
+
+add_custom_target(clean_tests
+  COMMAND ${CMAKE_COMMAND} -E rm -f ${CMAKE_BINARY_DIR}/src/*.o
+  COMMENT "Cleaning up generated object files after tests."
+)
