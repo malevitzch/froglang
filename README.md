@@ -1,8 +1,17 @@
 # flex-lr1-llvm
 The project requires CMake, a C++ compiler, LLVM 16+, a C compiler (prferably clang or gcc) to run.\
-The repository contains tests that can be run using CTest.
+The repository contains tests that can be run using CTest. To run them simply go to the build directory after building the project and run the following command:
+```sh
+ctest
+```
 # todo
 - Write functions that create a nice .o file name for a given string, change compiler functions so that they use that to generate object files
+
+- Make the run_output_tests.sh script more flexible, allowing for multi-file compilation
+
+- Add more tests
+
+- Add powershell alternatives to .sh scripts for testing
 
 - Clean up the parser file, especially the diagnostics
 
