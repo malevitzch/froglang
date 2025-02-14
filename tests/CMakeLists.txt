@@ -18,7 +18,7 @@ foreach(INPUT_FILE ${OUTPUT_TESTS})
   get_filename_component(TEST_NAME ${INPUT_FILE} NAME_WE)
   set(EXPECTED_FILE "${CMAKE_CURRENT_SOURCE_DIR}/print_tests/out/${TEST_NAME}.out")
   add_test(NAME ${TEST_NAME}
-          COMMAND bash "${CMAKE_CURRENT_SOURCE_DIR}/run_output_test.sh"
+          COMMAND sh "${CMAKE_CURRENT_SOURCE_DIR}/run_output_test.sh"
           "${CMAKE_BINARY_DIR}/src/compiler" "${INPUT_FILE}" "${EXPECTED_FILE}")
   set_tests_properties(${TEST_NAME} PROPERTIES LABELS "Print")
 endforeach()

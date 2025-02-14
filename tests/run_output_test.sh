@@ -1,9 +1,8 @@
-#!/bin/bash
-
+#!/bin/sh
 cleanup() {
   rm -f "$exec_name" "${test_path}_output" "${test_path}.o"
 }
-trap cleanup EXIT
+trap cleanup 0
 
 if [ "$#" -ne "3" ]; then
   echo "Usage: $0 <executable_path> <test_path> <expected_output_path>"
