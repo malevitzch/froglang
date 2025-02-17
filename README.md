@@ -11,6 +11,8 @@ ctest
 
 - Add more tests
 
+- lvalues and rvalues
+
 - Add powershell alternatives to .sh scripts for testing
 
 - Clean up the parser file, especially the diagnostics

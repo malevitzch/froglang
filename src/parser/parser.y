@@ -81,6 +81,9 @@
   args call_args call_arglist
   function_declaration_globject
 
+%type <node>
+  rvalue lvalue
+
 %%
 program: /* */ {
     ast_root = std::make_shared<ast::ProgramNode>();
