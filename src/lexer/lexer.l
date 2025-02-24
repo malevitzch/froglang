@@ -113,6 +113,16 @@ std::unordered_set<std::string> types = {
   yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::RBRACE, yytext);
   return yy::parser::token::RBRACE;
 }
+"[" {
+  *diagnostic_stream << "LBRACKET\n";
+  yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::LBRACKET, yytext);
+  return yy::parser::token::LBRACKET;
+}
+"]" {
+  *diagnostic_stream << "RBRACKET\n"; 
+  yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::RBRACKET, yytext);
+  return yy::parser::token::RBRACKET;
+}
 "," {
   *diagnostic_stream << "COMMA\n";
   yylval->token = std::make_shared<Tokens::Token>(Tokens::TokType::COMMA, yytext);

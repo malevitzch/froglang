@@ -138,8 +138,8 @@ std::optional<std::string> Compiler::compile_to_obj(std::string input_filename, 
 }
 
 std::optional<std::string> Compiler::compile_to_exec(std::istream* input_stream, std::string output_filename) {
+  std::cout << "TEST" << std::endl;
   std::optional<std::string> compilation_error = compile_to_obj(input_stream, "out.o");
-
   if(compilation_error) {
     return "Compilation to object failed due to: \"" + *compilation_error + "\"";
   }

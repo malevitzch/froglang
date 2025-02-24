@@ -34,6 +34,9 @@ namespace Tokens {
     RPAREN,
     LBRACE,
     RBRACE,
+    LBRACKET,
+    RBRACKET,
+
     COMMA,
     COLON,
     SEMICOLON,

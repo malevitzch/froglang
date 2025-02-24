@@ -56,6 +56,9 @@
 %token <token> LPAREN
 %token <token> RPAREN
 
+%token <token> LBRACKET
+%token <token> RBRACKET
+
 %token <token> LBRACE
 %token <token> RBRACE
 %token <token> SEMICOLON
@@ -237,6 +240,9 @@ expression: NUMBER {
   }
   | IDENTIFIER {
     $$ = std::make_shared<ast::VariableIdentifier>($1->metadata);
+  }
+  | LBRACKET expression RBRACKET {
+    $$ = std::make_shared<ast::IversonExpr>(dynamic_pointer_cast<ast::ExprNode>($2));
   }
   | MINUS expression %prec UMINUS {
     $$ = std::make_shared<ast::UnaryOperator>("-", dynamic_pointer_cast<ast::ExprNode>($2));

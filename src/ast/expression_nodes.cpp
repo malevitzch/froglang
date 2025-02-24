@@ -10,6 +10,23 @@ namespace ast {
     return "Expression Node";
   }
 
+  IversonExpr::IversonExpr(std::shared_ptr<ExprNode> expr) 
+  : expr(expr) {} 
+
+  llvm::Value* IversonExpr::eval() {
+    llvm::Value* expr_value = expr->eval();
+    llvm::Value* zero = llvm::Constant::getNullValue(expr_value->getType());
+    return CompilerContext::Builder->CreateICmpNE(expr_value, zero);
+  }
+
+  std::string IversonExpr::get_name() {
+    return "Iverson Expression";
+  }
+
+  std::vector<std::shared_ptr<Node>> IversonExpr::get_children() {
+    return {expr};
+  }
+
   UnaryOperator::UnaryOperator(std::string operator_type, std::shared_ptr<ExprNode> operand) 
   : operator_type(operator_type), operand(operand) {}
   llvm::Value* UnaryOperator::eval() {

@@ -14,6 +14,16 @@ namespace ast {
     virtual std::string get_name() override;
   };
 
+  class IversonExpr : public ExprNode {
+  private:
+    std::shared_ptr<ExprNode> expr;
+  public:
+    IversonExpr(std::shared_ptr<ExprNode> operand);
+    virtual llvm::Value* eval() override;
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
+  };
+
   class UnaryOperator : public ExprNode {
   private:
     std::string operator_type;
@@ -67,7 +77,6 @@ namespace ast {
     void add_arg(std::shared_ptr<ExprNode> arg);
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
-    
     std::vector<std::shared_ptr<ExprNode>> get_args();
   };
 
