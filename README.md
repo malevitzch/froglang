@@ -5,7 +5,7 @@ The repository contains tests that can be run using CTest. To run them simply go
 ctest
 ```
 # todo
-- Fix the iverson notation causing crashes, it has something to do with it not being cast to an i32 and rather being kept as i1 I'm pretty sure
+- Type casts
 
 - Write functions that create a nice .o file name for a given string, change compiler functions so that they use that to generate object files
 

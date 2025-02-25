@@ -16,7 +16,8 @@ namespace ast {
   llvm::Value* IversonExpr::eval() {
     llvm::Value* expr_value = expr->eval();
     llvm::Value* zero = llvm::Constant::getNullValue(expr_value->getType());
-    return CompilerContext::Builder->CreateICmpNE(expr_value, zero);
+    llvm::Value* cmp_result = CompilerContext::Builder->CreateICmpNE(expr_value, zero);
+    return CompilerContext::Builder->CreateIntCast(cmp_result, CompilerContext::Builder->getInt32Ty(), false);
   }
 
   std::string IversonExpr::get_name() {
