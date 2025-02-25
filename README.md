@@ -1,4 +1,4 @@
-# flex-lr1-llvm
+# froglang
 The project requires CMake, a C++ compiler, LLVM 16+, a C compiler (prferably clang or gcc) to run.\
 The repository contains tests that can be run using CTest. To run them simply go to the build directory after building the project and run the following command:
 ```sh
