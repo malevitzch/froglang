@@ -84,8 +84,7 @@
   args call_args call_arglist
   function_declaration_globject
 
-%type <node>
-  rvalue lvalue
+// %type <node> rvalue lvalue
 
 %%
 program: /* */ {
