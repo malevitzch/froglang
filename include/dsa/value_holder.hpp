@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DSA_VALUE_HOLDER_HPP
+#define DSA_VALUE_HOLDER_HPP
 
 #include <vector>
 #include <unordered_map>
@@ -18,3 +19,5 @@ namespace DSA {
     void remove_val(std::string name);
   };
 }
+
+#endif

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef AST_EXPRESSION_NODES_HPP
+#define AST_EXPRESSION_NODES_HPP
+
 #include "ast/node.hpp"
 
 namespace ast {
@@ -106,3 +108,5 @@ namespace ast {
   };
 
 }
+
+#endif

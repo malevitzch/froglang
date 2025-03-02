@@ -1,4 +1,6 @@
-#pragma once 
+#ifndef TOKENS_HPP
+#define TOKENS_HPP
+
 #include <string>
 #include "ast/node.hpp"
 namespace Tokens {
@@ -66,3 +68,5 @@ struct FrogTok {
   std::shared_ptr<Tokens::Token> token;
   std::shared_ptr<ast::Node> node;
 };
+
+#endif

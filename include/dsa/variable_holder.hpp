@@ -1,3 +1,6 @@
+#ifndef DSA_VARIABLE_HOLDER_HPP
+#define DSA_VARIABLE_HOLDER_HPP
+
 #include <vector>
 #include <unordered_map>
 
@@ -17,3 +20,5 @@ namespace DSA {
       void remove_var(std::string name);
   };
 }
+
+#endif

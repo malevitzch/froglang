@@ -1,4 +1,5 @@
-#pragma once
+#ifndef AST_GLOBALS_HPP
+#define AST_GLOBALS_HPP
 
 #include <memory>
 #include <map>
@@ -22,3 +23,5 @@ namespace CompilerContext {
   const std::vector<std::pair<std::string, llvm::Type*>> get_primitive_types();
   void reset_context();
 }
+
+#endif

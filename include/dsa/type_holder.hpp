@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DSA_TYPE_HOLDER_HPP
+#define DSA_TYPE_HOLDER_HPP
 
 #include <map>
 #include <optional>
@@ -20,3 +21,5 @@ namespace DSA {
     std::optional<llvm::Type*> get_type(std::string type_name);
   };
 }
+
+#endif

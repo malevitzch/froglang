@@ -1,4 +1,6 @@
 #include "ast/globject_nodes.hpp"
+#include "ast/globals.hpp"
+
 #include "libgen/print.hpp"
 
 namespace ast {

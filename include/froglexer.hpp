@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FROGLEXER_HPP
+#define FROGLEXER_HPP
 
 #include "tokens.hpp"
 #if ! defined(yyFlexLexerOnce)
@@ -13,3 +14,5 @@ public:
     FrogLexer(std::istream* input)
         : yyFlexLexer(input) {}
 };
+
+#endif

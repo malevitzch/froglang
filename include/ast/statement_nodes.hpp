@@ -1,4 +1,6 @@
-#pragma once
+#ifndef AST_STATEMENT_NODES_HPP
+#define AST_STATEMENT_NODES_HPP
+
 #include "node.hpp"
 #include "expression_nodes.hpp"
 
@@ -119,3 +121,5 @@ namespace ast {
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
 }
+
+#endif

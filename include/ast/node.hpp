@@ -1,7 +1,7 @@
-#pragma once
-#include <llvm/IR/Value.h>
+#ifndef AST_NODE_HPP
+#define AST_NODE_HPP
 
-#include "ast/globals.hpp"
+#include <llvm/IR/Value.h>
 
 namespace ast {
   // Abstract class
@@ -16,3 +16,5 @@ namespace ast {
     virtual std::vector<std::shared_ptr<Node>> get_children();
   };
 }
+
+#endif

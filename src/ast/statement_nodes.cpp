@@ -1,4 +1,6 @@
 #include "ast/statement_nodes.hpp"
+#include "ast/globals.hpp"
+
 #include <llvm/IR/BasicBlock.h>
 
 namespace ast {

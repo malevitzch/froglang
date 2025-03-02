@@ -1,3 +1,6 @@
+#ifndef COMPILER_HPP
+#define COMPILER_HPP
+
 #include <iostream>
 #include <optional>
 #include <vector>
@@ -30,3 +33,5 @@ public:
   // Parses a vector of CLI arguments given as strings 
   std::optional<std::string> compile_from_args(std::vector<std::string> args);
 };
+
+#endif

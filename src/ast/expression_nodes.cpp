@@ -1,4 +1,6 @@
 #include "ast/expression_nodes.hpp"
+#include "ast/globals.hpp"
+
 #include <cstdlib>
 
 #include "llvm/IR/Constants.h"
