@@ -9,6 +9,10 @@ The repository also contains tests that can be run using CTest. To run them simp
 ctest
 ```
 # todo
+- "while" loop
+
+- "times(x)" loop
+
 - Type casts
 
 - Write functions that create a nice .o file name for a given string, change compiler functions so that they use that to generate object files
