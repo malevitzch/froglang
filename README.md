@@ -64,3 +64,4 @@ ctest
 - a standard library
 - exceptions
 - classes
+- object file identification so that the compiler can just link the files rather then compile all of them

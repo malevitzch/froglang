@@ -170,4 +170,17 @@ namespace ast {
     }
     return children;
   }
+
+  WhileLoop::WhileLoop(std::shared_ptr<ExprNode> condition, std::shared_ptr<StatementNode> body)
+  : condition(condition), body(body) {}
+  void WhileLoop::codegen() {
+    //TODO: implement
+  }
+  std::string WhileLoop::get_name() {
+    return "While Loop";
+  }
+  std::vector<std::shared_ptr<Node>> WhileLoop::get_children() {
+    return {condition, body};
+  }
+
 }
