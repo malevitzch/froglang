@@ -120,6 +120,19 @@ namespace ast {
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
+
+  class WhileLoop : public StatementNode {
+  private:
+    std::shared_ptr<ExprNode> condition;
+    std::shared_ptr<StatementNode> body;
+  public:
+    WhileLoop(std::shared_ptr<ExprNode> condition, std::shared_ptr<StatementNode> body);
+    virtual ~WhileLoop() = default;
+    virtual void codegen() override;
+    virtual std::string get_name() override;
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
+  };
+
 }
 
 #endif

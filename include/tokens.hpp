@@ -48,7 +48,7 @@ namespace Tokens {
 
     IF,
     ELSE,
-    LOOP, //replacement of a while loop
+    WHILE, //replacement of a while loop
     FOR, //there should be a for loop cause it's convenient
     TIMES, //a type of loop that executes a set number of times
 

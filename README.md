@@ -56,7 +56,7 @@ ctest
 - booleans, floats, strings, unsigned integers
 - casts of form "\<TYPE_ID\> expression", combined with a data structure that runs bfs on a graph to check if cast is possible and applies the correct functions in order
 - else if statements
-- for loops, while loops (called just loop), times loops (a loop that executes a given number of times, given as "times(unsigned integer)" ).
+- for loops, while loops, times loops (a loop that executes a given number of times, given as "times(unsigned integer)" ).
 - labels for loops, break statements
 - named function parameter calls, function f(x: int, y: int) can be called as f(y: 3, x: 8).
 - arrays

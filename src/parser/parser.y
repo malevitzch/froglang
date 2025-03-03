@@ -68,6 +68,8 @@
 %token <token> IF
 %token <token> ELSE
 
+%token <token> WHILE
+
 %left LOGICAL_OR
 %left LOGICAL_AND
 %left LESS GREATER LESSEQ GREATEREQ EQUALITY INEQUALITY

@@ -22,6 +22,7 @@ const std::unordered_map<std::string, std::pair<Tokens::TokType, int> > keywords
   {"else", {Tokens::TokType::ELSE, yy::parser::token::ELSE}},
   {"true", {Tokens::TokType::TRUE, yy::parser::token::TRUE}},
   {"false", {Tokens::TokType::FALSE, yy::parser::token::FALSE}},
+  {"while", {Tokens::TokType::WHILE, yy::parser::token::WHILE}},
 };
 
 std::ostream* diagnostic_stream = &std::cout;
