@@ -11,6 +11,8 @@ ctest
 # todo
 - Certain compilation functions still do not support multiple sources which should probably be fixed asap
 
+- Add some tests for iverson notation
+
 - "while" loop
 
 - "times(x)" loop
@@ -18,8 +20,6 @@ ctest
 - Type casts
 
 - Write functions that create a nice .o file name for a given string, change compiler functions so that they use that to generate object files
-
-- Make the run_output_tests.sh script more flexible, allowing for multi-file compilation
 
 - Add more tests
 
@@ -54,7 +54,7 @@ ctest
 - Find a good way to use the print function from C in a way that does not look like a band-aid fix
 - Move the print function to a standard library rather than than manually adding it to every object
 
-# features to add
+# planned features
 - booleans, floats, strings, unsigned integers
 - casts of form "\<TYPE_ID\> expression", combined with a data structure that runs bfs on a graph to check if cast is possible and applies the correct functions in order
 - else if statements
