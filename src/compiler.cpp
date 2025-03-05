@@ -313,10 +313,46 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
   return "The compiler couldn't deduce the compilation mode";
 }
 
-std::optional<std::string> Compiler::parse_command(std::vector<std::string>::iterator it, std::vector<std::string>::iterator end, CommandData& data) {
+std::optional<std::string> Compiler::parse_command(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data) {
   while(it != end) {
-    
+    std::string arg = *it;
+    if(arg.size() == 0) {
+      return "Empty argument";
+    }
+    if(arg[0] == '-') {
+      auto error = parse_option(it, end, data);
+    }
   }
-
+  //TODO: validate the completness of the CommandData
+  //TODO: probably should be in a separate function, just run_command(data)
   return std::nullopt;
 }
+
+std::optional<std::string> Compiler::parse_option(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data) {
+  std::string option = (*it).substr(1, (*it).size() - 1);
+  it++;
+  if(option == "o") {
+    if(it == end) {
+      return "The \"-o\" option requires an argument";
+    }
+    //TODO: validate the arg as valid output name
+    auto arg = *it;
+    data.output_name = arg;
+    it++;
+  }
+  else if(option == "ir") {
+    data.mode = "IR";
+  }
+  else if(option == "c") {
+    data.mode = "obj";
+  }
+  else if(option == "genstdlib") {
+    data.mode = "stdlib";
+  }
+  else {
+    return "Unknown option: -\"" + option + "\"";
+  }
+  return std::nullopt;
+}
+
+
