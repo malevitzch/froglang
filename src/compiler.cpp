@@ -312,3 +312,11 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
   }
   return "The compiler couldn't deduce the compilation mode";
 }
+
+std::optional<std::string> Compiler::parse_command(std::vector<std::string>::iterator it, std::vector<std::string>::iterator end, CommandData& data) {
+  while(it != end) {
+    
+  }
+
+  return std::nullopt;
+}
