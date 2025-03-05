@@ -321,11 +321,16 @@ std::optional<std::string> Compiler::parse_command(std::vector<std::string>::ite
     }
     if(arg[0] == '-') {
       auto error = parse_option(it, end, data);
+      if(error) return error;
+    }
+    else {
+      auto error = parse_source(it, end, data);
+      if(error) return error;
     }
   }
   //TODO: validate the completness of the CommandData
   //TODO: probably should be in a separate function, just run_command(data)
-  return std::nullopt;
+  return run_command(data);
 }
 
 std::optional<std::string> Compiler::parse_option(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data) {
@@ -355,4 +360,37 @@ std::optional<std::string> Compiler::parse_option(std::vector<std::string>::iter
   return std::nullopt;
 }
 
+std::optional<std::string> Compiler::parse_source(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data) {
+  auto arg = *it;
+  //TODO: validate arg as valid source name
+  it++;
+  data.sources.push_back(arg);
+  return std::nullopt;
+}
 
+std::optional<std::string> Compiler::run_command(CommandData& data) {
+  if(data.mode == "stdlib") {
+    CompilerContext::reset_context();
+    compile_stdlib();
+    return std::nullopt;
+  }
+  if(data.sources.empty()) {
+    return "No source file given";
+  }
+  if(data.mode == "exec") {
+    if(!data.output_name) data.output_name = "exec";
+    CompilerContext::reset_context();
+    return compile_to_exec(data.sources, *data.output_name);
+  }
+  if(data.mode == "IR") {
+    if(!data.output_name) data.output_name = "IR";
+    CompilerContext::reset_context();
+    return compile_to_IR(data.sources[0], *data.output_name);
+  }
+  if(data.mode == "obj") {
+    if(!data.output_name) data.output_name = "obj.o";
+    CompilerContext::reset_context();
+    return compile_to_obj(data.sources[0], *data.output_name);
+  }
+  return "The compiler couldn't deduce the compilation mode";
+}

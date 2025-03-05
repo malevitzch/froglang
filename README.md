@@ -9,6 +9,8 @@ The repository also contains tests that can be run using CTest. To run them simp
 ctest
 ```
 # todo
+- Certain compilation functions still do not support multiple sources which should probably be fixed asap
+
 - "while" loop
 
 - "times(x)" loop

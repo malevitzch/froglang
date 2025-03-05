@@ -42,6 +42,10 @@ public:
   std::optional<std::string> parse_command(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data);
 
   std::optional<std::string> parse_option(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data);
+
+  std::optional<std::string> parse_source(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data);
+
+  std::optional<std::string> run_command(CommandData& data);
 };
 
 #endif
