@@ -241,76 +241,13 @@ std::optional<std::string> Compiler::compile_stdlib() {
 }
 
 std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> args) {
-  //FIXME: maybe split it into smaller, iterator-based functions?
   //TODO: setting a mode should only be done once (warn the user in case of multiple options that override each other)
-  std::vector<std::string>::iterator arg_it = args.begin();
-  std::string output_name = "";
-  std::vector<std::string> sources;
-  std::string mode = "exec";
-  while(arg_it != args.end()) {
-    std::string arg = *arg_it;
-    arg_it++;
-    if(arg.empty()) {
-      return "Empty argument";
-    }
-    if(arg[0] == '-') {
-      if(arg.size() == 1) {
-        return "\"-\" is not a valid option";
-      }
-      if(arg.size() > 1) {
-        std::string option = arg.substr(1, arg.size() - 1);
-        if(option == "o") {
-          if(arg_it == args.end()) {
-            return "The \"-o\" option requires an argument";
-          }
-          //TODO: validate the arg as valid output name
-          arg = *arg_it;
-          output_name = arg;
-          arg_it++;
-        }
-        else if(option == "ir") {
-          mode = "IR";
-        }
-        else if(option == "c") {
-          mode = "obj";
-        }
-        else if(option == "genstdlib") {
-          mode = "stdlib";
-        }
-        else {
-          return "Unknown option: -\"" + option + "\"";
-        }
-      }
-    }
-    else {
-      sources.push_back(arg);
-      //TODO: change this to an else if, validate the filename
-    }
-  }
-  if(mode == "stdlib") {
-    CompilerContext::reset_context();
-    compile_stdlib();
-    return std::nullopt;
-  }
-  if(sources.empty()) {
-    return "No source file given";
-  }
-  if(mode == "exec") {
-    if(output_name.empty()) output_name = "exec";
-    CompilerContext::reset_context();
-    return compile_to_exec(sources, output_name);
-  }
-  if(mode == "IR") {
-    if(output_name.empty()) output_name = "IR";
-    CompilerContext::reset_context();
-    return compile_to_IR(sources[0], output_name);
-  }
-  if(mode == "obj") {
-    if(output_name.empty()) output_name = "obj.o";
-    CompilerContext::reset_context();
-    return compile_to_obj(sources[0], output_name);
-  }
-  return "The compiler couldn't deduce the compilation mode";
+
+  auto begin = args.begin();
+  auto end = args.end();
+  auto data = CommandData();
+
+  return parse_command(begin, end, data);
 }
 
 std::optional<std::string> Compiler::parse_command(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data) {
