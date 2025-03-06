@@ -283,13 +283,13 @@ std::optional<std::string> Compiler::parse_option(std::vector<std::string>::iter
     it++;
   }
   else if(option == "ir") {
-    data.mode = "IR";
+    data.mode = Mode::IR;
   }
   else if(option == "c") {
-    data.mode = "obj";
+    data.mode = Mode::Obj;
   }
   else if(option == "genstdlib") {
-    data.mode = "stdlib";
+    data.mode = Mode::Stdlib;
   }
   else {
     return "Unknown option: -\"" + option + "\"";
@@ -306,28 +306,32 @@ std::optional<std::string> Compiler::parse_source(std::vector<std::string>::iter
 }
 
 std::optional<std::string> Compiler::run_command(CommandData& data) {
-  if(data.mode == "stdlib") {
-    CompilerContext::reset_context();
-    compile_stdlib();
-    return std::nullopt;
-  }
-  if(data.sources.empty()) {
+
+  if(data.sources.empty() && data.mode != Mode::Stdlib) {
     return "No source file given";
   }
-  if(data.mode == "exec") {
-    if(!data.output_name) data.output_name = "exec";
-    CompilerContext::reset_context();
-    return compile_to_exec(data.sources, *data.output_name);
+  switch(data.mode) {
+
+    case Mode::Stdlib:
+      CompilerContext::reset_context();
+      return compile_stdlib();
+
+    case Mode::Exec:
+      if(!data.output_name) data.output_name = "exec";
+      CompilerContext::reset_context();
+      return compile_to_exec(data.sources, *data.output_name);
+
+    case Mode::IR:
+      if(!data.output_name) data.output_name = "IR";
+      CompilerContext::reset_context();
+      return compile_to_IR(data.sources[0], *data.output_name);
+
+    case Mode::Obj:
+      if(!data.output_name) data.output_name = "obj.o";
+      CompilerContext::reset_context();
+      return compile_to_obj(data.sources[0], *data.output_name);
+
+    default:
+      return "The compiler couldn't deduce the compilation mode";
   }
-  if(data.mode == "IR") {
-    if(!data.output_name) data.output_name = "IR";
-    CompilerContext::reset_context();
-    return compile_to_IR(data.sources[0], *data.output_name);
-  }
-  if(data.mode == "obj") {
-    if(!data.output_name) data.output_name = "obj.o";
-    CompilerContext::reset_context();
-    return compile_to_obj(data.sources[0], *data.output_name);
-  }
-  return "The compiler couldn't deduce the compilation mode";
 }

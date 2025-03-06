@@ -11,15 +11,26 @@ extern std::ostream* diagnostic_stream;
 
 class Compiler {
 private:
+  enum class Mode {
+    Exec,
+    IR,
+    Stdlib,
+    Obj
+  };
   struct CommandData {
     std::vector<std::string> sources;
-    std::string mode = "exec";
+    Mode mode = Mode::Exec;
     std::optional<std::string> output_name;
   };
 
   void prepare_llvm();
   std::optional<std::string> get_compiler_path();
   std::optional<std::string> generate_IR(std::istream* input_stream);
+
+  std::optional<std::string> parse_command(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data);
+  std::optional<std::string> parse_option(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data);
+  std::optional<std::string> parse_source(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data);
+  std::optional<std::string> run_command(CommandData& data);
 public:
   Compiler() = default;
   Compiler(std::ostream* debug_output_stream);
@@ -38,14 +49,6 @@ public:
 
   // Parses a vector of CLI arguments given as strings 
   std::optional<std::string> compile_from_args(std::vector<std::string> args);
-
-  std::optional<std::string> parse_command(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data);
-
-  std::optional<std::string> parse_option(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data);
-
-  std::optional<std::string> parse_source(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data);
-
-  std::optional<std::string> run_command(CommandData& data);
 };
 
 #endif
