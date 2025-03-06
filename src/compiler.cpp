@@ -159,7 +159,7 @@ std::optional<std::string> Compiler::compile_to_exec(std::istream* input_stream,
     return "Cannot execute the compilation command";
   }
   else if(result == -2) {
-    return "The compiler used for linking crashed";
+    return "The C compiler used for linking crashed";
   }
   return std::nullopt;
 }
@@ -220,8 +220,7 @@ std::optional<std::string> Compiler::compile_stdlib() {
   llvm::TargetOptions opt;
   auto TargetMachine = Target->createTargetMachine(TargetTriple, CPU, Features, opt, llvm::Reloc::PIC_);
 
-  libgen::register_print_i32();
-  //TODO: here goes the thing
+  libgen::register_print_i32(); 
 
   CompilerContext::TheModule->setDataLayout(TargetMachine->createDataLayout());
   CompilerContext::TheModule->setTargetTriple(TargetTriple);
@@ -265,8 +264,6 @@ std::optional<std::string> Compiler::parse_command(std::vector<std::string>::ite
       if(error) return error;
     }
   }
-  //TODO: validate the completness of the CommandData
-  //TODO: probably should be in a separate function, just run_command(data)
   return run_command(data);
 }
 
@@ -310,6 +307,7 @@ std::optional<std::string> Compiler::run_command(CommandData& data) {
   if(data.sources.empty() && data.mode != Mode::Stdlib) {
     return "No source file given";
   }
+
   switch(data.mode) {
 
     case Mode::Stdlib:
