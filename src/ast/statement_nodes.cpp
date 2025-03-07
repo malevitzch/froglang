@@ -21,7 +21,7 @@ namespace ast {
   std::vector<std::shared_ptr<Node>> Statements::get_children() {
     std::vector<std::shared_ptr<Node>> children;
     for(std::shared_ptr<StatementNode> child : statements) children.push_back(child);
-    return children;
+    return {statements.begin(), statements.end()};
   }
 
   Block::Block(std::shared_ptr<Statements> statements) 

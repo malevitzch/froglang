@@ -23,17 +23,14 @@ namespace ast {
   }
   ProgramNode::ProgramNode() {}
   std::vector<std::shared_ptr<Node>> ProgramNode::get_children() {
-    return std::vector<std::shared_ptr<Node>>(globjects.begin(), globjects.end());
+    return {globjects.begin(), globjects.end()};
   }
 
   std::string FunctionArgs::get_name() {
     return "Function Args";
   }
   std::vector<std::shared_ptr<Node>> FunctionArgs::get_children() {
-    std::vector<std::shared_ptr<Node>> children;
-    for(std::shared_ptr<DeclarationNode> arg : args) 
-      children.push_back(arg);
-    return children;
+    return {args.begin(), args.end()};
   }
   void FunctionArgs::add_arg(std::shared_ptr<DeclarationNode> arg) {
     args.push_back(arg);

@@ -13,7 +13,7 @@ namespace ast {
   }
 
   IversonExpr::IversonExpr(std::shared_ptr<ExprNode> expr) 
-  : expr(expr) {} 
+  : expr(expr) {}
 
   llvm::Value* IversonExpr::eval() {
     llvm::Value* expr_value = expr->eval();
@@ -137,7 +137,7 @@ namespace ast {
     return "Function Call Args";
   }
   std::vector<std::shared_ptr<Node>> FunctionCallArgs::get_children() {
-    return std::vector<std::shared_ptr<Node>>(args.begin(), args.end());
+    return {args.begin(), args.end()};
   }
   std::vector<std::shared_ptr<ExprNode>> FunctionCallArgs::get_args() {
     return args;
