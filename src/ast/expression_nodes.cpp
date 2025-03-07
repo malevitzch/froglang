@@ -137,10 +137,7 @@ namespace ast {
     return "Function Call Args";
   }
   std::vector<std::shared_ptr<Node>> FunctionCallArgs::get_children() {
-    std::vector<std::shared_ptr<Node>> children;
-    for(std::shared_ptr<ExprNode> child : args)
-      children.push_back(child);
-    return children;
+    return std::vector<std::shared_ptr<Node>>(args.begin(), args.end());
   }
   std::vector<std::shared_ptr<ExprNode>> FunctionCallArgs::get_args() {
     return args;
@@ -167,8 +164,7 @@ namespace ast {
       throw std::runtime_error("Unregisterd function \"" + function_name + "\"");
     llvm::Function* to_call = CompilerContext::Functions->at(function_name);
     std::vector<llvm::Value*> call_args;
-    for(std::shared_ptr<ExprNode> arg : args->get_args())
-      call_args.push_back(arg->eval());
+    std::ranges::transform(args->get_args(), std::back_inserter(call_args), &ExprNode::eval);
     return CompilerContext::Builder->CreateCall(to_call, call_args);
   }
 
