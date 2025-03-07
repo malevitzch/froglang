@@ -3,10 +3,12 @@
 #include <fstream>
 
 int main(int argc, char** argv) {
+
   if(argc == 1) {
     std::cerr << "Error: No arguments given\n";
     return 1;
   }
+
   std::vector<std::string> compiler_args(argv+1, argv + argc);
 
   //TODO: maybe replace this with some sort of nullstream

@@ -12,9 +12,8 @@ namespace ast {
   void ProgramNode::codegen() {
 
     libgen::register_print_i32_decl();
+    std::ranges::for_each(globjects, &GlobjectNode::codegen);
 
-    for(std::shared_ptr<GlobjectNode> globject : globjects)
-      globject->codegen();
   }
   std::string ProgramNode::get_name() {
     return "Program Node";
@@ -24,10 +23,7 @@ namespace ast {
   }
   ProgramNode::ProgramNode() {}
   std::vector<std::shared_ptr<Node>> ProgramNode::get_children() {
-  std::vector<std::shared_ptr<Node>> children;
-    for(std::shared_ptr<GlobjectNode> globject : globjects) 
-      children.push_back(static_pointer_cast<Node>(globject));
-    return children;
+    return std::vector<std::shared_ptr<Node>>(globjects.begin(), globjects.end());
   }
 
   std::string FunctionArgs::get_name() {
@@ -59,9 +55,7 @@ namespace ast {
   }
   std::vector<llvm::Type*> FunctionArglist::get_arg_types() {
     std::vector<llvm::Type*> types;
-    for(std::shared_ptr<DeclarationNode> arg : get_args()) {
-      types.push_back(arg->get_var_type());
-    }
+    std::ranges::transform(get_args(), std::back_inserter(types), &DeclarationNode::get_var_type);
     return types;
   }
 
@@ -83,7 +77,7 @@ namespace ast {
   llvm::Function* FunctionDeclaration::get_func() {
     if(!CompilerContext::Functions->contains(var_name))
       codegen();
-    return CompilerContext::Functions->at(var_name); 
+    return CompilerContext::Functions->at(var_name);
   }
   std::string FunctionDeclaration::get_name() {
     return "Function Declaration";
@@ -132,7 +126,6 @@ namespace ast {
     CompilerContext::Builder->SetInsertPoint(EntryBlock);
     body->codegen();
 
-    //TODO: Probably in reverse in the future in case of type checks? Doesn't really matter though on a second thought. Stil, better to keep this in mind
     for(std::string varname : variables_to_clean_up) {
       CompilerContext::NamedValues->remove_val(varname);
     }
