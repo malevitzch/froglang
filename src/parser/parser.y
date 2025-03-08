@@ -92,19 +92,17 @@
 program: /* */ {
     ast_root = std::make_shared<ast::ProgramNode>();
     $$ = ast_root;
-    *diagnostic_stream<<"FINISHED\n";
+    *diagnostic_stream<<"Parsing finished successfully\n";
   }
   | program global_obj {
     auto prog_node = dynamic_pointer_cast<ast::ProgramNode>($1);
     auto globject = dynamic_pointer_cast<ast::GlobjectNode>($2);
     prog_node->add_obj(globject);
-    *diagnostic_stream<<"Added globject to program"<<std::endl;
     $$ = $1;
   }
   ;
 
 global_obj: function {
-    *diagnostic_stream<<"FUNCTION\n";
     $$ = $1;
   }
   | function_declaration_globject {
@@ -131,7 +129,6 @@ function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
       YYERROR;
     }
     $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), *type_ref);
-    *diagnostic_stream<<"DECLARED function("<<$2->metadata<<")\n";
   }
   | FUNCTION IDENTIFIER arglist {
     $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), llvm::Type::getVoidTy(*CompilerContext::TheContext));
@@ -141,7 +138,6 @@ function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
 block: LBRACE statements RBRACE {
     auto statements = dynamic_pointer_cast<ast::Statements>($2);
     $$ = std::make_shared<ast::Block>(statements);
-    *diagnostic_stream<<"BLOCK\n";
   }
   ;
 
@@ -152,14 +148,12 @@ statements: /* empty */ {
     auto statements = dynamic_pointer_cast<ast::Statements>($1);
     auto statement = dynamic_pointer_cast<ast::StatementNode>($2); 
     statements->add_statement(statement);
-    *diagnostic_stream<<"combined\n";
     $$ = $1;
   }
   ;
 
 statement: expression SEMICOLON {
     $$ = std::make_shared<ast::ExpressionStatement>(dynamic_pointer_cast<ast::ExprNode>($1));
-    *diagnostic_stream<<"Expression Statement\n";
   }
   | declaration SEMICOLON {
     $$ = std::make_shared<ast::DeclarationStatement>(dynamic_pointer_cast<ast::DeclarationNode>($1));
@@ -172,11 +166,9 @@ statement: expression SEMICOLON {
   | RETURN expression SEMICOLON {
     auto expr = dynamic_pointer_cast<ast::ExprNode>($2);
     $$ = std::make_shared<ast::ReturnStatement>(expr);
-    *diagnostic_stream<<"RETURNED\n";
   }
   | RETURN SEMICOLON {
     $$ = std::make_shared<ast::ReturnStatement>();
-    *diagnostic_stream<<"RETURNED (void)\n";
   }
   | block {
     $$ = $1;
@@ -201,7 +193,6 @@ declaration: IDENTIFIER COLON TYPE_ID {
       YYERROR;
     }
     $$ = std::make_shared<ast::DeclarationNode>(*type_ref, $1->metadata);
-    *diagnostic_stream<<"DECLARED\n";
   }
   ;
 
@@ -231,7 +222,6 @@ call_args: /* empty */ {
 expression: NUMBER {
     //TODO: solve the type issue
     $$ = std::make_shared<ast::IntegerConstant>(32, $1->metadata);
-    *diagnostic_stream<<"Converted\n";
   }
   | TRUE {
     $$ = std::make_shared<ast::IntegerConstant>(1, "0");
@@ -258,51 +248,39 @@ expression: NUMBER {
   | LPAREN expression RPAREN {$$ = $2;}
   | expression PLUS expression {
     $$ = std::make_shared<ast::BinaryOperator>("+", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    *diagnostic_stream<<"Added\n";
   }
   | expression MINUS expression {
     $$ = std::make_shared<ast::BinaryOperator>("-", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    *diagnostic_stream<<"Subtracted\n";
   }
   | expression STAR expression {
     $$ = std::make_shared<ast::BinaryOperator>("*", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    *diagnostic_stream<<"Multiplied\n";
   }
   | expression SLASH expression {
     $$ = std::make_shared<ast::BinaryOperator>("/", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    *diagnostic_stream<<"Divided\n";
   }
   | expression LESS expression {
     $$ = std::make_shared<ast::BinaryOperator>("<", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    *diagnostic_stream<<"Compared (less)\n";
   }
   | expression GREATER expression {
     $$ = std::make_shared<ast::BinaryOperator>(">", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    *diagnostic_stream<<"Compared (greater)\n";
   }
   | expression LESSEQ expression {
     $$ = std::make_shared<ast::BinaryOperator>("<=", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    *diagnostic_stream<<"Compared (lesseq)\n";
   }
   | expression GREATEREQ expression {
     $$ = std::make_shared<ast::BinaryOperator>(">=", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    *diagnostic_stream<<"Compared (greatereq)\n";
   }
   | expression EQUALITY expression {
     $$ = std::make_shared<ast::BinaryOperator>("==", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    *diagnostic_stream<<"Compared (equality)\n";
   }
   | expression INEQUALITY expression {
     $$ = std::make_shared<ast::BinaryOperator>("!=", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    *diagnostic_stream<<"Compared (inequality)\n";
   }
   | expression LOGICAL_AND expression {
     $$ = std::make_shared<ast::BinaryOperator>("&&", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    *diagnostic_stream<<"Logical AND\n";
   }
   | expression LOGICAL_OR expression {
     $$ = std::make_shared<ast::BinaryOperator>("||", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
-    *diagnostic_stream<<"Logical OR\n";
   }
   ;
 
@@ -326,7 +304,6 @@ args: /* empty */ {
 arglist: LPAREN args RPAREN {
     auto args = dynamic_pointer_cast<ast::FunctionArgs>($2);
     $$ = std::make_shared<ast::FunctionArglist>(args);
-    *diagnostic_stream<<"FUNCTION ARGLIST\n";
   }
   ;
 %%
