@@ -84,6 +84,7 @@ namespace ast {
   private:
     std::shared_ptr<FunctionDeclaration> decl;
     std::shared_ptr<Block> body;
+    void ensure_return(llvm::Function* func);
   protected:
   public:
     FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body);

@@ -101,6 +101,20 @@ namespace ast {
     return {decl};
   }
 
+  void FunctionGlobject::ensure_return(llvm::Function* func) {
+    llvm::BasicBlock *last_block = &func->back();
+    if(last_block->getTerminator()) return;
+
+    CompilerContext::Builder->SetInsertPoint(last_block);
+    llvm::Type *return_type = func->getReturnType();
+    if(return_type->isVoidTy()) {
+      CompilerContext::Builder->CreateRetVoid();
+    }
+    else {
+      llvm::Value *undef_val = llvm::UndefValue::get(return_type);
+      CompilerContext::Builder->CreateRet(undef_val);
+    }
+  }
   FunctionGlobject::FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body) 
   : decl(decl), body(body) {}
   void FunctionGlobject::codegen() {
@@ -116,25 +130,13 @@ namespace ast {
     int i = 0;
     for(auto& arg : f->args()) {
       CompilerContext::NamedValues->add_val(variables_to_clean_up[i++], &arg);
-      i++;
     }
 
     llvm::BasicBlock *EntryBlock = llvm::BasicBlock::Create(*CompilerContext::TheContext, decl->get_varname(), f);
     CompilerContext::Builder->SetInsertPoint(EntryBlock);
     body->codegen();
+    ensure_return(f);
 
-    llvm::BasicBlock *LastBlock = &f->back();
-    CompilerContext::Builder->SetInsertPoint(LastBlock);
-    llvm::Type *RetType = f->getReturnType();
-    if(!LastBlock->getTerminator()) {
-      if(RetType->isVoidTy()) {
-        CompilerContext::Builder->CreateRetVoid();
-      }
-      else {
-        llvm::Value *UndefVal = llvm::UndefValue::get(RetType);
-        CompilerContext::Builder->CreateRet(UndefVal);
-      }
-    }
     for(std::string varname : variables_to_clean_up) {
       CompilerContext::NamedValues->remove_val(varname);
     }
