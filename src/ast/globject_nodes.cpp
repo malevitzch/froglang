@@ -123,6 +123,18 @@ namespace ast {
     CompilerContext::Builder->SetInsertPoint(EntryBlock);
     body->codegen();
 
+    llvm::BasicBlock *LastBlock = &f->back();
+    CompilerContext::Builder->SetInsertPoint(LastBlock);
+    llvm::Type *RetType = f->getReturnType();
+    if(!LastBlock->getTerminator()) {
+      if(RetType->isVoidTy()) {
+        CompilerContext::Builder->CreateRetVoid();
+      }
+      else {
+        llvm::Value *UndefVal = llvm::UndefValue::get(RetType);
+        CompilerContext::Builder->CreateRet(UndefVal);
+      }
+    }
     for(std::string varname : variables_to_clean_up) {
       CompilerContext::NamedValues->remove_val(varname);
     }
