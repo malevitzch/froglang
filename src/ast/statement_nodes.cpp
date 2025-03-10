@@ -131,30 +131,33 @@ namespace ast {
   IfStatement::IfStatement(std::shared_ptr<ExprNode> condition, std::shared_ptr<StatementNode> if_body, std::shared_ptr<StatementNode> else_body) 
   : condition(condition), if_body(if_body), else_body(else_body) {}
   void IfStatement::codegen() {
-    llvm::Function* function = CompilerContext::Builder->GetInsertBlock()->getParent();
+    using CompilerContext::Builder;
+    using CompilerContext::TheContext;
 
-    llvm::BasicBlock *if_body_BB = llvm::BasicBlock::Create(*CompilerContext::TheContext, "then", function);
-    llvm::BasicBlock *merge_BB = llvm::BasicBlock::Create(*CompilerContext::TheContext, "ifcont", function);
-    llvm::BasicBlock *else_body_BB;
+    llvm::Function* function = Builder->GetInsertBlock()->getParent();
+
+    llvm::BasicBlock *if_body_block = llvm::BasicBlock::Create(*TheContext, "then", function);
+    llvm::BasicBlock *merge_block = llvm::BasicBlock::Create(*TheContext, "ifcont", function);
+    llvm::BasicBlock *else_body_block;
 
     if(else_body) {
-      else_body_BB = llvm::BasicBlock::Create(*CompilerContext::TheContext, "else", function); 
-      CompilerContext::Builder->CreateCondBr(condition->eval(), if_body_BB, else_body_BB);
+      else_body_block = llvm::BasicBlock::Create(*TheContext, "else", function); 
+      Builder->CreateCondBr(condition->eval(), if_body_block, else_body_block);
     }
     else {
-      CompilerContext::Builder->CreateCondBr(condition->eval(), if_body_BB, merge_BB);
+      Builder->CreateCondBr(condition->eval(), if_body_block, merge_block);
     }
 
-    CompilerContext::Builder->SetInsertPoint(if_body_BB);
+    Builder->SetInsertPoint(if_body_block);
     if_body->codegen();
-    CompilerContext::Builder->CreateBr(merge_BB);
+    Builder->CreateBr(merge_block);
 
     if(else_body) {
-      CompilerContext::Builder->SetInsertPoint(else_body_BB);
+      Builder->SetInsertPoint(else_body_block);
       else_body->codegen();
-      CompilerContext::Builder->CreateBr(merge_BB);
+      Builder->CreateBr(merge_block);
     }
-    CompilerContext::Builder->SetInsertPoint(merge_BB);
+    Builder->SetInsertPoint(merge_block);
   }
   std::string IfStatement::get_name() {
     return "If Statement";
