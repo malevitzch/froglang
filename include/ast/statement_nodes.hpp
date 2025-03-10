@@ -71,6 +71,7 @@ namespace ast {
 
   class DeclarationStatement : public StatementNode {
   private:
+  protected:
     std::shared_ptr<DeclarationNode> decl;
   public:
     DeclarationStatement(std::shared_ptr<DeclarationNode> decl);
@@ -81,9 +82,9 @@ namespace ast {
     std::string get_varname();
   };
 
-  class DeclarationAssignmentStatement : public StatementNode {
+  class DeclarationAssignmentStatement : public DeclarationStatement {
   private:
-    std::shared_ptr<DeclarationNode> decl;
+  protected:
     std::shared_ptr<ExprNode> expr;
   public:
     DeclarationAssignmentStatement(std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr);

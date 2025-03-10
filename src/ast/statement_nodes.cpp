@@ -29,13 +29,9 @@ namespace ast {
   void Block::codegen() {
     std::vector<std::string> block_named_values;
     for(std::shared_ptr<StatementNode> statement : statements->get()) {
-      if(statement->get_name() == "Declaration Statement") {
-        auto decl_statement = dynamic_pointer_cast<DeclarationStatement>(statement);
+      auto decl_statement = dynamic_pointer_cast<DeclarationStatement>(statement);
+      if(decl_statement) {
         block_named_values.push_back(decl_statement->get_varname());
-      }
-      else if(statement->get_name() == "Declaration Assignment Statement") {
-        auto decl_assignment_statement = dynamic_pointer_cast<DeclarationAssignmentStatement>(statement);
-        block_named_values.push_back(decl_assignment_statement->get_varname());
       }
       statement->codegen();
     }
@@ -97,7 +93,7 @@ namespace ast {
   }
 
   DeclarationAssignmentStatement::DeclarationAssignmentStatement(std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr)
-  : decl(decl), expr(expr) {}
+  : DeclarationStatement(decl), expr(expr) {}
   void DeclarationAssignmentStatement::codegen() {
     CompilerContext::NamedValues->add_val(decl->get_varname(), expr->eval());
   }
