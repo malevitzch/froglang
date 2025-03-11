@@ -23,7 +23,6 @@
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Target/TargetMachine.h"
 #include "llvm/Target/TargetOptions.h"
-#include "llvm/TargetParser/Host.h"
 #include "llvm/Support/Program.h"
 #include "llvm/Support/Host.h"
 #include <iostream>
@@ -154,7 +153,7 @@ std::optional<std::string> Compiler::compile_to_exec(std::istream* input_stream,
     argv.push_back(arg);
   }
   std::string error_message;
-  int result = llvm::sys::ExecuteAndWait(argv[0], argv, std::nullopt, {}, 0, 0, &error_message);
+  int result = llvm::sys::ExecuteAndWait(argv[0], argv, llvm::None, {}, 0, 0, &error_message);
   if(result == -1) {
     return "Cannot execute the compilation command";
   }
@@ -188,7 +187,7 @@ std::optional<std::string> Compiler::compile_to_exec(std::vector<std::string> fi
     argv.push_back(arg);
   }
   std::string error_message;
-  int result = llvm::sys::ExecuteAndWait(argv[0], argv, std::nullopt, {}, 0, 0, &error_message);
+  int result = llvm::sys::ExecuteAndWait(argv[0], argv, llvm::None, {}, 0, 0, &error_message);
   if(result == -1) {
     return "Cannot execute the compilation command";
   }

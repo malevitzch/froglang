@@ -1,5 +1,5 @@
 # froglang
-The project requires CMake, a C++ compiler, LLVM 16+, a C compiler (prferably clang or gcc) to run.\
+The project requires CMake, a C++ compiler, LLVM 14+, and a C compiler (prferably clang or gcc) to run.\
 To build the project run the following command:
 ```sh
 mkdir build && cd build && cmake ../ && make
