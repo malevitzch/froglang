@@ -1,5 +1,5 @@
 # froglang
-The project requires CMake, a C++ compiler, LLVM 14+, and a C compiler (prferably clang or gcc) to run.\
+The project requires Flex, Bison, CMake, a C++ compiler, ZLIB, LLVM 14+, and a C compiler (prferably clang or gcc) to run.\
 To build the project run the following command:
 ```sh
 mkdir build && cd build && cmake ../ && make
@@ -9,6 +9,10 @@ The repository also contains tests that can be run using CTest. To run them simp
 ctest
 ```
 # todo
+- A docker image that can be used to test the project without installing dependencies on the user's system
+
+- A document with code examples
+
 - Certain compilation functions still do not support multiple sources which should probably be fixed asap
 
 - Add some tests for iverson notation
