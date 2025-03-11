@@ -25,6 +25,7 @@ if (NOT LLVM_FOUND OR LLVM_VERSION_MAJOR LESS 16)
     )
     set(LLVM_DIR "${LLVM_INSTALL_DIR}/lib/cmake/llvm" CACHE PATH "Path to new LLVM install")
     set(CMAKE_PREFIX_PATH "${LLVM_DIR};${CMAKE_PREFIX_PATH}")
+    add_dependencies(MyProject llvm16)
 endif()
 
 find_package(LLVM 16 REQUIRED CONFIG)
