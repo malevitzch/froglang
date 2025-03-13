@@ -9,13 +9,17 @@ The repository also contains tests that can be run using CTest. To run them simp
 ctest
 ```
 # todo
-- A docker image that can be used to test the project without installing dependencies on the user's system
-
 - A document with code examples
+
+- Language standard documentaion
+
+- A reasonable way to build and run the docker image
 
 - Certain compilation functions still do not support multiple sources which should probably be fixed asap
 
 - Add some tests for iverson notation
+
+- Mutable variables
 
 - "while" loop
 
@@ -51,11 +55,10 @@ ctest
 
 - Make Binary Operators have their own classes for each. Or maybe make them take a void function pointer as codegen? We need a good way to solve the problem of having a huge block of code inside the binary operator eval function
 
-- Find all the dependencies using docker or something
-
 - Implement name-mangling
 
 - Find a good way to use the print function from C in a way that does not look like a band-aid fix
+
 - Move the print function to a standard library rather than than manually adding it to every object
 
 # planned features
