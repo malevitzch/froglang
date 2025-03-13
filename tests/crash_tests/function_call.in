@@ -1,8 +1,8 @@
-function f(x: i32) -> i32 {
+fn f(x: i32) -> i32 {
   return x;
 }
 
-function main() -> i32 {
+fn main() -> i32 {
   x: i32 = 42;
   y: i32 = f(x);
   return 0;

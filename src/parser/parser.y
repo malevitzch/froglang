@@ -50,7 +50,7 @@
 
 %token <token> ASSIGNMENT
 
-%token <token> FUNCTION
+%token <token> FN
 %token <token> RETURN
 
 %token <token> LPAREN
@@ -122,7 +122,7 @@ function: function_declaration block {
   }
   ;
 
-function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
+function_declaration: FN IDENTIFIER arglist ARROW TYPE_ID {
     std::optional<llvm::Type*> type_ref = CompilerContext::Types->get_type($5->metadata);
     if(!type_ref) {
       yy::parser::error("Undeclared type: \"" + $5->metadata + "\"");
@@ -130,7 +130,7 @@ function_declaration: FUNCTION IDENTIFIER arglist ARROW TYPE_ID {
     }
     $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), *type_ref);
   }
-  | FUNCTION IDENTIFIER arglist {
+  | FN IDENTIFIER arglist {
     $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), llvm::Type::getVoidTy(*CompilerContext::TheContext));
   }
   ;

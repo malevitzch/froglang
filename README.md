@@ -47,8 +47,6 @@ ctest
 
 - Add code coverage tests
 
-- Do something about the function keyword because it's a bit too long
-
 - Add some more tests (there are large chunks of code that are not tested yet, mostly boolean-related stuff)
 
 - Remove the outdated TokType which is not used for anything beside token creation

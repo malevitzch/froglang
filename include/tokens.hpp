@@ -44,7 +44,7 @@ namespace Tokens {
     SEMICOLON,
 
     RETURN,
-    FUNCTION,
+    FN,
 
     IF,
     ELSE,

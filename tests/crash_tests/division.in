@@ -1,4 +1,4 @@
-function main() -> i32 {
+fn main() -> i32 {
   x: i32 = 12 / 5;
   return 0;
 }
