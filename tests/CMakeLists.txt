@@ -8,8 +8,9 @@ endmacro()
 file(GLOB CRASH_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/crash_tests/*.in")
 foreach(TEST_FILE ${CRASH_TESTS})
   get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
-  add_test(NAME ${TEST_NAME} 
-          COMMAND ${CMAKE_BINARY_DIR}/src/compiler ${TEST_FILE})
+  add_test(NAME ${TEST_NAME}
+          COMMAND sh "${CMAKE_CURRENT_SOURCE_DIR}/run_crash_test.sh"
+          "${CMAKE_BINARY_DIR}/src/compiler" "${TEST_FILE}")
   set_tests_properties(${TEST_NAME} PROPERTIES LABELS "Crash")
 endforeach()
 
