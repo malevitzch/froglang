@@ -43,7 +43,7 @@ namespace Tokens {
     COLON,
     SEMICOLON,
 
-    RETURN,
+    RET,
     FN,
 
     IF,

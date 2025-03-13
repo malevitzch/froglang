@@ -16,7 +16,7 @@
 using namespace Tokens;
 
 const std::unordered_map<std::string, std::pair<Tokens::TokType, int> > keywords = {
-  {"return", {Tokens::TokType::RETURN, yy::parser::token::RETURN}},
+  {"ret", {Tokens::TokType::RET, yy::parser::token::RET}},
   {"fn", {Tokens::TokType::FN, yy::parser::token::FN}},
   {"if", {Tokens::TokType::IF, yy::parser::token::IF}},
   {"else", {Tokens::TokType::ELSE, yy::parser::token::ELSE}},

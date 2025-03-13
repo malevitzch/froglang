@@ -51,7 +51,7 @@
 %token <token> ASSIGNMENT
 
 %token <token> FN
-%token <token> RETURN
+%token <token> RET
 
 %token <token> LPAREN
 %token <token> RPAREN
@@ -163,11 +163,11 @@ statement: expression SEMICOLON {
     auto expr = dynamic_pointer_cast<ast::ExprNode>($3);
     $$ = std::make_shared<ast::DeclarationAssignmentStatement>(decl, expr);
   }
-  | RETURN expression SEMICOLON {
+  | RET expression SEMICOLON {
     auto expr = dynamic_pointer_cast<ast::ExprNode>($2);
     $$ = std::make_shared<ast::ReturnStatement>(expr);
   }
-  | RETURN SEMICOLON {
+  | RET SEMICOLON {
     $$ = std::make_shared<ast::ReturnStatement>();
   }
   | block {

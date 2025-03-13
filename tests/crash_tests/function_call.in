@@ -1,9 +1,9 @@
 fn f(x: i32) -> i32 {
-  return x;
+  ret x;
 }
 
 fn main() -> i32 {
   x: i32 = 42;
   y: i32 = f(x);
-  return 0;
+  ret 0;
 }
