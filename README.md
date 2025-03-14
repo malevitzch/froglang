@@ -10,6 +10,8 @@ ctest
 ```
 There is also a dockerfile situated in the root directory which can be used to run a linux system with the prerequisites installed
 # todo
+- Fix the number of arguments not being correctly checked
+
 - A document with code examples
 
 - Language standard documentaion

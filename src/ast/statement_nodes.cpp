@@ -142,10 +142,12 @@ namespace ast {
 
     if(else_body) {
       else_body_block = llvm::BasicBlock::Create(*TheContext, "else", function); 
-      Builder->CreateCondBr(condition->eval(), if_body_block, else_body_block);
+      llvm::Value* condition_val = condition->eval();
+      Builder->CreateCondBr(Builder->CreateICmpNE(condition_val, llvm::Constant::getNullValue(condition_val->getType()), "cast"), if_body_block, else_body_block);
     }
     else {
-      Builder->CreateCondBr(condition->eval(), if_body_block, merge_block);
+      llvm::Value* condition_val = condition->eval();
+      Builder->CreateCondBr(Builder->CreateICmpNE(condition_val, llvm::Constant::getNullValue(condition_val->getType()), "cast"), if_body_block, merge_block);
     }
 
     Builder->SetInsertPoint(if_body_block);
