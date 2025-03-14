@@ -1,0 +1,19 @@
+fn isPrime(i: i32, n: i32) -> i32 {
+  if(i >= n) ret 1;
+  if( (n / i) * i == n) {
+    ret 0;
+  }
+  ret isPrime(i+1, n);
+}
+
+fn primes(l: i32, r: i32) {
+  if(l > r) ret;
+  if(isPrime(2, l)) {
+    print_i32(l);
+  }
+  primes(l+1, r);
+}
+
+fn main() {
+  primes(2, 100);
+}
