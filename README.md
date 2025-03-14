@@ -8,6 +8,7 @@ The repository also contains tests that can be run using CTest. To run them simp
 ```sh
 ctest
 ```
+There is also a dockerfile situated in the root directory which can be used to run a linux system with the prerequisites installed
 # todo
 - A document with code examples
 
