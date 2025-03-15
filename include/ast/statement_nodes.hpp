@@ -19,7 +19,6 @@ namespace ast {
     virtual std::string get_name() override;
   };
 
-  // This inherits from Node directly because a bundle of statements is not a statement.
   class Statements : public Node {
   private:
     std::vector<std::shared_ptr<StatementNode>> statements;
@@ -87,7 +86,8 @@ namespace ast {
   protected:
     std::shared_ptr<ExprNode> expr;
   public:
-    DeclarationAssignmentStatement(std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr);
+    DeclarationAssignmentStatement(
+      std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr);
     ~DeclarationAssignmentStatement() = default;
     virtual void codegen() override;
     virtual std::string get_name() override;
@@ -114,8 +114,13 @@ namespace ast {
     std::shared_ptr<StatementNode> if_body;
     std::shared_ptr<StatementNode> else_body;
   public:
-    IfStatement(std::shared_ptr<ExprNode> condition, std::shared_ptr<StatementNode> if_body);
-    IfStatement(std::shared_ptr<ExprNode> condition, std::shared_ptr<StatementNode> if_body, std::shared_ptr<StatementNode> else_body);
+    IfStatement(
+      std::shared_ptr<ExprNode> condition,
+      std::shared_ptr<StatementNode> if_body);
+    IfStatement(
+      std::shared_ptr<ExprNode> condition,
+      std::shared_ptr<StatementNode> if_body,
+      std::shared_ptr<StatementNode> else_body);
     virtual ~IfStatement() = default;
     virtual void codegen() override;
     virtual std::string get_name() override;
@@ -127,7 +132,9 @@ namespace ast {
     std::shared_ptr<ExprNode> condition;
     std::shared_ptr<StatementNode> body;
   public:
-    WhileLoop(std::shared_ptr<ExprNode> condition, std::shared_ptr<StatementNode> body);
+    WhileLoop(
+      std::shared_ptr<ExprNode> condition,
+      std::shared_ptr<StatementNode> body);
     virtual ~WhileLoop() = default;
     virtual void codegen() override;
     virtual std::string get_name() override;

@@ -42,7 +42,10 @@ namespace ast {
     std::string operator_type;
     std::shared_ptr<ExprNode> left, right;
   public: 
-    BinaryOperator(std::string operator_type, std::shared_ptr<ExprNode> left, std::shared_ptr<ExprNode> right);
+    BinaryOperator(
+      std::string operator_type,
+      std::shared_ptr<ExprNode> left,
+      std::shared_ptr<ExprNode> right);
     virtual llvm::Value* eval() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
@@ -100,7 +103,9 @@ namespace ast {
     std::string function_name;
     std::shared_ptr<FunctionCallArglist> args;
   public:
-    FunctionCallExpr(std::string function_name, std::shared_ptr<FunctionCallArglist> args);
+    FunctionCallExpr(
+      std::string function_name,
+      std::shared_ptr<FunctionCallArglist> args);
     virtual ~FunctionCallExpr() = default;
     virtual llvm::Value* eval() override;
     virtual std::string get_name() override;

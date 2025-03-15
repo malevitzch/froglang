@@ -60,7 +60,10 @@ namespace ast {
     std::shared_ptr<FunctionArglist> args;
     llvm::Type* return_type;
   public:
-    FunctionDeclaration(std::string var_name, std::shared_ptr<FunctionArglist> args, llvm::Type* return_type);
+    FunctionDeclaration(
+      std::string var_name,
+      std::shared_ptr<FunctionArglist> args,
+      llvm::Type* return_type);
     virtual void codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
@@ -87,7 +90,9 @@ namespace ast {
     void ensure_return(llvm::Function* func);
   protected:
   public:
-    FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body);
+    FunctionGlobject(
+      std::shared_ptr<FunctionDeclaration> decl,
+      std::shared_ptr<Block> body);
     virtual void codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;

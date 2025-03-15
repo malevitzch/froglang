@@ -15,12 +15,15 @@ namespace Tokens {
     FALSE,
 
     ARROW,
+
+    // Arithmetic operators
     PLUS,
     MINUS,
-    STAR, //multiply (but I think this is better since it might mean deref later so probably worth to do this way)
+    STAR, 
     SLASH,
     ASSIGNMENT,
 
+    // Comparison operators
     LESS,
     GREATER,
     LESSEQ,
@@ -28,10 +31,12 @@ namespace Tokens {
     EQUALITY,
     INEQUALITY,
 
+    // Logical operators
     LOGICAL_AND,
     LOGICAL_OR,
     NEGATION,
 
+    // Brackets
     LPAREN,
     RPAREN,
     LBRACE,
