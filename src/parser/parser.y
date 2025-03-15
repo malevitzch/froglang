@@ -123,15 +123,22 @@ function: function_declaration block {
   ;
 
 function_declaration: FN IDENTIFIER arglist ARROW TYPE_ID {
-    std::optional<llvm::Type*> type_ref = CompilerContext::Types->get_type($5->metadata);
+    std::optional<llvm::Type*> type_ref = 
+      CompilerContext::Types->get_type($5->metadata);
     if(!type_ref) {
       yy::parser::error("Undeclared type: \"" + $5->metadata + "\"");
       YYERROR;
     }
-    $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), *type_ref);
+    $$ = std::make_shared<ast::FunctionDeclaration>(
+      $2->metadata, 
+      dynamic_pointer_cast<ast::FunctionArglist>($3), 
+      *type_ref);
   }
   | FN IDENTIFIER arglist {
-    $$ = std::make_shared<ast::FunctionDeclaration>($2->metadata, dynamic_pointer_cast<ast::FunctionArglist>($3), llvm::Type::getVoidTy(*CompilerContext::TheContext));
+    $$ = std::make_shared<ast::FunctionDeclaration>(
+      $2->metadata, 
+      dynamic_pointer_cast<ast::FunctionArglist>($3),
+      llvm::Type::getVoidTy(*CompilerContext::TheContext));
   }
   ;
 
@@ -153,10 +160,12 @@ statements: /* empty */ {
   ;
 
 statement: expression SEMICOLON {
-    $$ = std::make_shared<ast::ExpressionStatement>(dynamic_pointer_cast<ast::ExprNode>($1));
+    $$ = std::make_shared<ast::ExpressionStatement>(
+      dynamic_pointer_cast<ast::ExprNode>($1));
   }
   | declaration SEMICOLON {
-    $$ = std::make_shared<ast::DeclarationStatement>(dynamic_pointer_cast<ast::DeclarationNode>($1));
+    $$ = std::make_shared<ast::DeclarationStatement>(
+      dynamic_pointer_cast<ast::DeclarationNode>($1));
   }
   | declaration ASSIGNMENT expression SEMICOLON {
     auto decl = dynamic_pointer_cast<ast::DeclarationNode>($1);
@@ -187,7 +196,8 @@ statement: expression SEMICOLON {
   ;
 
 declaration: IDENTIFIER COLON TYPE_ID {
-    std::optional<llvm::Type*> type_ref = CompilerContext::Types->get_type($3->metadata);
+    std::optional<llvm::Type*> type_ref =
+      CompilerContext::Types->get_type($3->metadata);
     if(!type_ref) {
       yy::parser::error("Undeclared type: \"" + $3->metadata + "\"");
       YYERROR;
@@ -233,13 +243,18 @@ expression: NUMBER {
     $$ = std::make_shared<ast::VariableIdentifier>($1->metadata);
   }
   | LBRACKET expression RBRACKET {
-    $$ = std::make_shared<ast::IversonExpr>(dynamic_pointer_cast<ast::ExprNode>($2));
+    $$ = std::make_shared<ast::IversonExpr>(
+      dynamic_pointer_cast<ast::ExprNode>($2));
   }
   | MINUS expression %prec UMINUS {
-    $$ = std::make_shared<ast::UnaryOperator>("-", dynamic_pointer_cast<ast::ExprNode>($2));
+    $$ = std::make_shared<ast::UnaryOperator>(
+      "-",
+      dynamic_pointer_cast<ast::ExprNode>($2));
   }
   | NEGATION expression {
-    $$ = std::make_shared<ast::UnaryOperator>("~", dynamic_pointer_cast<ast::ExprNode>($2));
+    $$ = std::make_shared<ast::UnaryOperator>(
+      "~",
+      dynamic_pointer_cast<ast::ExprNode>($2));
   }
   | IDENTIFIER call_arglist {
     auto call_arglist = dynamic_pointer_cast<ast::FunctionCallArglist>($2);
@@ -247,40 +262,64 @@ expression: NUMBER {
   }
   | LPAREN expression RPAREN {$$ = $2;}
   | expression PLUS expression {
-    $$ = std::make_shared<ast::BinaryOperator>("+", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
+    auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
+    $$ = std::make_shared<ast::BinaryOperator>("+", lhs, rhs);
   }
   | expression MINUS expression {
-    $$ = std::make_shared<ast::BinaryOperator>("-", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
+    auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
+    $$ = std::make_shared<ast::BinaryOperator>("-", lhs, rhs);
   }
   | expression STAR expression {
-    $$ = std::make_shared<ast::BinaryOperator>("*", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
+    auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
+    $$ = std::make_shared<ast::BinaryOperator>("*", lhs, rhs);
   }
   | expression SLASH expression {
-    $$ = std::make_shared<ast::BinaryOperator>("/", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
+    auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
+    $$ = std::make_shared<ast::BinaryOperator>("/", lhs, rhs);  
   }
   | expression LESS expression {
-    $$ = std::make_shared<ast::BinaryOperator>("<", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
+    auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
+    $$ = std::make_shared<ast::BinaryOperator>("<", lhs, rhs);
   }
   | expression GREATER expression {
-    $$ = std::make_shared<ast::BinaryOperator>(">", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
+    auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
+    $$ = std::make_shared<ast::BinaryOperator>(">", lhs, rhs);
   }
   | expression LESSEQ expression {
-    $$ = std::make_shared<ast::BinaryOperator>("<=", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
+    auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
+    $$ = std::make_shared<ast::BinaryOperator>("<=", lhs, rhs);  
   }
   | expression GREATEREQ expression {
-    $$ = std::make_shared<ast::BinaryOperator>(">=", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
+    auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
+    $$ = std::make_shared<ast::BinaryOperator>(">=", lhs, rhs);
   }
   | expression EQUALITY expression {
-    $$ = std::make_shared<ast::BinaryOperator>("==", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
+    auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
+    $$ = std::make_shared<ast::BinaryOperator>("==", lhs, rhs);
   }
   | expression INEQUALITY expression {
-    $$ = std::make_shared<ast::BinaryOperator>("!=", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
+    auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
+    $$ = std::make_shared<ast::BinaryOperator>("!=", lhs, rhs);
   }
   | expression LOGICAL_AND expression {
-    $$ = std::make_shared<ast::BinaryOperator>("&&", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
+    auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
+    $$ = std::make_shared<ast::BinaryOperator>("&&", lhs, rhs);
   }
   | expression LOGICAL_OR expression {
-    $$ = std::make_shared<ast::BinaryOperator>("||", dynamic_pointer_cast<ast::ExprNode>($1), dynamic_pointer_cast<ast::ExprNode>($3));
+    auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
+    auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
+    $$ = std::make_shared<ast::BinaryOperator>("||", lhs, rhs);
   }
   ;
 
