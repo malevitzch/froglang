@@ -9,13 +9,14 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  std::vector<std::string> compiler_args(argv+1, argv + argc);
+  std::vector<std::string> compiler_args(argv + 1, argv + argc);
 
   //TODO: maybe replace this with some sort of nullstream
   std::ofstream debug_stream("debug.txt");
   Compiler compiler(&debug_stream);
 
-  std::optional<std::string> compilation_error = compiler.compile_from_args(compiler_args);
+  std::optional<std::string> compilation_error =
+    compiler.compile_from_args(compiler_args);
 
   if(compilation_error) {
     std::cerr << "Error: " << *compilation_error << "\n";
