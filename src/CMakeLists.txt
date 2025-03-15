@@ -5,7 +5,10 @@ set(BISON_HEADER ${CMAKE_BINARY_DIR}/parser.hpp)
 add_custom_command(
   DEPENDS ${BISON_INPUT}
   OUTPUT ${BISON_OUTPUT} ${BISON_HEADER}
-  COMMAND ${BISON_EXECUTABLE} -d --defines=${BISON_HEADER} -o ${BISON_OUTPUT} ${BISON_INPUT}
+  COMMAND ${BISON_EXECUTABLE} -d 
+    --defines=${BISON_HEADER} 
+    -o ${BISON_OUTPUT} 
+    ${BISON_INPUT}
 )
 
 set(FLEX_INPUT ${CMAKE_SOURCE_DIR}/src/lexer/lexer.l)
@@ -55,7 +58,8 @@ add_executable(compiler compiler.cpp compiler_driver.cpp)
 target_link_libraries(compiler PRIVATE LLVM)
 target_link_libraries(compiler PRIVATE app_lib)
 
-target_compile_definitions(compiler PRIVATE STDLIB_PATH=\"${CMAKE_BINARY_DIR}/src/froglib.o\")
+target_compile_definitions(compiler PRIVATE 
+  STDLIB_PATH=\"${CMAKE_BINARY_DIR}/src/froglib.o\")
 
 set(LIB_OUTPUT ${CMAKE_BINARY_DIR}/froglib.o)
 
@@ -68,10 +72,10 @@ add_custom_command(
 add_custom_target(generate_lib ALL DEPENDS ${LIB_OUTPUT})
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-        target_compile_options(compiler PRIVATE --coverage)
-        target_link_options(compiler PRIVATE --coverage)
-        target_compile_options(app_lib PRIVATE --coverage)
-        target_link_options(app_lib PRIVATE --coverage)
-    endif()
+  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_options(compiler PRIVATE --coverage)
+    target_link_options(compiler PRIVATE --coverage)
+    target_compile_options(app_lib PRIVATE --coverage)
+    target_link_options(app_lib PRIVATE --coverage)
+  endif()
 endif()

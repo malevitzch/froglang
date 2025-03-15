@@ -14,7 +14,8 @@ namespace CompilerContext {
   std::unique_ptr<std::map<std::string, llvm::Function*>> Functions;
   std::unique_ptr<DSA::TypeHolder> Types;
 
-  const std::vector<std::pair<std::string, llvm::Type*>> get_primitive_types() {
+  const std::vector<std::pair<std::string, llvm::Type*>>
+  get_primitive_types() {
     const std::vector<std::pair<std::string, llvm::Type*>> types = {
       {"i32", llvm::Type::getInt32Ty(*TheContext)},
       {"i1", llvm::Type::getInt1Ty(*TheContext)},
@@ -32,7 +33,9 @@ namespace CompilerContext {
     TheContext.reset();
 
     TheContext = std::make_unique<llvm::LLVMContext>();
-    TheModule = std::make_unique<llvm::Module>("ProgramModule", *CompilerContext::TheContext);
+    TheModule = std::make_unique<llvm::Module>(
+      "ProgramModule",
+      *CompilerContext::TheContext);
     Builder = std::make_unique<llvm::IRBuilder<>>(*CompilerContext::TheContext);
     NamedValues = std::make_unique<DSA::ValueHolder>();
     Functions = std::make_unique<std::map<std::string, llvm::Function*>>();

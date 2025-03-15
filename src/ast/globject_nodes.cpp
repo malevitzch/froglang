@@ -52,11 +52,17 @@ namespace ast {
   }
   std::vector<llvm::Type*> FunctionArglist::get_arg_types() {
     std::vector<llvm::Type*> types;
-    std::ranges::transform(get_args(), std::back_inserter(types), &DeclarationNode::get_var_type);
+    std::ranges::transform(
+      get_args(),
+      std::back_inserter(types),
+      &DeclarationNode::get_var_type);
     return types;
   }
 
-  FunctionDeclaration::FunctionDeclaration(std::string var_name, std::shared_ptr<FunctionArglist> args, llvm::Type* return_type) 
+  FunctionDeclaration::FunctionDeclaration(
+    std::string var_name,
+    std::shared_ptr<FunctionArglist> args,
+    llvm::Type* return_type)
   : var_name(var_name), args(args), return_type(return_type) {}
   void FunctionDeclaration::codegen() {
     if(CompilerContext::Functions->contains(var_name)) {
@@ -68,7 +74,12 @@ namespace ast {
       llvm::FunctionType::get(return_type, arg_types, false);
 
     llvm::Function* this_function =
-      llvm::Function::Create(func_type, llvm::Function::ExternalLinkage, var_name, CompilerContext::TheModule.get());
+      llvm::Function::Create(
+        func_type,
+        llvm::Function::ExternalLinkage,
+        var_name,
+        CompilerContext::TheModule.get());
+
     (*CompilerContext::Functions)[var_name] = this_function;
   }
   llvm::Function* FunctionDeclaration::get_func() {
@@ -82,14 +93,16 @@ namespace ast {
   std::vector<std::shared_ptr<Node>> FunctionDeclaration::get_children() {
     return {args};
   }
-  std::vector<std::shared_ptr<DeclarationNode>> FunctionDeclaration::get_args() {
+  std::vector<std::shared_ptr<DeclarationNode>> 
+  FunctionDeclaration::get_args() {
     return args->get_args();
   }
   std::string FunctionDeclaration::get_varname() {
     return var_name;
   }
 
-  FunctionDeclarationGlobject::FunctionDeclarationGlobject(std::shared_ptr<FunctionDeclaration> decl)
+  FunctionDeclarationGlobject::FunctionDeclarationGlobject(
+    std::shared_ptr<FunctionDeclaration> decl)
   : decl(decl) {}
   void FunctionDeclarationGlobject::codegen() {
     decl->codegen();
@@ -97,7 +110,8 @@ namespace ast {
   std::string FunctionDeclarationGlobject::get_name() {
     return "Function Declaration Globject";
   }
-  std::vector<std::shared_ptr<Node>> FunctionDeclarationGlobject::get_children() {
+  std::vector<std::shared_ptr<Node>> 
+  FunctionDeclarationGlobject::get_children() {
     return {decl};
   }
 
@@ -115,7 +129,9 @@ namespace ast {
       CompilerContext::Builder->CreateRet(undef_val);
     }
   }
-  FunctionGlobject::FunctionGlobject(std::shared_ptr<FunctionDeclaration> decl, std::shared_ptr<Block> body) 
+  FunctionGlobject::FunctionGlobject(
+    std::shared_ptr<FunctionDeclaration> decl,
+    std::shared_ptr<Block> body) 
   : decl(decl), body(body) {}
   void FunctionGlobject::codegen() {
 
@@ -132,7 +148,10 @@ namespace ast {
       CompilerContext::NamedValues->add_val(variables_to_clean_up[i++], &arg);
     }
 
-    llvm::BasicBlock *EntryBlock = llvm::BasicBlock::Create(*CompilerContext::TheContext, decl->get_varname(), f);
+    llvm::BasicBlock *EntryBlock = llvm::BasicBlock::Create(
+      *CompilerContext::TheContext,
+      decl->get_varname(),
+      f);
     CompilerContext::Builder->SetInsertPoint(EntryBlock);
     body->codegen();
     ensure_return(f);

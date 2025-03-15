@@ -2,13 +2,13 @@
 #include <memory>
 #include <fstream>
 #include <FlexLexer.h>
-#include "tokens.hpp"
 #include "parser.hpp"
 
 std::shared_ptr<ast::Node> ast_root;
 
 void lex_file(std::string filename) {
-  std::shared_ptr<std::ifstream> in = std::make_shared<std::ifstream>(std::ifstream(filename));
+  std::shared_ptr<std::ifstream> in = 
+      std::make_shared<std::ifstream>(std::ifstream(filename));
   if(!in->is_open()) {
     std::cerr << "Cannot open file: " << filename << "\n";
     return;
@@ -23,7 +23,8 @@ void traverse(std::shared_ptr<ast::Node> node, int depth, std::ostream& out) {
     return;
   }
   out << " {\n";
-  for(std::shared_ptr<ast::Node> child : node->get_children()) traverse(child, depth+1, out);
+  for(std::shared_ptr<ast::Node> child :node->get_children()) 
+    traverse(child, depth+1, out);
   for(int i = 0; i < depth; i++) out << "  ";
   out<<"}\n";
 }

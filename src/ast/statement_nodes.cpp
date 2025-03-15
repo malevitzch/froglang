@@ -20,7 +20,8 @@ namespace ast {
   }
   std::vector<std::shared_ptr<Node>> Statements::get_children() {
     std::vector<std::shared_ptr<Node>> children;
-    for(std::shared_ptr<StatementNode> child : statements) children.push_back(child);
+    for(std::shared_ptr<StatementNode> child : statements)
+      children.push_back(child);
     return {statements.begin(), statements.end()};
   }
 
@@ -29,13 +30,15 @@ namespace ast {
   void Block::codegen() {
     std::vector<std::string> block_named_values;
     for(std::shared_ptr<StatementNode> statement : statements->get()) {
-      auto decl_statement = dynamic_pointer_cast<DeclarationStatement>(statement);
+      auto decl_statement = 
+        dynamic_pointer_cast<DeclarationStatement>(statement);
       if(decl_statement) {
         block_named_values.push_back(decl_statement->get_varname());
       }
       statement->codegen();
     }
-    //TODO: in the future, when we want to do typechecks, this should probably be in reverse order or smth
+    //TODO: in the future, we will want to do typechecks
+    // this should probably be in reverse order or smth
     for(std::string value_name : block_named_values) {
       CompilerContext::NamedValues->remove_val(value_name);
     }
@@ -77,7 +80,8 @@ namespace ast {
     return {expr};
   }
 
-  DeclarationStatement::DeclarationStatement(std::shared_ptr<DeclarationNode> decl)
+  DeclarationStatement::DeclarationStatement(
+    std::shared_ptr<DeclarationNode> decl)
   : decl(decl) {}
   void DeclarationStatement::codegen() {
     CompilerContext::NamedValues->add_val(get_varname());
@@ -92,7 +96,8 @@ namespace ast {
     return decl->get_varname();
   }
 
-  DeclarationAssignmentStatement::DeclarationAssignmentStatement(std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr)
+  DeclarationAssignmentStatement::DeclarationAssignmentStatement(
+    std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr)
   : DeclarationStatement(decl), expr(expr) {}
   void DeclarationAssignmentStatement::codegen() {
     CompilerContext::NamedValues->add_val(decl->get_varname(), expr->eval());
@@ -100,7 +105,8 @@ namespace ast {
   std::string DeclarationAssignmentStatement::get_name() {
     return "Declaration Assignment Statement";
   }
-  std::vector<std::shared_ptr<Node>> DeclarationAssignmentStatement::get_children() {
+  std::vector<std::shared_ptr<Node>> 
+  DeclarationAssignmentStatement::get_children() {
     return {decl, expr};
   }
   std::string DeclarationAssignmentStatement::get_varname() {
@@ -126,9 +132,14 @@ namespace ast {
   std::vector<std::shared_ptr<Node>> ReturnStatement::get_children() {
     return {val};
   }
-  IfStatement::IfStatement(std::shared_ptr<ExprNode> condition, std::shared_ptr<StatementNode> if_body) 
+  IfStatement::IfStatement(
+    std::shared_ptr<ExprNode> condition,
+    std::shared_ptr<StatementNode> if_body) 
   : condition(condition), if_body(if_body), else_body(nullptr) {}
-  IfStatement::IfStatement(std::shared_ptr<ExprNode> condition, std::shared_ptr<StatementNode> if_body, std::shared_ptr<StatementNode> else_body) 
+  IfStatement::IfStatement(
+    std::shared_ptr<ExprNode> condition,
+    std::shared_ptr<StatementNode> if_body,
+    std::shared_ptr<StatementNode> else_body) 
   : condition(condition), if_body(if_body), else_body(else_body) {}
   void IfStatement::codegen() {
     using CompilerContext::Builder;
@@ -136,18 +147,33 @@ namespace ast {
 
     llvm::Function* function = Builder->GetInsertBlock()->getParent();
 
-    llvm::BasicBlock *if_body_block = llvm::BasicBlock::Create(*TheContext, "then", function);
-    llvm::BasicBlock *merge_block = llvm::BasicBlock::Create(*TheContext, "ifcont", function);
+    llvm::BasicBlock *if_body_block =
+      llvm::BasicBlock::Create(*TheContext, "then", function);
+    llvm::BasicBlock *merge_block =
+      llvm::BasicBlock::Create(*TheContext, "ifcont", function);
     llvm::BasicBlock *else_body_block;
 
     if(else_body) {
-      else_body_block = llvm::BasicBlock::Create(*TheContext, "else", function); 
+      else_body_block = 
+        llvm::BasicBlock::Create(*TheContext, "else", function); 
       llvm::Value* condition_val = condition->eval();
-      Builder->CreateCondBr(Builder->CreateICmpNE(condition_val, llvm::Constant::getNullValue(condition_val->getType()), "cast"), if_body_block, else_body_block);
+      Builder->CreateCondBr(
+        Builder->CreateICmpNE(
+          condition_val,
+          llvm::Constant::getNullValue(condition_val->getType()),
+          "cast"),
+        if_body_block,
+        else_body_block);
     }
     else {
       llvm::Value* condition_val = condition->eval();
-      Builder->CreateCondBr(Builder->CreateICmpNE(condition_val, llvm::Constant::getNullValue(condition_val->getType()), "cast"), if_body_block, merge_block);
+      Builder->CreateCondBr(
+        Builder->CreateICmpNE(
+          condition_val,
+          llvm::Constant::getNullValue(condition_val->getType()),
+          "cast"), 
+        if_body_block,
+        merge_block);
     }
 
     Builder->SetInsertPoint(if_body_block);
@@ -172,7 +198,9 @@ namespace ast {
     return children;
   }
 
-  WhileLoop::WhileLoop(std::shared_ptr<ExprNode> condition, std::shared_ptr<StatementNode> body)
+  WhileLoop::WhileLoop(
+    std::shared_ptr<ExprNode> condition,
+    std::shared_ptr<StatementNode> body)
   : condition(condition), body(body) {}
   void WhileLoop::codegen() {
     //TODO: implement

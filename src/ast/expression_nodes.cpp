@@ -18,8 +18,13 @@ namespace ast {
   llvm::Value* IversonExpr::eval() {
     llvm::Value* expr_value = expr->eval();
     llvm::Value* zero = llvm::Constant::getNullValue(expr_value->getType());
-    llvm::Value* cmp_result = CompilerContext::Builder->CreateICmpNE(expr_value, zero);
-    return CompilerContext::Builder->CreateIntCast(cmp_result, CompilerContext::Builder->getInt32Ty(), false);
+    llvm::Value* cmp_result = 
+      CompilerContext::Builder->CreateICmpNE(expr_value, zero);
+
+    return CompilerContext::Builder->CreateIntCast(
+      cmp_result,
+      CompilerContext::Builder->getInt32Ty(),
+      false);
   }
 
   std::string IversonExpr::get_name() {
@@ -30,7 +35,9 @@ namespace ast {
     return {expr};
   }
 
-  UnaryOperator::UnaryOperator(std::string operator_type, std::shared_ptr<ExprNode> operand) 
+  UnaryOperator::UnaryOperator(
+    std::string operator_type,
+    std::shared_ptr<ExprNode> operand) 
   : operator_type(operator_type), operand(operand) {}
   llvm::Value* UnaryOperator::eval() {
     //FIXME: replace with operator subclasses
@@ -40,7 +47,8 @@ namespace ast {
     if(operator_type == "~") {
       return CompilerContext::Builder->CreateNot(operand->eval(), "not");
     }
-    throw std::runtime_error("Unimplemented unary operator: \"" + operator_type + "\"");
+    throw std::runtime_error(
+      "Unimplemented unary operator: \"" + operator_type + "\"");
   }
   std::string UnaryOperator::get_name() {
     return "Unary Operator";
@@ -52,7 +60,8 @@ namespace ast {
   llvm::Value* BinaryOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
-    //FIXME: replace this with operator subclasses because this is so unbeliveably ugly and stupid
+    //FIXME: replace this with operator subclasses
+    //because this is so unbeliveably ugly and stupid
     if(operator_type == "+") {
       return CompilerContext::Builder->CreateAdd(L, R, "addtmp");
     }
@@ -89,14 +98,20 @@ namespace ast {
     if(operator_type == "||") {
       return CompilerContext::Builder->CreateOr(L, R, "or");
     }
-    throw std::runtime_error("Unimplemented binary operator: \"" + operator_type + "\"");
+    throw std::runtime_error(
+      "Unimplemented binary operator: \"" + operator_type + "\"");
   }
 
-  //TODO: the BinaryOperator uses deduce_type() to find out what type it should be. 
-  // There will be no implicit conversions because those sound like a very bad idea
-  BinaryOperator::BinaryOperator(std::string operator_type, std::shared_ptr<ExprNode> left, std::shared_ptr<ExprNode> right)
+  //TODO: the BinaryOperator uses deduce_type() to find out 
+  // what exactly to do 
+  // There will be no implicit conversions
+  BinaryOperator::BinaryOperator(
+    std::string operator_type,
+    std::shared_ptr<ExprNode> left,
+    std::shared_ptr<ExprNode> right)
   : operator_type(operator_type), left(left), right(right) {}
-  // TODO: This needs complex logic for result type deduction once we want to use more than just integers.
+  // TODO: This needs complex logic for result type deduction
+  //once we want to use more than just integers.
   std::string BinaryOperator::get_name() {
     return "Binary Operator";
   }
@@ -109,7 +124,9 @@ namespace ast {
 
   llvm::Value* IntegerConstant::eval() {
     //TODO: Precision can't be zero
-    return llvm::ConstantInt::get(*CompilerContext::TheContext, llvm::APInt(precision, data, 10));
+    return llvm::ConstantInt::get(
+      *CompilerContext::TheContext,
+      llvm::APInt(precision, data, 10));
   }
 
   std::string IntegerConstant::get_name() {
@@ -143,7 +160,8 @@ namespace ast {
     return args;
   }
 
-  FunctionCallArglist::FunctionCallArglist(std::shared_ptr<FunctionCallArgs> args) 
+  FunctionCallArglist::FunctionCallArglist(
+    std::shared_ptr<FunctionCallArgs> args) 
   : args(args) {}
 
   std::string FunctionCallArglist::get_name() {
@@ -157,14 +175,20 @@ namespace ast {
     return args->get_args();
   }
 
-  FunctionCallExpr::FunctionCallExpr(std::string function_name, std::shared_ptr<FunctionCallArglist> args)
+  FunctionCallExpr::FunctionCallExpr(
+    std::string function_name,
+    std::shared_ptr<FunctionCallArglist> args)
   : function_name(function_name), args(args) {}
   llvm::Value* FunctionCallExpr::eval() {
     if(!CompilerContext::Functions->contains(function_name))
-      throw std::runtime_error("Unregisterd function \"" + function_name + "\"");
+      throw std::runtime_error(
+        "Unregisterd function \"" + function_name + "\"");
     llvm::Function* to_call = CompilerContext::Functions->at(function_name);
     std::vector<llvm::Value*> call_args;
-    std::ranges::transform(args->get_args(), std::back_inserter(call_args), &ExprNode::eval);
+    std::ranges::transform(
+      args->get_args(),
+      std::back_inserter(call_args),
+      &ExprNode::eval);
     return CompilerContext::Builder->CreateCall(to_call, call_args);
   }
 

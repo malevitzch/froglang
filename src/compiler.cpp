@@ -11,7 +11,6 @@
 #include "llvm/ADT/APFloat.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Module.h"
@@ -39,10 +38,12 @@ void Compiler::prepare_llvm() {
 }
 
 std::optional<std::string> Compiler::get_compiler_path() {
-  static const std::vector<std::string> possible_compilers = {"clang", "gcc", "cc", "cl"};
+  static const std::vector<std::string> possible_compilers =
+    {"clang", "gcc", "cc", "cl"};
   std::optional<std::string> compiler_path = std::nullopt;
   for(const std::string& compiler : possible_compilers) {
-    llvm::ErrorOr<std::string> error_or_compiler_path = llvm::sys::findProgramByName(compiler);
+    llvm::ErrorOr<std::string> error_or_compiler_path =
+      llvm::sys::findProgramByName(compiler);
     if(error_or_compiler_path) {
       compiler_path = error_or_compiler_path.get();
       break;
@@ -66,7 +67,9 @@ std::optional<std::string> Compiler::generate_IR(std::istream* input_stream) {
   return std::nullopt;
 }
 
-std::optional<std::string> Compiler::compile_to_IR(std::string input_filename, std::string output_filename) {
+std::optional<std::string> Compiler::compile_to_IR(
+  std::string input_filename,
+  std::string output_filename) {
   std::ifstream input_stream(input_filename);
   return compile_to_IR(&input_stream, output_filename);
 }
@@ -75,7 +78,9 @@ Compiler::Compiler(std::ostream* debug_output_stream) {
   diagnostic_stream = debug_output_stream;
 }
 
-std::optional<std::string> Compiler::compile_to_IR(std::istream* input_stream, std::string output_filename) {
+std::optional<std::string> Compiler::compile_to_IR(
+  std::istream* input_stream,
+  std::string output_filename) {
   generate_IR(input_stream);
   std::error_code EC;
   llvm::raw_fd_ostream IR_out(output_filename, EC, llvm::sys::fs::OF_None);
@@ -88,7 +93,9 @@ std::optional<std::string> Compiler::compile_to_IR(std::istream* input_stream, s
   return std::nullopt;
 }
 
-std::optional<std::string> Compiler::compile_to_obj(std::istream* input_stream, std::string output_filename) {
+std::optional<std::string> Compiler::compile_to_obj(
+  std::istream* input_stream,
+  std::string output_filename) {
   auto TargetTriple = llvm::sys::getDefaultTargetTriple();
 
   prepare_llvm();
@@ -99,7 +106,12 @@ std::optional<std::string> Compiler::compile_to_obj(std::istream* input_stream, 
   auto CPU = "generic";
   auto Features = "";
   llvm::TargetOptions opt;
-  auto TargetMachine = Target->createTargetMachine(TargetTriple, CPU, Features, opt, llvm::Reloc::PIC_);
+  auto TargetMachine = Target->createTargetMachine(
+    TargetTriple,
+    CPU,
+    Features,
+    opt,
+    llvm::Reloc::PIC_);
 
   std::optional<std::string> parsing_error = generate_IR(input_stream);
 
@@ -107,8 +119,6 @@ std::optional<std::string> Compiler::compile_to_obj(std::istream* input_stream, 
     return "Parsing failed due to: \"" + *parsing_error + "\""; 
   }
 
-  //FIXME: we do not necessarily want to emit the tree_output.txt every time in the finished compiler
-  //std::ofstream ast_out("tree_output.txt");
   //TODO: bring back the tree_output dfs because it was a cool thing to have
 
   CompilerContext::TheModule->setDataLayout(TargetMachine->createDataLayout());
@@ -128,7 +138,9 @@ std::optional<std::string> Compiler::compile_to_obj(std::istream* input_stream, 
   return std::nullopt;
 }
 
-std::optional<std::string> Compiler::compile_to_obj(std::string input_filename, std::string output_filename) {
+std::optional<std::string> Compiler::compile_to_obj(
+  std::string input_filename,
+  std::string output_filename) {
   std::ifstream input_stream(input_filename);
   if(!input_stream.is_open()) {
     return "Cannot open file \"" + input_filename + "\"";
@@ -136,24 +148,36 @@ std::optional<std::string> Compiler::compile_to_obj(std::string input_filename, 
   return compile_to_obj(&input_stream, output_filename);
 }
 
-std::optional<std::string> Compiler::compile_to_exec(std::istream* input_stream, std::string output_filename) {
+std::optional<std::string> Compiler::compile_to_exec(
+  std::istream* input_stream,
+  std::string output_filename) {
   std::cout << "TEST" << std::endl;
-  std::optional<std::string> compilation_error = compile_to_obj(input_stream, "out.o");
+  std::optional<std::string> compilation_error = 
+    compile_to_obj(input_stream, "out.o");
   if(compilation_error) {
-    return "Compilation to object failed due to: \"" + *compilation_error + "\"";
+    return "Compilation to object failed due to: \"" 
+      + *compilation_error + "\"";
   }
 
   std::optional<std::string> compiler_path = get_compiler_path();
   if(!compiler_path) {
     return "Can't find a C compiler";
   }
-  std::vector<std::string> args = {*compiler_path, "-o", output_filename, "out.o", STDLIB_PATH};
+  std::vector<std::string> args = 
+      {*compiler_path, "-o", output_filename, "out.o", STDLIB_PATH};
   llvm::SmallVector<llvm::StringRef, 16> argv;
   for(auto& arg : args) {
     argv.push_back(arg);
   }
   std::string error_message;
-  int result = llvm::sys::ExecuteAndWait(argv[0], argv, llvm::None, {}, 0, 0, &error_message);
+  int result = llvm::sys::ExecuteAndWait(
+    argv[0],
+    argv,
+    llvm::None,
+    {},
+    0,
+    0,
+    &error_message);
   if(result == -1) {
     return "Cannot execute the compilation command";
   }
@@ -163,22 +187,29 @@ std::optional<std::string> Compiler::compile_to_exec(std::istream* input_stream,
   return std::nullopt;
 }
 
-std::optional<std::string> Compiler::compile_to_exec(std::vector<std::string> filenames, std::string output_filename) {
+std::optional<std::string> Compiler::compile_to_exec(
+  std::vector<std::string> filenames,
+  std::string output_filename) {
   for(std::string filename : filenames) {
     CompilerContext::reset_context();
     //FIXME: validate the stream
     std::ifstream input_stream(filename);
-    //FIXME: remove extension until first dot and add generate the object filename?
-    std::optional<std::string> compilation_error = compile_to_obj(&input_stream, filename + ".o");
+    //FIXME: remove extension and create a better filename 
+    std::optional<std::string> compilation_error =
+      compile_to_obj(&input_stream, filename + ".o");
     if(compilation_error) {
-      return "Compilation of file \"" + filename + "\" to object failed due to: \"" + *compilation_error + "\"";
+      return "Compilation of file \"" 
+        + filename 
+        + "\" to object failed due to: \"" 
+        + *compilation_error + "\"";
     }
   }
   std::optional<std::string> compiler_path = get_compiler_path();
   if(!compiler_path) {
     return "Can't find a C compiler";
   }
-  std::vector<std::string> args = {*compiler_path, "-o", output_filename, STDLIB_PATH};
+  std::vector<std::string> args = 
+    {*compiler_path, "-o", output_filename, STDLIB_PATH};
   for(std::string filename : filenames) {
     args.push_back(filename + ".o");
   }
@@ -187,7 +218,14 @@ std::optional<std::string> Compiler::compile_to_exec(std::vector<std::string> fi
     argv.push_back(arg);
   }
   std::string error_message;
-  int result = llvm::sys::ExecuteAndWait(argv[0], argv, llvm::None, {}, 0, 0, &error_message);
+  int result = llvm::sys::ExecuteAndWait(
+    argv[0],
+    argv,
+    llvm::None,
+    {},
+    0,
+    0,
+    &error_message);
   if(result == -1) {
     return "Cannot execute the compilation command";
   }
@@ -198,7 +236,9 @@ std::optional<std::string> Compiler::compile_to_exec(std::vector<std::string> fi
 
 }
 
-std::optional<std::string> Compiler::compile_to_exec(std::string input_filename, std::string output_filename) {
+std::optional<std::string> Compiler::compile_to_exec(
+  std::string input_filename,
+  std::string output_filename) {
   std::ifstream input_stream(input_filename);
     if(!input_stream.is_open()) {
       return "Cannot open file: \"" + input_filename + "\"";
@@ -217,7 +257,12 @@ std::optional<std::string> Compiler::compile_stdlib() {
   auto CPU = "generic";
   auto Features = "";
   llvm::TargetOptions opt;
-  auto TargetMachine = Target->createTargetMachine(TargetTriple, CPU, Features, opt, llvm::Reloc::PIC_);
+  auto TargetMachine = Target->createTargetMachine(
+    TargetTriple,
+    CPU,
+    Features,
+    opt,
+    llvm::Reloc::PIC_);
 
   libgen::register_print_i32(); 
 
@@ -238,8 +283,10 @@ std::optional<std::string> Compiler::compile_stdlib() {
   return std::nullopt;
 }
 
-std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> args) {
-  //TODO: setting a mode should only be done once (warn the user in case of multiple options that override each other)
+std::optional<std::string> 
+Compiler::compile_from_args(std::vector<std::string> args) {
+  //TODO: setting a mode should only be done once 
+  // Warn the user in case of multiple options that override each other
 
   auto begin = args.begin();
   auto end = args.end();
@@ -248,7 +295,10 @@ std::optional<std::string> Compiler::compile_from_args(std::vector<std::string> 
   return parse_command(begin, end, data);
 }
 
-std::optional<std::string> Compiler::parse_command(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data) {
+std::optional<std::string> Compiler::parse_command(
+  std::vector<std::string>::iterator& it,
+  std::vector<std::string>::iterator& end,
+  CommandData& data) {
   while(it != end) {
     std::string arg = *it;
     if(arg.size() == 0) {
@@ -266,7 +316,10 @@ std::optional<std::string> Compiler::parse_command(std::vector<std::string>::ite
   return run_command(data);
 }
 
-std::optional<std::string> Compiler::parse_option(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data) {
+std::optional<std::string> Compiler::parse_option(
+  std::vector<std::string>::iterator& it,
+  std::vector<std::string>::iterator& end,
+  CommandData& data) {
   std::string option = (*it).substr(1, (*it).size() - 1);
   it++;
   if(option == "o") {
@@ -293,7 +346,10 @@ std::optional<std::string> Compiler::parse_option(std::vector<std::string>::iter
   return std::nullopt;
 }
 
-std::optional<std::string> Compiler::parse_source(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator& end, CommandData& data) {
+std::optional<std::string> Compiler::parse_source(
+  std::vector<std::string>::iterator& it,
+  std::vector<std::string>::iterator& end,
+  CommandData& data) {
   auto arg = *it;
   //TODO: validate arg as valid source name
   it++;
