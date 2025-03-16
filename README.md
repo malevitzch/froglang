@@ -8,7 +8,15 @@ The repository also contains tests that can be run using CTest. To run them simp
 ```sh
 ctest
 ```
-There is also a dockerfile situated in the root directory which can be used to run a linux system with the prerequisites installed
+There is also a Dockerfile situated in the root directory which can be used to build an image which can run the project without worrying about dependencies, barring docker itself. To build the image use the following command:
+```sh
+docker build -t froglang .
+```
+To run the container:
+```sh
+docker container run -it froglang
+```
+Inside the container the compiler can be ran using the 'frog' command
 # todo
 - Fix the number of arguments not being correctly checked
 

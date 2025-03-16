@@ -9,3 +9,4 @@ RUN mkdir build
 WORKDIR /froglang-compiler/build
 RUN cmake -S ..
 RUN make
+RUN echo 'frog() { /froglang-compiler/build/src/compiler "$@"; }' >> ~/.bashrc
