@@ -7,6 +7,8 @@
 
 #include <FlexLexer.h>
 
+#include "ast/node.hpp"
+
 extern std::ostream* diagnostic_stream;
 
 class Compiler {
@@ -15,7 +17,8 @@ private:
     Exec,
     IR,
     Stdlib,
-    Obj
+    Obj,
+    AST,
   };
   struct CommandData {
     std::vector<std::string> sources;
@@ -25,6 +28,12 @@ private:
 
   void prepare_llvm();
   std::optional<std::string> get_compiler_path();
+  void print_AST(
+    std::shared_ptr<ast::Node> node,
+    int depth,
+    std::ostream* out);
+  std::optional<std::string> parse_to_AST(std::istream* input_stream);
+
   std::optional<std::string> generate_IR(std::istream* input_stream);
 
   std::optional<std::string> parse_command(
@@ -46,6 +55,14 @@ private:
 public:
   Compiler() = default;
   Compiler(std::ostream* debug_output_stream);
+
+  std::optional<std::string> compile_to_AST(
+    std::istream* input_stream,
+    std::string output_filename);
+
+  std::optional<std::string> compile_to_AST(
+    std::string input_filename,
+    std::string output_filename);
 
   std::optional<std::string> compile_to_IR(
     std::istream* input_stream,

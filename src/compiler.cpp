@@ -52,7 +52,32 @@ std::optional<std::string> Compiler::get_compiler_path() {
   return compiler_path;
 }
 
-std::optional<std::string> Compiler::generate_IR(std::istream* input_stream) {
+void Compiler::print_AST(
+  std::shared_ptr<ast::Node> node,
+  int depth,
+  std::ostream* output_stream) {
+  std::ostream& out = *output_stream;
+  for(int i = 0; i < depth; i++) out << "  ";
+  out << node->get_name();
+  if(node->final) {
+    out << "\n";
+    return;
+  }
+  out << " {\n";
+  for(std::shared_ptr<ast::Node> child : node->get_children()) {
+    if(child == nullptr) {
+      throw std::runtime_error(
+        "The AST node: \"" 
+        + node->get_name() 
+        + "\" has a null child");
+      }
+    print_AST(child, depth+1, output_stream);
+  }
+  for(int i = 0; i < depth; i++) out << "  ";
+  out << "}\n";
+}
+
+std::optional<std::string> Compiler::parse_to_AST(std::istream* input_stream) {
   FrogLexer lexer(input_stream);
   Tokens::Token *yylval = new Tokens::Token();
   yy::parser p(lexer);
@@ -61,10 +86,33 @@ std::optional<std::string> Compiler::generate_IR(std::istream* input_stream) {
   if(parser_return_val != 0) {
     return "Parsing error";
   }
+  return std::nullopt;
+}
+
+std::optional<std::string> Compiler::generate_IR(std::istream* input_stream) {
+  std::optional<std::string> parsing_error = parse_to_AST(input_stream);
+  if(parsing_error) return parsing_error;
   dynamic_pointer_cast<ast::ProgramNode>(ast_root)->codegen();
   ast_root = nullptr;
   //FIXME: implement AST error handling
   return std::nullopt;
+}
+
+std::optional<std::string> Compiler::compile_to_AST(
+  std::istream* input_stream,
+  std::string output_filename) {
+  std::optional<std::string> parsing_error = parse_to_AST(input_stream);
+  if(parsing_error) return parsing_error;
+  std::ofstream output_stream(output_filename);
+  print_AST(ast_root, 0, &output_stream);
+  return std::nullopt;
+}
+
+std::optional<std::string> Compiler::compile_to_AST(
+  std::string input_filename,
+  std::string output_filename) {
+  std::ifstream input_stream(input_filename);
+  return compile_to_AST(&input_stream, output_filename);
 }
 
 std::optional<std::string> Compiler::compile_to_IR(
@@ -340,6 +388,9 @@ std::optional<std::string> Compiler::parse_option(
   else if(option == "genstdlib") {
     data.mode = Mode::Stdlib;
   }
+  else if(option == "ast") {
+    data.mode = Mode::AST;
+  }
   else {
     return "Unknown option: -\"" + option + "\"";
   }
@@ -383,6 +434,11 @@ std::optional<std::string> Compiler::run_command(CommandData& data) {
       if(!data.output_name) data.output_name = "obj.o";
       CompilerContext::reset_context();
       return compile_to_obj(data.sources[0], *data.output_name);
+
+    case Mode::AST:
+      if(!data.output_name) data.output_name = "AST.txt";
+      CompilerContext::reset_context();
+      return compile_to_AST(data.sources[0], *data.output_name);
 
     default:
       return "The compiler couldn't deduce the compilation mode";

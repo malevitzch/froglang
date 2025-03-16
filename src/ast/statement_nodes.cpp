@@ -130,7 +130,8 @@ namespace ast {
     return "Return Statement";
   }
   std::vector<std::shared_ptr<Node>> ReturnStatement::get_children() {
-    return {val};
+    if(val) return {val};
+    return {};
   }
   IfStatement::IfStatement(
     std::shared_ptr<ExprNode> condition,
