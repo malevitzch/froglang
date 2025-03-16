@@ -31,7 +31,7 @@ private:
   void print_AST(
     std::shared_ptr<ast::Node> node,
     int depth,
-    std::ostream* out);
+    std::ostream* output_stream);
   std::optional<std::string> parse_to_AST(std::istream* input_stream);
 
   std::optional<std::string> generate_IR(std::istream* input_stream);
