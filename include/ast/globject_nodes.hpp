@@ -27,29 +27,16 @@ namespace ast {
     std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
-  class FunctionArgs : public Node {
+  class FunctionArglist : public Node {
   private:
     std::vector<std::shared_ptr<DeclarationNode>> args;
   public:
-    FunctionArgs() = default;
-    virtual ~FunctionArgs() = default;
-    virtual std::string get_name() override;
-    virtual std::vector<std::shared_ptr<Node>> get_children() override;
-
-    void add_arg(std::shared_ptr<DeclarationNode> arg);
-    std::vector<std::shared_ptr<DeclarationNode>> get_args();
-  };
-
-  class FunctionArglist : public Node {
-  private:
-    std::shared_ptr<FunctionArgs> args;
-  public:
     FunctionArglist() = default;
-    FunctionArglist(std::shared_ptr<FunctionArgs> args);
     virtual ~FunctionArglist() = default;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
+    void add_arg(std::shared_ptr<DeclarationNode> arg);
     std::vector<std::shared_ptr<DeclarationNode>> get_args();
     std::vector<llvm::Type*> get_arg_types();
   };

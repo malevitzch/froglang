@@ -26,34 +26,24 @@ namespace ast {
     return {globjects.begin(), globjects.end()};
   }
 
-  std::string FunctionArgs::get_name() {
-    return "Function Args";
-  }
-  std::vector<std::shared_ptr<Node>> FunctionArgs::get_children() {
-    return {args.begin(), args.end()};
-  }
-  void FunctionArgs::add_arg(std::shared_ptr<DeclarationNode> arg) {
-    args.push_back(arg);
-  }
-  std::vector<std::shared_ptr<DeclarationNode>> FunctionArgs::get_args() {
-    return args;
-  }
-  std::vector<std::shared_ptr<DeclarationNode>> FunctionArglist::get_args() {
-    return args->get_args();
-  }
-
-  FunctionArglist::FunctionArglist(std::shared_ptr<FunctionArgs> args)
-  : args(args) {}
   std::string FunctionArglist::get_name() {
     return "Function Arglist";
   }
   std::vector<std::shared_ptr<Node>> FunctionArglist::get_children() {
-    return {args};
+    std::vector<std::shared_ptr<Node>> children;
+    std::ranges::copy(args, std::back_inserter(children));
+    return children;
+  }
+  void FunctionArglist::add_arg(std::shared_ptr<DeclarationNode> arg) {
+    args.push_back(arg);
+  }
+  std::vector<std::shared_ptr<DeclarationNode>> FunctionArglist::get_args() {
+    return args;
   }
   std::vector<llvm::Type*> FunctionArglist::get_arg_types() {
     std::vector<llvm::Type*> types;
     std::ranges::transform(
-      get_args(),
+      args,
       std::back_inserter(types),
       &DeclarationNode::get_var_type);
     return types;

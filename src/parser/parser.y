@@ -324,16 +324,16 @@ expression: NUMBER {
   ;
 
 args: /* empty */ {
-    $$ = std::make_shared<ast::FunctionArgs>();
+    $$ = std::make_shared<ast::FunctionArglist>();
   }
   | declaration {
-    auto args = std::make_shared<ast::FunctionArgs>();
+    auto args = std::make_shared<ast::FunctionArglist>();
     auto arg = dynamic_pointer_cast<ast::DeclarationNode>($1);
     args->add_arg(arg);
     $$ = args;
   }
   | args COMMA declaration {
-    auto args = dynamic_pointer_cast<ast::FunctionArgs>($1);
+    auto args = dynamic_pointer_cast<ast::FunctionArglist>($1);
     auto arg = dynamic_pointer_cast<ast::DeclarationNode>($3);
     args->add_arg(arg);
     $$ = args;
@@ -341,8 +341,7 @@ args: /* empty */ {
   ;
 
 arglist: LPAREN args RPAREN {
-    auto args = dynamic_pointer_cast<ast::FunctionArgs>($2);
-    $$ = std::make_shared<ast::FunctionArglist>(args);
+    $$ = $2;
   }
   ;
 %%
