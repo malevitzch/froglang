@@ -16,7 +16,7 @@ To run the container:
 ```sh
 docker container run -it froglang
 ```
-Inside the container the compiler can be ran using the 'frog' command.
+Inside the container the compiler can be ran using the 'frog' command.\
 Note: the docker commands might require sudo if the user is not in the docker group
 # todo
 - Remove FunctionCallArgs just like it was done with FunctionArgs
