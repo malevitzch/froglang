@@ -21,6 +21,7 @@ namespace Tokens {
     MINUS,
     STAR, 
     SLASH,
+    PERCENT,
     ASSIGNMENT,
 
     // Comparison operators

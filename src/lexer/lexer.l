@@ -91,6 +91,11 @@ std::unordered_set<std::string> types = {
     Tokens::TokType::SLASH, yytext);
   return yy::parser::token::SLASH;
 }
+"%" {
+  yylval->token = std::make_shared<Tokens::Token>(
+    Tokens::TokType::PERCENT, yytext);
+  return yy::parser::token::PERCENT;
+}
 "=" {
   yylval->token = std::make_shared<Tokens::Token>(
     Tokens::TokType::ASSIGNMENT, yytext);

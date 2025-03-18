@@ -74,6 +74,9 @@ namespace ast {
     if(operator_type == "/" ) {
       return CompilerContext::Builder->CreateSDiv(L, R, "sdiv");
     }
+    if(operator_type == "%") {
+      return CompilerContext::Builder->CreateSRem(L, R, "modulo");
+    }
     if(operator_type == "<") {
       return CompilerContext::Builder->CreateICmpSLT(L, R, "lesstmp");
     }

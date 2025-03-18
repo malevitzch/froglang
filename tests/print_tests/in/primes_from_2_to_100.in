@@ -1,6 +1,6 @@
 fn isPrime(i: i32, n: i32) -> i32 {
   if(i >= n) ret 1;
-  if( (n / i) * i == n) {
+  if(n % i == 0) {
     ret 0;
   }
   ret isPrime(i+1, n);

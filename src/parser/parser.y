@@ -36,6 +36,7 @@
 %token <token> MINUS
 %token <token> STAR
 %token <token> SLASH
+%token <token> PERCENT
 
 %token <token> LESS
 %token <token> GREATER
@@ -74,7 +75,7 @@
 %left LOGICAL_AND
 %left LESS GREATER LESSEQ GREATEREQ EQUALITY INEQUALITY
 %left PLUS MINUS
-%left STAR SLASH
+%left STAR SLASH PERCENT
 
 %right UMINUS
 %right NEGATION
@@ -279,7 +280,12 @@ expression: NUMBER {
   | expression SLASH expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
-    $$ = std::make_shared<ast::BinaryOperator>("/", lhs, rhs);  
+    $$ = std::make_shared<ast::BinaryOperator>("/", lhs, rhs);
+  }
+  | expression PERCENT expression {
+    auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
+    auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
+    $$ = std::make_shared<ast::BinaryOperator>("%", lhs, rhs);
   }
   | expression LESS expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
