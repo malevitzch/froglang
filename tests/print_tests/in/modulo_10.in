@@ -1,0 +1,9 @@
+fn loop(start: i32, end: i32, n: i32) {
+  if(start > end) return;
+  print_i32(start % n);
+  loop(start+1, end, n);
+}
+fn main() {
+  loop(0, 100, 10);
+  return 0;
+}

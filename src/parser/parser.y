@@ -132,7 +132,7 @@ function_declaration: FN IDENTIFIER arglist ARROW TYPE_ID {
     }
     $$ = std::make_shared<ast::FunctionDeclaration>(
       $2->metadata, 
-      dynamic_pointer_cast<ast::FunctionArglist>($3), 
+      dynamic_pointer_cast<ast::FunctionArglist>($3),
       *type_ref);
   }
   | FN IDENTIFIER arglist {
