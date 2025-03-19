@@ -167,8 +167,6 @@ std::optional<std::string> Compiler::compile_to_obj(
     return "Parsing failed due to: \"" + *parsing_error + "\""; 
   }
 
-  //TODO: bring back the tree_output dfs because it was a cool thing to have
-
   CompilerContext::TheModule->setDataLayout(TargetMachine->createDataLayout());
   CompilerContext::TheModule->setTargetTriple(TargetTriple);
   std::error_code EC;
@@ -240,8 +238,9 @@ std::optional<std::string> Compiler::compile_to_exec(
   std::string output_filename) {
   for(std::string filename : filenames) {
     CompilerContext::reset_context();
-    //FIXME: validate the stream
     std::ifstream input_stream(filename);
+    if(!input_stream) 
+      return "Couldn't open file: \"" + filename +"\"\n";
     //FIXME: remove extension and create a better filename 
     std::optional<std::string> compilation_error =
       compile_to_obj(&input_stream, filename + ".o");

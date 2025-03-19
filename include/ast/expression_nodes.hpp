@@ -10,7 +10,6 @@ namespace ast {
   protected:
     ExprNode() = default;
     virtual ~ExprNode() = default;
-    //TODO: this might not exist in the future
   public:
     virtual llvm::Value* eval() = 0;
     virtual std::string get_name() override;
