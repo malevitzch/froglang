@@ -149,33 +149,22 @@ namespace ast {
     return "Variable Identifier";
   }
 
-  void FunctionCallArgs::add_arg(std::shared_ptr<ExprNode> arg) {
-    args.push_back(arg);
-  }
-
-  std::string FunctionCallArgs::get_name() {
-    return "Function Call Args";
-  }
-  std::vector<std::shared_ptr<Node>> FunctionCallArgs::get_children() {
-    return {args.begin(), args.end()};
-  }
-  std::vector<std::shared_ptr<ExprNode>> FunctionCallArgs::get_args() {
-    return args;
-  }
-
   FunctionCallArglist::FunctionCallArglist(
-    std::shared_ptr<FunctionCallArgs> args) 
+    std::vector<std::shared_ptr<ExprNode>> args) 
   : args(args) {}
-
   std::string FunctionCallArglist::get_name() {
     return "Function Call Arglist";
   }
   std::vector<std::shared_ptr<Node>> FunctionCallArglist::get_children() {
-    if(args == nullptr) return {};
-    return {args};
+    std::vector<std::shared_ptr<Node>> children;
+    std::ranges::copy(args, std::back_inserter(children));
+    return children;
   }
   std::vector<std::shared_ptr<ExprNode>> FunctionCallArglist::get_args() {
-    return args->get_args();
+    return args;
+  }
+  void FunctionCallArglist::add_arg(std::shared_ptr<ExprNode> arg) {
+    args.push_back(arg);
   }
 
   FunctionCallExpr::FunctionCallExpr(

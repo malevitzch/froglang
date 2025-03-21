@@ -209,21 +209,20 @@ declaration: IDENTIFIER COLON TYPE_ID {
 
 
 call_arglist: LPAREN call_args RPAREN {
-    auto call_args = dynamic_pointer_cast<ast::FunctionCallArgs>($2);
-    $$ = std::make_shared<ast::FunctionCallArglist>(call_args); 
+    $$ = $2;
   }
 
 call_args: /* empty */ {
-    $$ = std::make_shared<ast::FunctionCallArgs>();
+    $$ = std::make_shared<ast::FunctionCallArglist>();
   }
   | expression {
-    auto call_args = std::make_shared<ast::FunctionCallArgs>();
+    auto call_args = std::make_shared<ast::FunctionCallArglist>();
     auto expr = dynamic_pointer_cast<ast::ExprNode>($1);
     call_args->add_arg(expr);
     $$ = call_args;
   }
   | call_args COMMA expression {
-    auto call_args = dynamic_pointer_cast<ast::FunctionCallArgs>($1);
+    auto call_args = dynamic_pointer_cast<ast::FunctionCallArglist>($1);
     auto expr = dynamic_pointer_cast<ast::ExprNode>($3);
     call_args->add_arg(expr);
     $$ = call_args;

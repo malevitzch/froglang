@@ -72,29 +72,18 @@ namespace ast {
     virtual std::string get_name() override;
   };
 
-  class FunctionCallArgs : public Node {
+  class FunctionCallArglist : public Node {
   private:
     std::vector<std::shared_ptr<ExprNode>> args;
   public:
-    FunctionCallArgs() = default;
-    ~FunctionCallArgs() = default;
-    void add_arg(std::shared_ptr<ExprNode> arg);
-    virtual std::string get_name() override;
-    virtual std::vector<std::shared_ptr<Node>> get_children() override;
-    std::vector<std::shared_ptr<ExprNode>> get_args();
-  };
-
-  class FunctionCallArglist : public Node {
-  private:
-    std::shared_ptr<FunctionCallArgs> args;
-  public:
     FunctionCallArglist() = default;
-    FunctionCallArglist(std::shared_ptr<FunctionCallArgs> args);
+    FunctionCallArglist(std::vector<std::shared_ptr<ExprNode>> args);
     virtual ~FunctionCallArglist() = default;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
     std::vector<std::shared_ptr<ExprNode>> get_args();
+    void add_arg(std::shared_ptr<ExprNode> arg);
   };
 
   class FunctionCallExpr : public ExprNode {
