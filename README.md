@@ -19,6 +19,8 @@ docker container run -it froglang
 Inside the container the compiler can be ran using the 'frog' command.\
 Note: the docker commands might require sudo if the user is not in the docker group
 # todo
+- Change the way operators are represented in code, they should just inherit from the Binary or Unary Operator superclass which should be abstract. Then the operators could be generated through a factory function that returns a shared pointer to the corresponding class (maybe a static function for Operator)
+
 - Add read_i32()
 
 - Fix the number of arguments not being correctly checked
@@ -50,8 +52,6 @@ Note: the docker commands might require sudo if the user is not in the docker gr
 - Add powershell alternatives to .sh scripts for testing
 
 - Clean up the parser file, especially the diagnostics
-
-- Change the way operators are represented in code, they should just inherit from the Binary or Unary Operator superclass which should be abstract. Then the operators could be generated through a factory function that returns a shared pointer to the corresponding class (maybe a static function for Operator)
 
 - Add a reasonable compilation error/warning log to the AST
 

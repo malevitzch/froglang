@@ -40,7 +40,8 @@ namespace ast {
   private:
     std::string operator_type;
     std::shared_ptr<ExprNode> left, right;
-  public: 
+  public:
+    static std::shared_ptr<BinaryOperator> create(std::string type, std::shared_ptr<ExprNode> left, std::shared_ptr<ExprNode> right);
     BinaryOperator(
       std::string operator_type,
       std::shared_ptr<ExprNode> left,
