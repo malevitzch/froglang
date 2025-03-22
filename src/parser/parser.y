@@ -234,10 +234,10 @@ expression: NUMBER {
     $$ = std::make_shared<ast::IntegerConstant>(32, $1->metadata);
   }
   | TRUE {
-    $$ = std::make_shared<ast::IntegerConstant>(1, "0");
+    $$ = std::make_shared<ast::IntegerConstant>(1, "1");
   }
   | FALSE {
-    $$ = std::make_shared<ast::IntegerConstant>(0, "1");
+    $$ = std::make_shared<ast::IntegerConstant>(1, "0");
   }
   | IDENTIFIER {
     $$ = std::make_shared<ast::VariableIdentifier>($1->metadata);
