@@ -21,6 +21,8 @@ Note: the docker commands might require sudo if the user is not in the docker gr
 # todo
 - Change the way operators are represented in code, they should just inherit from the Binary or Unary Operator superclass which should be abstract. Then the operators could be generated through a factory function that returns a shared pointer to the corresponding class (maybe a static function for Operator)
 
+- Add names to binary operator classes
+
 - Add read_i32()
 
 - Fix the number of arguments not being correctly checked

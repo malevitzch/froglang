@@ -105,6 +105,57 @@ namespace ast {
       "Unimplemented binary operator: \"" + operator_type + "\"");
   }
 
+  std::shared_ptr<BinaryOperator> BinaryOperator::create(
+    std::string operator_type,
+    std::shared_ptr<ExprNode> left,
+    std::shared_ptr<ExprNode> right) {
+    auto L = left->eval();
+    auto R = right->eval();
+    //FIXME: replace this with operator subclasses
+    //because this is so unbeliveably ugly and stupid
+    /*if(operator_type == "+") {
+      return CompilerContext::Builder->CreateAdd(L, R, "addtmp");
+    }
+    if(operator_type == "-") {
+      return CompilerContext::Builder->CreateSub(L, R, "subtmp");
+    }
+    if(operator_type == "*") {
+      return CompilerContext::Builder->CreateMul(L, R, "multmp");
+    }
+    if(operator_type == "/" ) {
+      return CompilerContext::Builder->CreateSDiv(L, R, "sdiv");
+    }
+    if(operator_type == "%") {
+      return CompilerContext::Builder->CreateSRem(L, R, "modulo");
+    }
+    if(operator_type == "<") {
+      return CompilerContext::Builder->CreateICmpSLT(L, R, "lesstmp");
+    }
+    if(operator_type == ">") {
+      return CompilerContext::Builder->CreateICmpSGT(L, R, "greatertmp");
+    }
+    if(operator_type == "<=") {
+      return CompilerContext::Builder->CreateICmpSLE(L, R, "lesseqtmp");
+    }
+    if(operator_type == ">=") {
+      return CompilerContext::Builder->CreateICmpSGE(L, R, "greatereqtmp");
+    }
+    if(operator_type == "==") {
+      return CompilerContext::Builder->CreateICmpEQ(L, R, "equaltmp");
+    }
+    if(operator_type == "!=") {
+      return CompilerContext::Builder->CreateICmpNE(L, R, "inequaltmp");
+    }
+    if(operator_type == "&&") {
+      return CompilerContext::Builder->CreateAnd(L, R, "and");
+    }
+    if(operator_type == "||") {
+      return CompilerContext::Builder->CreateOr(L, R, "or");
+    }*/
+    throw std::runtime_error(
+      "Unimplemented binary operator: \"" + operator_type + "\"");
+  }
+
   //TODO: the BinaryOperator uses deduce_type() to find out 
   // what exactly to do 
   // There will be no implicit conversions
