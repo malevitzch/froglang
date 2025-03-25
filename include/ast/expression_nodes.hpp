@@ -39,6 +39,7 @@ namespace ast {
   class BinaryOperator : public ExprNode {
   private:
     std::string operator_type;
+  protected:
     std::shared_ptr<ExprNode> left, right;
   public:
     static std::shared_ptr<BinaryOperator> create(

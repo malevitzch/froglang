@@ -96,10 +96,10 @@ namespace ast {
       return CompilerContext::Builder->CreateICmpNE(L, R, "inequaltmp");
     }
     if(operator_type == "&&") {
-      return CompilerContext::Builder->CreateAnd(L, R, "and");
+      return CompilerContext::Builder->CreateAnd(L, R, "andtmp");
     }
     if(operator_type == "||") {
-      return CompilerContext::Builder->CreateOr(L, R, "or");
+      return CompilerContext::Builder->CreateOr(L, R, "ortmp");
     }
     throw std::runtime_error(
       "Unimplemented binary operator: \"" + operator_type + "\"");

@@ -40,6 +40,7 @@ set(LIB_SOURCES
   ast/expression_nodes.cpp
   ast/statement_nodes.cpp
   ast/globject_nodes.cpp
+  ast/binary_operators.cpp
   ast/globals.cpp
 
   dsa/value_holder.cpp
