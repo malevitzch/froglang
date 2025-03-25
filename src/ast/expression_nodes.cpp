@@ -1,5 +1,6 @@
 #include "ast/expression_nodes.hpp"
 #include "ast/globals.hpp"
+#include "ast/binary_operators.hpp"
 
 #include <cstdlib>
 
@@ -57,101 +58,62 @@ namespace ast {
     return {operand};
   }
 
-  llvm::Value* BinaryOperator::eval() {
-    auto L = left->eval();
-    auto R = right->eval();
-    //FIXME: replace this with operator subclasses
-    //because this is so unbeliveably ugly and stupid
-    if(operator_type == "+") {
-      return CompilerContext::Builder->CreateAdd(L, R, "addtmp");
-    }
-    if(operator_type == "-") {
-      return CompilerContext::Builder->CreateSub(L, R, "subtmp");
-    }
-    if(operator_type == "*") {
-      return CompilerContext::Builder->CreateMul(L, R, "multmp");
-    }
-    if(operator_type == "/" ) {
-      return CompilerContext::Builder->CreateSDiv(L, R, "sdiv");
-    }
-    if(operator_type == "%") {
-      return CompilerContext::Builder->CreateSRem(L, R, "modulo");
-    }
-    if(operator_type == "<") {
-      return CompilerContext::Builder->CreateICmpSLT(L, R, "lesstmp");
-    }
-    if(operator_type == ">") {
-      return CompilerContext::Builder->CreateICmpSGT(L, R, "greatertmp");
-    }
-    if(operator_type == "<=") {
-      return CompilerContext::Builder->CreateICmpSLE(L, R, "lesseqtmp");
-    }
-    if(operator_type == ">=") {
-      return CompilerContext::Builder->CreateICmpSGE(L, R, "greatereqtmp");
-    }
-    if(operator_type == "==") {
-      return CompilerContext::Builder->CreateICmpEQ(L, R, "equaltmp");
-    }
-    if(operator_type == "!=") {
-      return CompilerContext::Builder->CreateICmpNE(L, R, "inequaltmp");
-    }
-    if(operator_type == "&&") {
-      return CompilerContext::Builder->CreateAnd(L, R, "andtmp");
-    }
-    if(operator_type == "||") {
-      return CompilerContext::Builder->CreateOr(L, R, "ortmp");
-    }
-    throw std::runtime_error(
-      "Unimplemented binary operator: \"" + operator_type + "\"");
-  }
-
   std::shared_ptr<BinaryOperator> BinaryOperator::create(
     std::string operator_type,
     std::shared_ptr<ExprNode> left,
     std::shared_ptr<ExprNode> right) {
-    auto L = left->eval();
-    auto R = right->eval();
-    //FIXME: replace this with operator subclasses
-    //because this is so unbeliveably ugly and stupid
-    /*if(operator_type == "+") {
-      return CompilerContext::Builder->CreateAdd(L, R, "addtmp");
+    if(operator_type == "+") {
+      return std::shared_ptr<BinaryOperator>(
+        new AdditionOperator(left, right));
     }
     if(operator_type == "-") {
-      return CompilerContext::Builder->CreateSub(L, R, "subtmp");
+      return std::shared_ptr<BinaryOperator>(
+        new SubtractionOperator(left, right));
     }
     if(operator_type == "*") {
-      return CompilerContext::Builder->CreateMul(L, R, "multmp");
+      return std::shared_ptr<BinaryOperator>(
+        new MultiplicationOperator(left, right));
     }
     if(operator_type == "/" ) {
-      return CompilerContext::Builder->CreateSDiv(L, R, "sdiv");
+      return std::shared_ptr<BinaryOperator>(
+        new DivisionOperator(left, right));
     }
     if(operator_type == "%") {
-      return CompilerContext::Builder->CreateSRem(L, R, "modulo");
+      return std::shared_ptr<BinaryOperator>(
+        new ModuloOperator(left, right));
     }
     if(operator_type == "<") {
-      return CompilerContext::Builder->CreateICmpSLT(L, R, "lesstmp");
+      return std::shared_ptr<BinaryOperator>(
+        new LesserComparisonOperator(left, right));
     }
     if(operator_type == ">") {
-      return CompilerContext::Builder->CreateICmpSGT(L, R, "greatertmp");
+      return std::shared_ptr<BinaryOperator>(
+        new GreaterComparisonOperator(left, right));
     }
     if(operator_type == "<=") {
-      return CompilerContext::Builder->CreateICmpSLE(L, R, "lesseqtmp");
+      return std::shared_ptr<BinaryOperator>(
+        new LesserEQComparisonOperator(left, right));
     }
     if(operator_type == ">=") {
-      return CompilerContext::Builder->CreateICmpSGE(L, R, "greatereqtmp");
+      return std::shared_ptr<BinaryOperator>(
+        new GreaterEQComparisonOperator(left, right));
     }
     if(operator_type == "==") {
-      return CompilerContext::Builder->CreateICmpEQ(L, R, "equaltmp");
+      return std::shared_ptr<BinaryOperator>(
+        new EqualityComparisonOperator(left, right));
     }
     if(operator_type == "!=") {
-      return CompilerContext::Builder->CreateICmpNE(L, R, "inequaltmp");
+      return std::shared_ptr<BinaryOperator>(
+        new InequalityComparisonOperator(left, right));
     }
     if(operator_type == "&&") {
-      return CompilerContext::Builder->CreateAnd(L, R, "and");
+      return std::shared_ptr<BinaryOperator>(
+        new LogicalAndOperator(left, right));
     }
     if(operator_type == "||") {
-      return CompilerContext::Builder->CreateOr(L, R, "or");
-    }*/
+      return std::shared_ptr<BinaryOperator>(
+        new LogicalOrOperator(left, right));
+    }
     throw std::runtime_error(
       "Unimplemented binary operator: \"" + operator_type + "\"");
   }

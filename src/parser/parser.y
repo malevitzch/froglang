@@ -264,67 +264,67 @@ expression: NUMBER {
   | expression PLUS expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
-    $$ = std::make_shared<ast::BinaryOperator>("+", lhs, rhs);
+    $$ = ast::BinaryOperator::create("+", lhs, rhs);
   }
   | expression MINUS expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
-    $$ = std::make_shared<ast::BinaryOperator>("-", lhs, rhs);
+    $$ = ast::BinaryOperator::create("-", lhs, rhs);
   }
   | expression STAR expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
-    $$ = std::make_shared<ast::BinaryOperator>("*", lhs, rhs);
+    $$ = ast::BinaryOperator::create("*", lhs, rhs);
   }
   | expression SLASH expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
-    $$ = std::make_shared<ast::BinaryOperator>("/", lhs, rhs);
+    $$ = ast::BinaryOperator::create("/", lhs, rhs);
   }
   | expression PERCENT expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
-    $$ = std::make_shared<ast::BinaryOperator>("%", lhs, rhs);
+    $$ = ast::BinaryOperator::create("%", lhs, rhs);
   }
   | expression LESS expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
-    $$ = std::make_shared<ast::BinaryOperator>("<", lhs, rhs);
+    $$ = ast::BinaryOperator::create("<", lhs, rhs);
   }
   | expression GREATER expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
-    $$ = std::make_shared<ast::BinaryOperator>(">", lhs, rhs);
+    $$ = ast::BinaryOperator::create(">", lhs, rhs);
   }
   | expression LESSEQ expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
-    $$ = std::make_shared<ast::BinaryOperator>("<=", lhs, rhs);  
+    $$ = ast::BinaryOperator::create("<=", lhs, rhs);
   }
   | expression GREATEREQ expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
-    $$ = std::make_shared<ast::BinaryOperator>(">=", lhs, rhs);
-  }
+    $$ = ast::BinaryOperator::create(">=", lhs, rhs);
+}
   | expression EQUALITY expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
-    $$ = std::make_shared<ast::BinaryOperator>("==", lhs, rhs);
+    $$ = ast::BinaryOperator::create("==", lhs, rhs);
   }
   | expression INEQUALITY expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
-    $$ = std::make_shared<ast::BinaryOperator>("!=", lhs, rhs);
+    $$ = ast::BinaryOperator::create("!=", lhs, rhs);
   }
   | expression LOGICAL_AND expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
-    $$ = std::make_shared<ast::BinaryOperator>("&&", lhs, rhs);
+    $$ = ast::BinaryOperator::create("&&", lhs, rhs);
   }
   | expression LOGICAL_OR expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
-    $$ = std::make_shared<ast::BinaryOperator>("||", lhs, rhs);
+    $$ = ast::BinaryOperator::create("||", lhs, rhs);
   }
   ;
 

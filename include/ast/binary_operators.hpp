@@ -5,10 +5,10 @@
 
 namespace ast {
 
-  class AdditionOperator : BinaryOperator {
+  class AdditionOperator : public BinaryOperator {
   private:
+  protected:
     AdditionOperator(
-      std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
   public:
@@ -17,10 +17,10 @@ namespace ast {
   friend class BinaryOperator;
   };
 
-  class SubtractionOperator : BinaryOperator {
+  class SubtractionOperator : public BinaryOperator {
   private:
+  protected:
     SubtractionOperator(
-      std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
   public:
@@ -29,10 +29,10 @@ namespace ast {
   friend class BinaryOperator;
   };
 
-  class MultiplicationOperator : BinaryOperator {
+  class MultiplicationOperator : public BinaryOperator {
   private:
+  protected:
     MultiplicationOperator(
-      std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
   public:
@@ -41,10 +41,10 @@ namespace ast {
   friend class BinaryOperator;
   };
 
-  class DivisionOperator : BinaryOperator {
+  class DivisionOperator : public BinaryOperator {
   private:
+  protected:
     DivisionOperator(
-      std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
   public:
@@ -53,10 +53,10 @@ namespace ast {
   friend class BinaryOperator;
   };
 
-  class ModuloOperator : BinaryOperator {
+  class ModuloOperator : public BinaryOperator {
   private:
+  protected:
     ModuloOperator(
-      std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
   public:
@@ -65,10 +65,10 @@ namespace ast {
   friend class BinaryOperator;
   };
 
-  class LesserComparisonOperator : BinaryOperator {
+  class LesserComparisonOperator : public BinaryOperator {
   private:
+  protected:
     LesserComparisonOperator(
-      std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
   public:
@@ -77,10 +77,10 @@ namespace ast {
   friend class BinaryOperator;
   };
 
-  class GreaterComparisonOperator : BinaryOperator {
+  class GreaterComparisonOperator : public BinaryOperator {
   private:
+  protected:
     GreaterComparisonOperator(
-      std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
   public:
@@ -89,10 +89,10 @@ namespace ast {
   friend class BinaryOperator;
   };
 
-  class LesserEQComparisonOperator : BinaryOperator {
+  class LesserEQComparisonOperator : public BinaryOperator {
   private:
+  protected:
     LesserEQComparisonOperator(
-      std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
   public:
@@ -101,10 +101,10 @@ namespace ast {
   friend class BinaryOperator;
   };
 
-  class GreaterEQComparisonOperator : BinaryOperator {
+  class GreaterEQComparisonOperator : public BinaryOperator {
   private:
+  protected:
     GreaterEQComparisonOperator(
-      std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
   public:
@@ -113,10 +113,10 @@ namespace ast {
   friend class BinaryOperator;
   };
 
-  class EqualityComparisonOperator : BinaryOperator {
+  class EqualityComparisonOperator : public BinaryOperator {
   private:
+  protected:
     EqualityComparisonOperator(
-      std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
   public:
@@ -125,10 +125,10 @@ namespace ast {
   friend class BinaryOperator;
   };
 
-  class InequalityComparisonOperator : BinaryOperator {
+  class InequalityComparisonOperator : public BinaryOperator {
   private:
+  protected:
     InequalityComparisonOperator(
-      std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
   public:
@@ -137,10 +137,10 @@ namespace ast {
   friend class BinaryOperator;
   };
 
-  class LogicalAndOperator : BinaryOperator {
+  class LogicalAndOperator : public BinaryOperator {
   private:
+  protected:
     LogicalAndOperator(
-      std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
   public:
@@ -149,10 +149,10 @@ namespace ast {
   friend class BinaryOperator;
   };
 
-  class LogicalOrOperator : BinaryOperator {
+  class LogicalOrOperator : public BinaryOperator {
   private:
+  protected:
     LogicalOrOperator(
-      std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
   public:

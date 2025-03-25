@@ -4,10 +4,9 @@
 namespace ast {
 
   AdditionOperator::AdditionOperator(
-    std::string operator_type,
     std::shared_ptr<ExprNode> left,
     std::shared_ptr<ExprNode> right)
-    : BinaryOperator(operator_type, left, right) {}
+    : BinaryOperator("+", left, right) {}
   llvm::Value* AdditionOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
@@ -15,10 +14,9 @@ namespace ast {
   }
 
   SubtractionOperator::SubtractionOperator(
-    std::string operator_type,
     std::shared_ptr<ExprNode> left,
     std::shared_ptr<ExprNode> right)
-    : BinaryOperator(operator_type, left, right) {}
+    : BinaryOperator("-", left, right) {}
   llvm::Value* SubtractionOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
@@ -26,10 +24,9 @@ namespace ast {
   }
 
   MultiplicationOperator::MultiplicationOperator(
-    std::string operator_type,
     std::shared_ptr<ExprNode> left,
     std::shared_ptr<ExprNode> right)
-    : BinaryOperator(operator_type, left, right) {}
+    : BinaryOperator("*", left, right) {}
   llvm::Value* MultiplicationOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
@@ -37,10 +34,9 @@ namespace ast {
   }
 
   DivisionOperator::DivisionOperator(
-    std::string operator_type,
     std::shared_ptr<ExprNode> left,
     std::shared_ptr<ExprNode> right)
-    : BinaryOperator(operator_type, left, right) {}
+    : BinaryOperator("/", left, right) {}
   llvm::Value* DivisionOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
@@ -48,10 +44,9 @@ namespace ast {
   }
 
   ModuloOperator::ModuloOperator(
-    std::string operator_type,
     std::shared_ptr<ExprNode> left,
     std::shared_ptr<ExprNode> right)
-    : BinaryOperator(operator_type, left, right) {}
+    : BinaryOperator("%", left, right) {}
   llvm::Value* ModuloOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
@@ -59,10 +54,9 @@ namespace ast {
   }
 
   LesserComparisonOperator::LesserComparisonOperator(
-    std::string operator_type,
     std::shared_ptr<ExprNode> left,
     std::shared_ptr<ExprNode> right)
-    : BinaryOperator(operator_type, left, right) {}
+    : BinaryOperator("<", left, right) {}
   llvm::Value* LesserComparisonOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
@@ -70,10 +64,9 @@ namespace ast {
   }
 
   GreaterComparisonOperator::GreaterComparisonOperator(
-    std::string operator_type,
     std::shared_ptr<ExprNode> left,
     std::shared_ptr<ExprNode> right)
-    : BinaryOperator(operator_type, left, right) {}
+    : BinaryOperator(">", left, right) {}
   llvm::Value* GreaterComparisonOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
@@ -81,10 +74,9 @@ namespace ast {
   }
 
   LesserEQComparisonOperator::LesserEQComparisonOperator (
-    std::string operator_type,
     std::shared_ptr<ExprNode> left,
     std::shared_ptr<ExprNode> right)
-    : BinaryOperator(operator_type, left, right) {}
+    : BinaryOperator("<=", left, right) {}
   llvm::Value* LesserEQComparisonOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
@@ -92,10 +84,9 @@ namespace ast {
   }
 
   GreaterEQComparisonOperator::GreaterEQComparisonOperator(
-    std::string operator_type,
     std::shared_ptr<ExprNode> left,
     std::shared_ptr<ExprNode> right)
-    : BinaryOperator(operator_type, left, right) {}
+    : BinaryOperator(">=", left, right) {}
   llvm::Value* GreaterEQComparisonOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
@@ -103,10 +94,9 @@ namespace ast {
   }
 
   EqualityComparisonOperator::EqualityComparisonOperator(
-    std::string operator_type,
     std::shared_ptr<ExprNode> left,
     std::shared_ptr<ExprNode> right)
-    : BinaryOperator(operator_type, left, right) {}
+    : BinaryOperator("==", left, right) {}
   llvm::Value* EqualityComparisonOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
@@ -114,10 +104,9 @@ namespace ast {
   }
 
   InequalityComparisonOperator::InequalityComparisonOperator(
-    std::string operator_type,
     std::shared_ptr<ExprNode> left,
     std::shared_ptr<ExprNode> right)
-    : BinaryOperator(operator_type, left, right) {}
+    : BinaryOperator("!=", left, right) {}
   llvm::Value* InequalityComparisonOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
@@ -125,10 +114,9 @@ namespace ast {
   }
 
   LogicalAndOperator::LogicalAndOperator(
-    std::string operator_type,
     std::shared_ptr<ExprNode> left,
     std::shared_ptr<ExprNode> right)
-    : BinaryOperator(operator_type, left, right) {}
+    : BinaryOperator("&&", left, right) {}
   llvm::Value* LogicalAndOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();
@@ -136,10 +124,9 @@ namespace ast {
   }
 
   LogicalOrOperator::LogicalOrOperator(
-    std::string operator_type,
     std::shared_ptr<ExprNode> left,
     std::shared_ptr<ExprNode> right)
-    : BinaryOperator(operator_type, left, right) {}
+    : BinaryOperator("||", left, right) {}
   llvm::Value* LogicalOrOperator::eval() {
     auto L = left->eval();
     auto R = right->eval();

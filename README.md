@@ -23,6 +23,8 @@ Note: the docker commands might require sudo if the user is not in the docker gr
 
 - Add names to binary operator classes
 
+- Change the system for unary operators the same way
+
 - Add read_i32()
 
 - Fix the number of arguments not being correctly checked

@@ -50,7 +50,6 @@ namespace ast {
       std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
-    virtual llvm::Value* eval() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
