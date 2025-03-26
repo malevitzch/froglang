@@ -439,6 +439,10 @@ std::optional<std::string> Compiler::run_command(CommandData& data) {
       CompilerContext::reset_context();
       return compile_to_AST(data.sources[0], *data.output_name);
 
+    case Mode::Help:
+      //FIXME: here goes the big help message
+      return std::nullopt;
+
     default:
       return "The compiler couldn't deduce the compilation mode";
   }

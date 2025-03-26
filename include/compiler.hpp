@@ -19,6 +19,7 @@ private:
     Stdlib,
     Obj,
     AST,
+    Help,
   };
   struct CommandData {
     std::vector<std::string> sources;
