@@ -13,7 +13,7 @@ namespace ast {
       std::shared_ptr<ExprNode> right);
   public:
     virtual llvm::Value* eval() override;
-
+    virtual std::string get_name() override;
   friend class BinaryOperator;
   };
 
@@ -25,7 +25,7 @@ namespace ast {
       std::shared_ptr<ExprNode> right);
   public:
     virtual llvm::Value* eval() override;
-
+    virtual std::string get_name() override;
   friend class BinaryOperator;
   };
 
@@ -37,6 +37,7 @@ namespace ast {
       std::shared_ptr<ExprNode> right);
   public:
     virtual llvm::Value* eval() override;
+    virtual std::string get_name() override;
 
   friend class BinaryOperator;
   };
@@ -49,6 +50,7 @@ namespace ast {
       std::shared_ptr<ExprNode> right);
   public:
     virtual llvm::Value* eval() override;
+    virtual std::string get_name() override;
 
   friend class BinaryOperator;
   };
@@ -61,6 +63,7 @@ namespace ast {
       std::shared_ptr<ExprNode> right);
   public:
     virtual llvm::Value* eval() override;
+    virtual std::string get_name() override;
 
   friend class BinaryOperator;
   };
@@ -73,6 +76,7 @@ namespace ast {
       std::shared_ptr<ExprNode> right);
   public:
     virtual llvm::Value* eval() override;
+    virtual std::string get_name() override;
 
   friend class BinaryOperator;
   };
@@ -85,6 +89,7 @@ namespace ast {
       std::shared_ptr<ExprNode> right);
   public:
     virtual llvm::Value* eval() override;
+    virtual std::string get_name() override;
 
   friend class BinaryOperator;
   };
@@ -97,6 +102,7 @@ namespace ast {
       std::shared_ptr<ExprNode> right);
   public:
     virtual llvm::Value* eval() override;
+    virtual std::string get_name() override;
 
   friend class BinaryOperator;
   };
@@ -109,6 +115,7 @@ namespace ast {
       std::shared_ptr<ExprNode> right);
   public:
     virtual llvm::Value* eval() override;
+    virtual std::string get_name() override;
 
   friend class BinaryOperator;
   };
@@ -121,6 +128,7 @@ namespace ast {
       std::shared_ptr<ExprNode> right);
   public:
     virtual llvm::Value* eval() override;
+    virtual std::string get_name() override;
 
   friend class BinaryOperator;
   };
@@ -133,6 +141,7 @@ namespace ast {
       std::shared_ptr<ExprNode> right);
   public:
     virtual llvm::Value* eval() override;
+    virtual std::string get_name() override;
 
   friend class BinaryOperator;
   };
@@ -145,6 +154,7 @@ namespace ast {
       std::shared_ptr<ExprNode> right);
   public:
     virtual llvm::Value* eval() override;
+    virtual std::string get_name() override;
 
   friend class BinaryOperator;
   };
@@ -157,6 +167,7 @@ namespace ast {
       std::shared_ptr<ExprNode> right);
   public:
     virtual llvm::Value* eval() override;
+    virtual std::string get_name() override;
 
   friend class BinaryOperator;
   };
