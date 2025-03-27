@@ -25,6 +25,8 @@ Note: the docker commands might require sudo if the user is not in the docker gr
 
 - Add "-help" so that I don't have to check source code when compiling
 
+- Make the CLI errors say to use -help rather than just fail completely with "unknown option"
+
 - Add read_i32()
 
 - Fix the number of arguments not being correctly checked
