@@ -29,6 +29,18 @@
 
 std::shared_ptr<ast::Node> ast_root;
 
+static const std::string compiler_help_message = 
+  "The usage is <compiler executable> "
+  "[source file 1] [source file 2] ...\n"
+  "The possible flags are: \n"
+  "\t-o [output name] - to set the name of the output file\n"
+  "\t-genstdlib - to make the compiler generate the language standard library\n"
+  "\t-ast - to make the compiler generate an AST of the given file "
+  "rather than compiling it to an object file\n"
+  "\t-c - to make the compiler generate the .o file only, without linking to executable\n"
+  "\t-ir - to make the compiler only generate LLVM IR, without compiling to object files\n"
+  ;
+
 void Compiler::prepare_llvm() {
   llvm::InitializeAllTargetInfos();
   llvm::InitializeAllTargets();
@@ -390,8 +402,11 @@ std::optional<std::string> Compiler::parse_option(
   else if(option == "ast") {
     data.mode = Mode::AST;
   }
+  else if(option == "help") {
+    data.mode = Mode::Help;
+  }
   else {
-    return "Unknown option: -\"" + option + "\"";
+    return "Unknown option: \"-" + option + "\"";
   }
   return std::nullopt;
 }
@@ -409,7 +424,7 @@ std::optional<std::string> Compiler::parse_source(
 
 std::optional<std::string> Compiler::run_command(CommandData& data) {
 
-  if(data.sources.empty() && data.mode != Mode::Stdlib) {
+  if(data.sources.empty() && data.mode != Mode::Stdlib && data.mode != Mode::Help) {
     return "No source file given";
   }
 
@@ -418,6 +433,10 @@ std::optional<std::string> Compiler::run_command(CommandData& data) {
     case Mode::Stdlib:
       CompilerContext::reset_context();
       return compile_stdlib();
+
+    case Mode::Help:
+      std::cout << compiler_help_message;
+      return std::nullopt;
 
     case Mode::Exec:
       if(!data.output_name) data.output_name = "exec";
@@ -438,10 +457,6 @@ std::optional<std::string> Compiler::run_command(CommandData& data) {
       if(!data.output_name) data.output_name = "AST.txt";
       CompilerContext::reset_context();
       return compile_to_AST(data.sources[0], *data.output_name);
-
-    case Mode::Help:
-      //FIXME: here goes the big help message
-      return std::nullopt;
 
     default:
       return "The compiler couldn't deduce the compilation mode";

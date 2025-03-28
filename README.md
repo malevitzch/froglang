@@ -23,6 +23,10 @@ Note: the docker commands might require sudo if the user is not in the docker gr
 
 - Change the system for unary operators the same way
 
+- Add a way to name the standard library output file
+
+- Add a linking option
+
 - Add "-help" so that I don't have to check source code when compiling
 
 - Make the CLI errors say to use -help rather than just fail completely with "unknown option"
