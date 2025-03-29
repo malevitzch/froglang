@@ -344,8 +344,6 @@ std::optional<std::string> Compiler::compile_stdlib() {
 
 std::optional<std::string> 
 Compiler::compile_from_args(std::vector<std::string> args) {
-  //TODO: setting a mode should only be done once 
-  // Warn the user in case of multiple options that override each other
 
   auto begin = args.begin();
   auto end = args.end();
@@ -391,18 +389,28 @@ std::optional<std::string> Compiler::parse_option(
     it++;
   }
   else if(option == "ir") {
+    if(data.mode != Mode::Exec) 
+      return "The compiler mode should only be set once";
     data.mode = Mode::IR;
   }
   else if(option == "c") {
+    if(data.mode != Mode::Exec) 
+      return "The compiler mode should only be set once";
     data.mode = Mode::Obj;
   }
   else if(option == "genstdlib") {
+    if(data.mode != Mode::Exec) 
+      return "The compiler mode should only be set once";
     data.mode = Mode::Stdlib;
   }
   else if(option == "ast") {
+    if(data.mode != Mode::Exec) 
+      return "The compiler mode should only be set once";
     data.mode = Mode::AST;
   }
   else if(option == "help") {
+    if(data.mode != Mode::Exec) 
+      return "The compiler mode should only be set once";
     data.mode = Mode::Help;
   }
   else {
