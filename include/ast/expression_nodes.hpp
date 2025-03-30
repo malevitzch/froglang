@@ -31,6 +31,9 @@ namespace ast {
   protected:
     std::shared_ptr<ExprNode> operand;
   public:
+    static std::shared_ptr<UnaryOperator> create(
+      std::string operator_type,
+      std::shared_ptr<ExprNode> operand);
     UnaryOperator(std::string operator_type, std::shared_ptr<ExprNode> operand);
     virtual llvm::Value* eval() override;
     virtual std::string get_name() override;
