@@ -28,6 +28,7 @@ namespace ast {
   class UnaryOperator : public ExprNode {
   private:
     std::string operator_type;
+  protected:
     std::shared_ptr<ExprNode> operand;
   public:
     UnaryOperator(std::string operator_type, std::shared_ptr<ExprNode> operand);
@@ -40,13 +41,13 @@ namespace ast {
   private:
     std::string operator_type;
   protected:
-    std::shared_ptr<ExprNode> left, right;
-  public:
-    static std::shared_ptr<BinaryOperator> create(
+    BinaryOperator(
       std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
-    BinaryOperator(
+    std::shared_ptr<ExprNode> left, right;
+  public:
+    static std::shared_ptr<BinaryOperator> create(
       std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
