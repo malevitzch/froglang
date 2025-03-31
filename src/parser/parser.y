@@ -247,12 +247,12 @@ expression: NUMBER {
       dynamic_pointer_cast<ast::ExprNode>($2));
   }
   | MINUS expression %prec UMINUS {
-    $$ = std::make_shared<ast::UnaryOperator>(
+    $$ = ast::UnaryOperator::create(
       "-",
       dynamic_pointer_cast<ast::ExprNode>($2));
   }
   | NEGATION expression {
-    $$ = std::make_shared<ast::UnaryOperator>(
+    $$ = ast::UnaryOperator::create(
       "~",
       dynamic_pointer_cast<ast::ExprNode>($2));
   }

@@ -19,11 +19,9 @@ docker container run -it froglang
 Inside the container the compiler can be ran using the 'frog' command.\
 Note: the docker commands might require sudo if the user is not in the docker group
 # todo
-- Change the way operators are represented in code, they should just inherit from the Binary or Unary Operator superclass which should be abstract. Then the operators could be generated through a factory function that returns a shared pointer to the corresponding class (maybe a static function for Operator)
-
-- Change the system for unary operators the same way
-
 - Add a way to name the standard library output file
+
+- Add a series of simple, standard tests for arithmetic operator
 
 - Add a linking option
 

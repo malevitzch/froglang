@@ -1,6 +1,7 @@
 #include "ast/expression_nodes.hpp"
 #include "ast/globals.hpp"
 #include "ast/binary_operators.hpp"
+#include "ast/unary_operators.hpp"
 
 #include <cstdlib>
 
@@ -39,14 +40,18 @@ namespace ast {
   UnaryOperator::UnaryOperator(
     std::string operator_type,
     std::shared_ptr<ExprNode> operand) 
-  : operator_type(operator_type), operand(operand) {}
-  llvm::Value* UnaryOperator::eval() {
-    //FIXME: replace with operator subclasses
+    : operator_type(operator_type), operand(operand) {}
+
+  std::shared_ptr<UnaryOperator> UnaryOperator::create(
+    std::string operator_type, 
+    std::shared_ptr<ExprNode> operand) {
     if(operator_type == "-") {
-      return CompilerContext::Builder->CreateNeg(operand->eval(), "uminus");
+      return std::shared_ptr<UnaryMinusOperator>(
+        new UnaryMinusOperator(operand));
     }
     if(operator_type == "~") {
-      return CompilerContext::Builder->CreateNot(operand->eval(), "not");
+      return std::shared_ptr<NegationOperator>(
+        new NegationOperator(operand));
     }
     throw std::runtime_error(
       "Unimplemented unary operator: \"" + operator_type + "\"");
