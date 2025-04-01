@@ -1,0 +1,4 @@
+fn main() {
+  print_i32(6 * 7);
+  print_i32(8 * 8 * 8);
+}

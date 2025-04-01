@@ -24,6 +24,16 @@ foreach(INPUT_FILE ${OUTPUT_TESTS})
   set_tests_properties(${TEST_NAME} PROPERTIES LABELS "Print")
 endforeach()
 
+file(GLOB OUTPUT_TESTS "${CMAKE_CURRENT_SOURCE_DIR}/operator_tests/in/*.in")
+foreach(INPUT_FILE ${OUTPUT_TESTS})
+  get_filename_component(TEST_NAME ${INPUT_FILE} NAME_WE)
+  set(EXPECTED_FILE "${CMAKE_CURRENT_SOURCE_DIR}/operator_tests/out/${TEST_NAME}.out")
+  add_test(NAME ${TEST_NAME}
+          COMMAND sh "${CMAKE_CURRENT_SOURCE_DIR}/run_output_test.sh"
+          "${CMAKE_BINARY_DIR}/src/compiler" "${INPUT_FILE}" "${EXPECTED_FILE}")
+  set_tests_properties(${TEST_NAME} PROPERTIES LABELS "Operators")
+endforeach()
+
 add_custom_target(clean_tests
   COMMAND ${CMAKE_COMMAND} -E rm -f ${CMAKE_BINARY_DIR}/src/*.o
   COMMENT "Cleaning up generated object files after tests."

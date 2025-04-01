@@ -1,0 +1,14 @@
+fn main() {
+  if(~true) {
+    print_i32(1);
+  }
+  if(~false) {
+    print_i32(2);
+  }
+  if(~~true) {
+    print_i32(3);
+  }
+  if(~~false) {
+    print_i32(4);
+  }
+}

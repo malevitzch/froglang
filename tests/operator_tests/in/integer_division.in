@@ -1,0 +1,6 @@
+fn main() {
+  print_i32(10 / 3);
+  print_i32(25 / 5);
+  print_i32((-10) / 3);
+  print_i32(10 / (-3));
+}

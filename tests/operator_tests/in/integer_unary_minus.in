@@ -1,0 +1,5 @@
+fn main() {
+  print_i32(-2);
+  print_i32(-(-6));
+  print_i32(-0);
+}
