@@ -1,5 +1,5 @@
 # froglang
-The project requires Flex, Bison, CMake, a C++ compiler, ZLIB, LLVM 14+, and a C compiler (prferably clang or gcc) to run.\
+The project requires Flex, Bison, CMake, a C++ compiler, ZLIB, LLVM 14, and a C compiler (prferably clang or gcc) to run.\
 To build the project run the following command:
 ```sh
 mkdir build && cd build && cmake ../ && make
@@ -19,6 +19,8 @@ docker container run -it froglang
 Inside the container the compiler can be ran using the 'frog' command.\
 Note: the docker commands might require sudo if the user is not in the docker group
 # todo
+- Resolve LLVM compatibility problems again
+
 - Add a way to name the standard library output file
 
 - Add a series of simple, standard tests for arithmetic operator
