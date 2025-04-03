@@ -19,11 +19,7 @@ docker container run -it froglang
 Inside the container the compiler can be ran using the 'frog' command.\
 Note: the docker commands might require sudo if the user is not in the docker group
 # todo
-- Resolve LLVM compatibility problems again
-
 - Add a way to name the standard library output file
-
-- Add a series of simple, standard tests for arithmetic operator
 
 - Add a linking option
 
