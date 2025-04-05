@@ -43,7 +43,7 @@ static const std::string compiler_help_message =
 
 static bool is_valid_filename(const std::string& filename) {
     if(filename.empty()) return false;
-    static const std::set<char> illegal_characters = {'\\', '\"', '?', ':', '*', '>', '<', '|'};
+    static const std::set<char> illegal_characters = {'\"', '?', ':', '*', '>', '<', '|'};
     static auto is_legal_char = [](char ch) {
       return !illegal_characters.contains(ch);
     };
