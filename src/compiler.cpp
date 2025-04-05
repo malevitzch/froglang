@@ -41,6 +41,15 @@ static const std::string compiler_help_message =
   "\t-ir - to make the compiler only generate LLVM IR, without compiling to object files\n"
   ;
 
+static bool is_valid_filename(const std::string& filename) {
+    if(filename.empty()) return false;
+    static const std::set<char> illegal_characters = {'\\', '\"', '?', ':', '*', '>', '<', '|'};
+    static auto is_legal_char = [](char ch) {
+      return !illegal_characters.contains(ch);
+    };
+    return std::ranges::all_of(filename, is_legal_char);
+}
+
 void Compiler::prepare_llvm() {
   llvm::InitializeAllTargetInfos();
   llvm::InitializeAllTargets();
@@ -248,7 +257,7 @@ std::optional<std::string> Compiler::compile_to_exec(
 std::optional<std::string> Compiler::compile_to_exec(
   std::vector<std::string> filenames,
   std::string output_filename) {
-  for(std::string filename : filenames) {
+  for(std::string& filename : filenames) {
     CompilerContext::reset_context();
     std::ifstream input_stream(filename);
     if(!input_stream) 
@@ -383,8 +392,10 @@ std::optional<std::string> Compiler::parse_option(
     if(it == end) {
       return "The \"-o\" option requires an argument";
     }
-    //TODO: validate the arg as valid output name
     auto arg = *it;
+    if(!is_valid_filename(arg)) {
+      return "Invalid output filename: \"" + arg + "\"";
+    }
     data.output_name = arg;
     it++;
   }
@@ -424,7 +435,9 @@ std::optional<std::string> Compiler::parse_source(
   std::vector<std::string>::iterator& end,
   CommandData& data) {
   auto arg = *it;
-  //TODO: validate arg as valid source name
+  if(!is_valid_filename(arg)) {
+    return "Invalid input filename: \"" + arg + "\""; 
+  }
   it++;
   data.sources.push_back(arg);
   return std::nullopt;
