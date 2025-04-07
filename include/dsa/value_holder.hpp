@@ -11,7 +11,7 @@ namespace DSA {
     std::unordered_map<std::string, std::vector<llvm::Value*>> values;
   public:
     ValueHolder() = default;
-    bool has_val(std::string name);
+    bool has_val(std::string name) const;
     llvm::Value* get_val(std::string name);
     void add_val(std::string name);
     void add_val(std::string name, llvm::Value* val);

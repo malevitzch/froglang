@@ -2,7 +2,7 @@
 #include <stdexcept>
 
 namespace DSA {
-  bool ValueHolder::has_val(std::string name) {
+  bool ValueHolder::has_val(std::string name) const {
     return values.contains(name);
   }
   llvm::Value* ValueHolder::get_val(std::string name) {
