@@ -15,9 +15,9 @@ namespace frtype {
       const std::shared_ptr<VariableType>,
       const std::function<llvm::Value*(llvm::Value*)>> casts;
   public:
-    std::string get_name() const;
-    bool is_automatically_castable() const;
-    bool is_mutable() const;
-  };
-
+    VariableType(std::string name, bool mutable_type, bool autocast_type);
+    virtual std::string get_name() const;
+    virtual bool is_automatically_castable() const;
+    virtual bool is_mutable() const;
+  }; 
 }
