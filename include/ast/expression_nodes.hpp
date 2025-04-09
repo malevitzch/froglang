@@ -5,12 +5,15 @@
 
 namespace ast {
 
+  // Abstract class
   class ExprNode : public Node {
   private:
   protected:
     ExprNode() = default;
     virtual ~ExprNode() = default;
   public:
+    // The main function for all expression nodes
+    // Evaluates the expression to an llvm::Value*
     virtual llvm::Value* eval() = 0;
     virtual std::string get_name() override;
   };
@@ -41,6 +44,7 @@ namespace ast {
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 };
 
+  // Abstract class, inherits the pure virtual method from ExprNode
   class BinaryOperator : public ExprNode {
   private:
     std::string operator_type;
@@ -63,8 +67,6 @@ namespace ast {
   private:
     unsigned precision;
     std::string data;
-    // TODO: This might be replaced by an arbitrarily-large bit array
-    // so that we can have arbitrary size integers later
   public:
     IntegerConstant(unsigned precision, std::string data);
     virtual llvm::Value* eval() override;
