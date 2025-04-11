@@ -63,7 +63,14 @@ namespace ast {
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
 
-  class IntegerConstant : public ExprNode {
+  //TODO: some of the constant functionality should probably be handled 
+  // by this class, probably stuff like getType()
+  class Constant : public ExprNode {
+  private:
+  public:
+  };
+
+  class IntegerConstant : public Constant {
   private:
     unsigned precision;
     std::string data;
