@@ -21,6 +21,10 @@ Note: the docker commands might require sudo if the user is not in the docker gr
 # todo
 - Add consts to all the functions that should be const
 
+- Finish the new variable system
+
+- Make functions return new variable representation instead of LLVM values
+
 - Change the way the graphical AST is generated
 
 - Add a way to name the standard library output file
