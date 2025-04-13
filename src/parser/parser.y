@@ -305,7 +305,7 @@ expression: NUMBER {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
     $$ = ast::BinaryOperator::create(">=", lhs, rhs);
-}
+  }
   | expression EQUALITY expression {
     auto lhs = dynamic_pointer_cast<ast::ExprNode>($1);
     auto rhs = dynamic_pointer_cast<ast::ExprNode>($3);
