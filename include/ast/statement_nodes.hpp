@@ -1,6 +1,8 @@
 #ifndef AST_STATEMENT_NODES_HPP
 #define AST_STATEMENT_NODES_HPP
 
+#include <optional>
+
 #include "node.hpp"
 #include "expression_nodes.hpp"
 
@@ -15,7 +17,7 @@ namespace ast {
     StatementNode() = default;
     virtual ~StatementNode() = default;
   public:
-    virtual void codegen() = 0;
+    virtual std::optional<std::string> codegen() = 0;
     virtual std::string get_name() override;
   };
 
@@ -37,7 +39,7 @@ namespace ast {
   public:
     Block(std::shared_ptr<Statements> statements);
     virtual ~Block() = default;
-    virtual void codegen() override;
+    virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
@@ -49,7 +51,7 @@ namespace ast {
     std::string var_name;
   public:
     DeclarationNode(llvm::Type* var_type, std::string var_name);
-    virtual void codegen();
+    virtual std::optional<std::string> codegen();
     std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
@@ -63,7 +65,7 @@ namespace ast {
     std::shared_ptr<ExprNode> expr;
   public:
     ExpressionStatement(std::shared_ptr<ExprNode> expr);
-    virtual void codegen() override;
+    virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override; 
   };
@@ -74,7 +76,7 @@ namespace ast {
     std::shared_ptr<DeclarationNode> decl;
   public:
     DeclarationStatement(std::shared_ptr<DeclarationNode> decl);
-    virtual void codegen() override;
+    virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
@@ -89,7 +91,7 @@ namespace ast {
     DeclarationAssignmentStatement(
       std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr);
     ~DeclarationAssignmentStatement() = default;
-    virtual void codegen() override;
+    virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
@@ -103,7 +105,7 @@ namespace ast {
     ReturnStatement(); // For void returns
     ReturnStatement(std::shared_ptr<ExprNode> val); // For everything else
     virtual ~ReturnStatement() = default;
-    virtual void codegen() override;
+    virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
@@ -122,7 +124,7 @@ namespace ast {
       std::shared_ptr<StatementNode> if_body,
       std::shared_ptr<StatementNode> else_body);
     virtual ~IfStatement() = default;
-    virtual void codegen() override;
+    virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
@@ -136,7 +138,7 @@ namespace ast {
       std::shared_ptr<ExprNode> condition,
       std::shared_ptr<StatementNode> body);
     virtual ~WhileLoop() = default;
-    virtual void codegen() override;
+    virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };

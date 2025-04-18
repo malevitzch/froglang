@@ -9,11 +9,11 @@ namespace ast {
     return "Globject Node";
   }
 
-  void ProgramNode::codegen() {
+  std::optional<std::string> ProgramNode::codegen() {
 
     libgen::register_print_i32_decl();
     std::ranges::for_each(globjects, &GlobjectNode::codegen);
-
+    return std::nullopt;
   }
   std::string ProgramNode::get_name() {
     return "Program Node";
@@ -54,9 +54,9 @@ namespace ast {
     std::shared_ptr<FunctionArglist> args,
     llvm::Type* return_type)
   : var_name(var_name), args(args), return_type(return_type) {}
-  void FunctionDeclaration::codegen() {
+  std::optional<std::string> FunctionDeclaration::codegen() {
     if(CompilerContext::Functions->contains(var_name)) {
-      return;
+      return std::nullopt;
     }
     std::vector<llvm::Type*> arg_types = args->get_arg_types();
 
@@ -71,6 +71,7 @@ namespace ast {
         CompilerContext::TheModule.get());
 
     (*CompilerContext::Functions)[var_name] = this_function;
+    return std::nullopt;
   }
   llvm::Function* FunctionDeclaration::get_func() {
     if(!CompilerContext::Functions->contains(var_name))
@@ -94,8 +95,9 @@ namespace ast {
   FunctionDeclarationGlobject::FunctionDeclarationGlobject(
     std::shared_ptr<FunctionDeclaration> decl)
   : decl(decl) {}
-  void FunctionDeclarationGlobject::codegen() {
+  std::optional<std::string> FunctionDeclarationGlobject::codegen() {
     decl->codegen();
+    return std::nullopt;
   }
   std::string FunctionDeclarationGlobject::get_name() {
     return "Function Declaration Globject";
@@ -123,7 +125,7 @@ namespace ast {
     std::shared_ptr<FunctionDeclaration> decl,
     std::shared_ptr<Block> body) 
   : decl(decl), body(body) {}
-  void FunctionGlobject::codegen() {
+  std::optional<std::string> FunctionGlobject::codegen() {
 
     std::vector<std::string> variables_to_clean_up;
 
@@ -149,7 +151,7 @@ namespace ast {
     for(std::string varname : variables_to_clean_up) {
       CompilerContext::NamedValues->remove_val(varname);
     }
-
+  return std::nullopt;
   }
   std::string FunctionGlobject::get_name() {
     return "Function Globject";

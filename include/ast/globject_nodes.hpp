@@ -1,6 +1,8 @@
 #ifndef AST_GLOBJECT_NODES_HPP
 #define AST_GLOBJECT_NODES_HPP
 
+#include <optional>
+
 #include "node.hpp"
 #include "statement_nodes.hpp"
 
@@ -11,7 +13,7 @@ namespace ast {
   protected:
     GlobjectNode() = default;
   public:
-    virtual void codegen() = 0;
+    virtual std::optional<std::string> codegen() = 0;
     std::string get_name() override;
   };
 
@@ -21,7 +23,7 @@ namespace ast {
   public:
     ProgramNode();
     virtual std::string get_name() override;
-    virtual void codegen();
+    virtual std::optional<std::string> codegen();
     void add_obj(std::shared_ptr<GlobjectNode> globject);
 
     std::vector<std::shared_ptr<Node>> get_children() override;
@@ -51,7 +53,7 @@ namespace ast {
       std::string var_name,
       std::shared_ptr<FunctionArglist> args,
       llvm::Type* return_type);
-    virtual void codegen() override;
+    virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
@@ -65,7 +67,7 @@ namespace ast {
     std::shared_ptr<FunctionDeclaration> decl;
   public:
     FunctionDeclarationGlobject(std::shared_ptr<FunctionDeclaration> decl);
-    virtual void codegen() override;
+    virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };
@@ -80,7 +82,7 @@ namespace ast {
     FunctionGlobject(
       std::shared_ptr<FunctionDeclaration> decl,
       std::shared_ptr<Block> body);
-    virtual void codegen() override;
+    virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
   };

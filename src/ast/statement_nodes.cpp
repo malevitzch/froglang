@@ -27,7 +27,7 @@ namespace ast {
 
   Block::Block(std::shared_ptr<Statements> statements) 
   : statements(statements) {}
-  void Block::codegen() {
+  std::optional<std::string> Block::codegen() {
     std::vector<std::string> block_named_values;
     for(std::shared_ptr<StatementNode> statement : statements->get()) {
       auto decl_statement = 
@@ -42,6 +42,7 @@ namespace ast {
     for(std::string value_name : block_named_values) {
       CompilerContext::NamedValues->remove_val(value_name);
     }
+    return std::nullopt;
   }
   std::string Block::get_name() {
     return "Block";
@@ -52,8 +53,9 @@ namespace ast {
 
   DeclarationNode::DeclarationNode(llvm::Type* var_type, std::string var_name) 
   : var_type(var_type), var_name(var_name) {final = true;}
-  void DeclarationNode::codegen() {
+  std::optional<std::string> DeclarationNode::codegen() {
     CompilerContext::NamedValues->add_val(var_name);
+    return std::nullopt;
   }
   std::string DeclarationNode::get_name() {
     return "Declaration Node";
@@ -70,8 +72,9 @@ namespace ast {
 
   ExpressionStatement::ExpressionStatement(std::shared_ptr<ExprNode> expr) 
   : expr(expr) {}
-  void ExpressionStatement::codegen() {
+  std::optional<std::string> ExpressionStatement::codegen() {
     expr->eval();
+    return std::nullopt;
   }
   std::string ExpressionStatement::get_name() {
     return "Expression Statement";
@@ -83,8 +86,9 @@ namespace ast {
   DeclarationStatement::DeclarationStatement(
     std::shared_ptr<DeclarationNode> decl)
   : decl(decl) {}
-  void DeclarationStatement::codegen() {
+  std::optional<std::string> DeclarationStatement::codegen() {
     CompilerContext::NamedValues->add_val(get_varname());
+    return std::nullopt;
   }
   std::string DeclarationStatement::get_name() {
     return "Declaration Statement";
@@ -99,8 +103,9 @@ namespace ast {
   DeclarationAssignmentStatement::DeclarationAssignmentStatement(
     std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr)
   : DeclarationStatement(decl), expr(expr) {}
-  void DeclarationAssignmentStatement::codegen() {
+  std::optional<std::string> DeclarationAssignmentStatement::codegen() {
     CompilerContext::NamedValues->add_val(decl->get_varname(), expr->eval());
+    return std::nullopt;
   }
   std::string DeclarationAssignmentStatement::get_name() {
     return "Declaration Assignment Statement";
@@ -117,7 +122,7 @@ namespace ast {
   : val(nullptr) {}
   ReturnStatement::ReturnStatement(std::shared_ptr<ExprNode> val)
   : val(val) {}
-  void ReturnStatement::codegen() {
+  std::optional<std::string> ReturnStatement::codegen() {
     // If there is no value, we create a void ret instruction
     if(!val) {
       CompilerContext::Builder->CreateRetVoid();
@@ -125,6 +130,7 @@ namespace ast {
     else {
       CompilerContext::Builder->CreateRet(val->eval());
     }
+    return std::nullopt;
   }
   std::string ReturnStatement::get_name() {
     return "Return Statement";
@@ -142,7 +148,7 @@ namespace ast {
     std::shared_ptr<StatementNode> if_body,
     std::shared_ptr<StatementNode> else_body) 
   : condition(condition), if_body(if_body), else_body(else_body) {}
-  void IfStatement::codegen() {
+  std::optional<std::string> IfStatement::codegen() {
     using CompilerContext::Builder;
     using CompilerContext::TheContext;
 
@@ -187,6 +193,7 @@ namespace ast {
       Builder->CreateBr(merge_block);
     }
     Builder->SetInsertPoint(merge_block);
+    return std::nullopt;
   }
   std::string IfStatement::get_name() {
     return "If Statement";
@@ -203,8 +210,9 @@ namespace ast {
     std::shared_ptr<ExprNode> condition,
     std::shared_ptr<StatementNode> body)
   : condition(condition), body(body) {}
-  void WhileLoop::codegen() {
+  std::optional<std::string> WhileLoop::codegen() {
     //TODO: implement
+    return std::nullopt;
   }
   std::string WhileLoop::get_name() {
     return "While Loop";
