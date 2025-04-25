@@ -29,7 +29,7 @@
 
 std::shared_ptr<ast::Node> ast_root;
 
-static const std::string compiler_help_message = 
+static const std::string compiler_help_message =
   "The usage is <compiler executable> "
   "[source file 1] [source file 2] ...\n"
   "The possible flags are: \n"
@@ -37,13 +37,16 @@ static const std::string compiler_help_message =
   "\t-genstdlib - to make the compiler generate the language standard library\n"
   "\t-ast - to make the compiler generate an AST of the given file "
   "rather than compiling it to an object file\n"
-  "\t-c - to make the compiler generate the .o file only, without linking to executable\n"
-  "\t-ir - to make the compiler only generate LLVM IR, without compiling to object files\n"
+  "\t-c - to make the compiler generate the .o file only, "
+  "without linking to executable\n"
+  "\t-ir - to make the compiler only generate LLVM IR, "
+  "without compiling to object files\n"
   ;
 
 static bool is_valid_filename(const std::string& filename) {
     if(filename.empty()) return false;
-    static const std::set<char> illegal_characters = {'\"', '?', ':', '*', '>', '<', '|'};
+    static const std::set<char> illegal_characters =
+      {'\"', '?', ':', '*', '>', '<', '|'};
     static auto is_legal_char = [](char ch) {
       return !illegal_characters.contains(ch);
     };
@@ -445,7 +448,9 @@ std::optional<std::string> Compiler::parse_source(
 
 std::optional<std::string> Compiler::run_command(CommandData& data) {
 
-  if(data.sources.empty() && data.mode != Mode::Stdlib && data.mode != Mode::Help) {
+  if(data.sources.empty()
+    && data.mode != Mode::Stdlib 
+    && data.mode != Mode::Help) {
     return "No source file given";
   }
 
