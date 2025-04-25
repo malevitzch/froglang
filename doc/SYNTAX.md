@@ -11,3 +11,15 @@ Immutable variables can be declared using the following syntax:
 ```
 <varname> : <type> = <expr>
 ```
+
+## Returning
+To return a value from a function we use the ret keyword
+```
+ret <expr>
+```
+
+## If-else statements
+The language currently supports if-else statements in the form of
+```
+if <block> else <block>
+```
