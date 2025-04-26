@@ -1,5 +1,14 @@
-FROM alpine 
-RUN apk update && apk add g++ cmake make llvm15-dev flex bison
+FROM alpine:3.17
+RUN apk update && apk add \
+  g++ \
+  cmake \
+  make \
+  llvm14-dev \
+  flex \
+  bison \
+  libffi-dev \
+  zlib-dev \
+  libxml2-dev
 WORKDIR /froglang-compiler
 COPY src/ ./src/
 COPY include/ ./include/
