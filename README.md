@@ -1,5 +1,5 @@
 # froglang
-The project requires Flex, Bison, CMake, a C++ compiler, ZLIB, LLVM 14, and a C compiler (prferably clang or gcc) to run.\
+The project requires Flex, Bison, CMake, a C++ compiler, ZLIB, LLVM 14, and a C compiler (prferably clang or gcc, the compatibility with others is not guaranteed) to run.\
 To build the project run the following command:
 ```sh
 mkdir build && cd build && cmake ../ && make
