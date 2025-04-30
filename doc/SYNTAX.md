@@ -35,4 +35,3 @@ In the future this will return a "polymorphic type" which automatically casts to
 
 ## Type casts
 Types are not implicitly castable, instead type casts need to be explicit. The syntax is not ready yet though
->>>>>>> 1977f70 (Updated the syntax doc)
