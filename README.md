@@ -19,6 +19,8 @@ docker container run -it froglang
 Inside the container the compiler can be ran using the 'frog' command.\
 Note: the docker commands might require sudo if the user is not in the docker group
 # todo
+- Change the codegen implementation to use the visitor pattern instead
+
 - Add consts to all the functions that should be const
 
 - Finish the new variable system
