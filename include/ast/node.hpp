@@ -4,6 +4,8 @@
 #include <llvm/IR/Value.h>
 
 namespace ast {
+  class TreeVisitor;
+
   // Abstract class
   class Node {
   private:
@@ -11,6 +13,11 @@ namespace ast {
     Node() = default;
     virtual ~Node() = default;
   public:
+    virtual void accept_visitor(TreeVisitor& visitor);
+    //TODO: does this even make sense? 
+    //Doesn't need to be a thing in general, it was a bandaid solution
+    //to printing, becomes completely obsolete with visitor
+    //also public attribute very bad
     bool final = false;
     // Returns the node name, this is purely cosmetic
     virtual std::string get_name();

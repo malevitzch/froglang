@@ -7,7 +7,6 @@ namespace ast {
   class TreePrinter {
   private:
   public:
-    void codegen(ProgramNode& program_node);
   };
 }
 
