@@ -6,7 +6,9 @@
 namespace ast {
   class TreePrinter {
   private:
+    std::ostream* output_stream;
   public:
+    TreePrinter(std::ostream* output_stream);
   };
 }
 

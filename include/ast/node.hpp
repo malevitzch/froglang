@@ -14,6 +14,7 @@ namespace ast {
     virtual ~Node() = default;
   public:
     virtual void accept_visitor(TreeVisitor& visitor);
+
     //TODO: does this even make sense? 
     //Doesn't need to be a thing in general, it was a bandaid solution
     //to printing, becomes completely obsolete with visitor

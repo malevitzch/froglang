@@ -1,7 +1,9 @@
 #include "ast/globject_nodes.hpp"
 #include "ast/globals.hpp"
 
+#include "ast/visitors/tree_visitor.hpp"
 #include "libgen/print.hpp"
+#include "ast/visitors/tree_visitor.hpp"
 
 namespace ast {
 
@@ -9,14 +11,17 @@ namespace ast {
     return "Globject Node";
   }
 
+  void ProgramNode::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_program_node(*this);
+  }
+  std::string ProgramNode::get_name() {
+    return "Program Node";
+  }
   std::optional<std::string> ProgramNode::codegen() {
 
     libgen::register_print_i32_decl();
     std::ranges::for_each(globjects, &GlobjectNode::codegen);
     return std::nullopt;
-  }
-  std::string ProgramNode::get_name() {
-    return "Program Node";
   }
   void ProgramNode::add_obj(std::shared_ptr<GlobjectNode> globject) {
     globjects.push_back(globject);

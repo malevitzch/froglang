@@ -22,6 +22,7 @@ namespace ast {
     std::vector<std::shared_ptr<GlobjectNode>> globjects;
   public:
     ProgramNode();
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::string get_name() override;
     virtual std::optional<std::string> codegen();
     void add_obj(std::shared_ptr<GlobjectNode> globject);
