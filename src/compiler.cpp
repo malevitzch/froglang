@@ -86,6 +86,7 @@ void Compiler::print_AST(
 
   ast::TreePrinter* printer = new ast::TreePrinter(output_stream);
   printer->visit_node(*node);
+  delete(printer);
   return;
 
   std::ostream& out = *output_stream;
