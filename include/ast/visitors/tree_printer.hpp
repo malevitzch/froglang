@@ -3,12 +3,17 @@
 
 #include "ast.hpp"
 
+#include "ast/visitors/tree_visitor.hpp"
+
 namespace ast {
-  class TreePrinter {
+
+
+  class TreePrinter : public TreeVisitor {
   private:
     std::ostream* output_stream;
   public:
     TreePrinter(std::ostream* output_stream);
+    virtual void visit_program_node(ProgramNode& program_node) override;
   };
 }
 

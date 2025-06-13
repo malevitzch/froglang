@@ -7,6 +7,7 @@ namespace ast {
   class TreeVisitor {
   private:
   public:
+    void visit_node(Node& node);
     virtual void visit_program_node(ProgramNode& node) = 0;
   };
 }

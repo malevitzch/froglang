@@ -44,6 +44,9 @@ set(LIB_SOURCES
   ast/unary_operators.cpp
   ast/globals.cpp
 
+  ast/visitors/tree_visitor.cpp
+  ast/visitors/tree_printer.cpp
+
   dsa/value_holder.cpp
   dsa/type_holder.cpp
 

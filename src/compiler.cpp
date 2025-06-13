@@ -27,6 +27,9 @@
 #include <iostream>
 #include <fstream>
 
+
+#include "ast/visitors/tree_printer.hpp"
+
 std::shared_ptr<ast::Node> ast_root;
 
 static const std::string compiler_help_message =
@@ -80,6 +83,11 @@ void Compiler::print_AST(
   std::shared_ptr<ast::Node> node,
   int depth,
   std::ostream* output_stream) {
+
+  ast::TreePrinter* printer = new ast::TreePrinter(output_stream);
+  printer->visit_node(*node);
+  return;
+
   std::ostream& out = *output_stream;
   for(int i = 0; i < depth; i++) out << "  ";
   out << node->get_name();
