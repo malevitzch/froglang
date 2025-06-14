@@ -3,7 +3,7 @@
 
 namespace ast {
   void Node::accept_visitor(TreeVisitor& visitor) {
-    //FIXME: this should do something like throw unimplemented method
+    visitor.default_visit(*this);
   }
   std::string Node::get_name() {
     return "Uninitialized Name";

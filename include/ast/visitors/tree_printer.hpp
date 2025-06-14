@@ -17,6 +17,7 @@ namespace ast {
     void line(std::string text);
   public:
     TreePrinter(std::ostream* output_stream);
+    virtual void default_visit(Node& node) override;
     virtual void visit_program_node(ProgramNode& program_node) override;
   };
 }
