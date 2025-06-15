@@ -54,6 +54,7 @@ namespace ast {
       std::string var_name,
       std::shared_ptr<FunctionArglist> args,
       llvm::Type* return_type);
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;

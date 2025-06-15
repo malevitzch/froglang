@@ -11,6 +11,7 @@ namespace ast {
     void visit_node(std::shared_ptr<Node> node);
     virtual void default_visit(Node& node) = 0;
     virtual void visit_program_node(ProgramNode& node) = 0;
+    virtual void visit_function_declaration_node(FunctionDeclaration& node) = 0;
   };
 }
 

@@ -26,4 +26,7 @@ namespace ast {
     }
     indent_depth--;
   }
+  void TreePrinter::visit_function_declaration_node(FunctionDeclaration& node) {
+    //FIXME: implement
+  }
 }

@@ -19,6 +19,7 @@ namespace ast {
     TreePrinter(std::ostream* output_stream);
     virtual void default_visit(Node& node) override;
     virtual void visit_program_node(ProgramNode& program_node) override;
+    virtual void visit_function_declaration_node(FunctionDeclaration& node) override;
   };
 }
 

@@ -59,6 +59,9 @@ namespace ast {
     std::shared_ptr<FunctionArglist> args,
     llvm::Type* return_type)
   : var_name(var_name), args(args), return_type(return_type) {}
+  void FunctionDeclaration::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_function_declaration_node(*this);
+  }
   std::optional<std::string> FunctionDeclaration::codegen() {
     if(CompilerContext::Functions->contains(var_name)) {
       return std::nullopt;
