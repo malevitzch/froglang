@@ -6,8 +6,9 @@ namespace ast {
     return std::string(indent_depth, '\t');
   }
   void TreePrinter::line(std::initializer_list<std::string> text) {
+    *output_stream << indent();
     for(std::string s : text) {
-      *output_stream << indent() << s;
+      *output_stream << s;
     }
     *output_stream << "\n";
   }
@@ -27,6 +28,16 @@ namespace ast {
     indent_depth--;
   }
   void TreePrinter::visit_function_declaration_node(FunctionDeclaration& node) {
-    //FIXME: implement
+    //FIXME: maybe no need for friend, maybe just expose the info
+    // in the nodes themselves (here it can be done easily)
+    line({"Declaration of function \"", node.function_name, "\""});
+    //FIXME: there is no type wrapper yet unfortunately so it's just raw LLVM types
+    line({"Return type: ", "UNIMPLEMENTED"});
+    line("Arguments:");
+    indent_depth++;
+    for(auto& arg : node.get_args()) {
+      arg->accept_visitor(*this);
+    }
+    indent_depth--;
   }
 }

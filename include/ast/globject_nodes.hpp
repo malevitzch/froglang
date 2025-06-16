@@ -8,6 +8,8 @@
 
 namespace ast {
 
+  class TreePrinter;
+
   class GlobjectNode : public Node {
   private:
   protected:
@@ -46,7 +48,7 @@ namespace ast {
 
   class FunctionDeclaration : public GlobjectNode {
   private:
-    std::string var_name;
+    std::string function_name;
     std::shared_ptr<FunctionArglist> args;
     llvm::Type* return_type;
   public:
@@ -62,6 +64,8 @@ namespace ast {
     std::vector<std::shared_ptr<DeclarationNode>> get_args();
     llvm::Function* get_func();
     std::string get_varname();
+
+    friend class TreePrinter;
   };
 
   class FunctionDeclarationGlobject : public GlobjectNode {
@@ -69,9 +73,12 @@ namespace ast {
     std::shared_ptr<FunctionDeclaration> decl;
   public:
     FunctionDeclarationGlobject(std::shared_ptr<FunctionDeclaration> decl);
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    friend class TreePrinter;
   };
 
   class FunctionGlobject : public GlobjectNode {

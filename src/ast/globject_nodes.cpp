@@ -55,15 +55,15 @@ namespace ast {
   }
 
   FunctionDeclaration::FunctionDeclaration(
-    std::string var_name,
+    std::string function_name,
     std::shared_ptr<FunctionArglist> args,
     llvm::Type* return_type)
-  : var_name(var_name), args(args), return_type(return_type) {}
+  : function_name(function_name), args(args), return_type(return_type) {}
   void FunctionDeclaration::accept_visitor(TreeVisitor& visitor) {
     visitor.visit_function_declaration_node(*this);
   }
   std::optional<std::string> FunctionDeclaration::codegen() {
-    if(CompilerContext::Functions->contains(var_name)) {
+    if(CompilerContext::Functions->contains(function_name)) {
       return std::nullopt;
     }
     std::vector<llvm::Type*> arg_types = args->get_arg_types();
@@ -75,16 +75,16 @@ namespace ast {
       llvm::Function::Create(
         func_type,
         llvm::Function::ExternalLinkage,
-        var_name,
+        function_name,
         CompilerContext::TheModule.get());
 
-    (*CompilerContext::Functions)[var_name] = this_function;
+    (*CompilerContext::Functions)[function_name] = this_function;
     return std::nullopt;
   }
   llvm::Function* FunctionDeclaration::get_func() {
-    if(!CompilerContext::Functions->contains(var_name))
+    if(!CompilerContext::Functions->contains(function_name))
       codegen();
-    return CompilerContext::Functions->at(var_name);
+    return CompilerContext::Functions->at(function_name);
   }
   std::string FunctionDeclaration::get_name() {
     return "Function Declaration";
@@ -97,7 +97,7 @@ namespace ast {
     return args->get_args();
   }
   std::string FunctionDeclaration::get_varname() {
-    return var_name;
+    return function_name;
   }
 
   FunctionDeclarationGlobject::FunctionDeclarationGlobject(
@@ -106,6 +106,11 @@ namespace ast {
   std::optional<std::string> FunctionDeclarationGlobject::codegen() {
     decl->codegen();
     return std::nullopt;
+  }
+  // The function declaration globject is simply a wrapper
+  // so it simply relays the visitor to the declaration below it 
+  void FunctionDeclarationGlobject::accept_visitor(TreeVisitor& visitor) {
+    decl->accept_visitor(visitor);
   }
   std::string FunctionDeclarationGlobject::get_name() {
     return "Function Declaration Globject";

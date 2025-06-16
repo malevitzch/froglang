@@ -20,4 +20,9 @@ include_directories(${CMAKE_BINARY_DIR})
 add_subdirectory(src)
 
 enable_testing()
+add_custom_target(check
+  COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+  DEPENDS compiler
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
 add_subdirectory(tests)
