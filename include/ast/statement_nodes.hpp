@@ -10,6 +10,8 @@
 
 namespace ast {
 
+  class TreeVisitor;
+
   // Abstract class
   class StatementNode : public Node {
   private:
@@ -51,6 +53,7 @@ namespace ast {
     std::string var_name;
   public:
     DeclarationNode(llvm::Type* var_type, std::string var_name);
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::optional<std::string> codegen();
     std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;

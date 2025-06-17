@@ -1,6 +1,8 @@
 #include "ast/statement_nodes.hpp"
 #include "ast/globals.hpp"
 
+#include "ast/visitors/tree_visitor.hpp"
+
 #include <llvm/IR/BasicBlock.h>
 
 namespace ast {
@@ -53,6 +55,9 @@ namespace ast {
 
   DeclarationNode::DeclarationNode(llvm::Type* var_type, std::string var_name) 
   : var_type(var_type), var_name(var_name) {final = true;}
+  void DeclarationNode::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_declaration_node(*this);
+  }
   std::optional<std::string> DeclarationNode::codegen() {
     CompilerContext::NamedValues->add_val(var_name);
     return std::nullopt;

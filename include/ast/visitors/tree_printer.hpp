@@ -12,7 +12,9 @@ namespace ast {
   private:
     std::ostream* output_stream;
     int indent_depth = 0;
-    std::string indent();
+    std::string indentation();
+    void indent();
+    void unindent();
     void line(std::initializer_list<std::string> text);
     void line(std::string text);
   public:
@@ -20,6 +22,7 @@ namespace ast {
     virtual void default_visit(Node& node) override;
     virtual void visit_program_node(ProgramNode& program_node) override;
     virtual void visit_function_declaration_node(FunctionDeclaration& node) override;
+    virtual void visit_declaration_node(DeclarationNode& node) override;
   };
 }
 
