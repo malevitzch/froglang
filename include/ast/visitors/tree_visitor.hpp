@@ -12,6 +12,7 @@ namespace ast {
     virtual void default_visit(Node& node) = 0;
     virtual void visit_program_node(ProgramNode& node) = 0;
     virtual void visit_function_declaration_node(FunctionDeclaration& node) = 0;
+    virtual void visit_function_node(FunctionGlobject& node) = 0;
     virtual void visit_declaration_node(DeclarationNode& node) = 0;
   };
 }

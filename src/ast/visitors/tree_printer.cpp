@@ -11,11 +11,17 @@ namespace ast {
   void TreePrinter::unindent() {
     indent_depth--;
   }
-  void TreePrinter::line(std::initializer_list<std::string> text) {
-    *output_stream << indentation();
+  void TreePrinter::write(std::initializer_list<std::string> text) {
     for(std::string s : text) {
       *output_stream << s;
     }
+  }
+  void TreePrinter::write(std::string text) {
+    write({text});
+  }
+  void TreePrinter::line(std::initializer_list<std::string> text) {
+    *output_stream << indentation();
+    write(text);
     *output_stream << "\n";
   }
   void TreePrinter::line(std::string text) {
@@ -46,6 +52,13 @@ namespace ast {
       arg->accept_visitor(*this);
     }
     unindent();
+    unindent();
+  }
+  void TreePrinter::visit_function_node(FunctionGlobject& node) {
+    line({"Function ",  "\"", node.decl->get_varname(), "\""});
+    indent();
+    visit_node(*(node.decl));
+    visit_node(*(node.body));
     unindent();
   }
   void TreePrinter::visit_declaration_node(DeclarationNode& node) {

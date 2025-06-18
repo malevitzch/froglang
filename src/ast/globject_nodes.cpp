@@ -138,6 +138,9 @@ namespace ast {
     std::shared_ptr<FunctionDeclaration> decl,
     std::shared_ptr<Block> body) 
   : decl(decl), body(body) {}
+  void FunctionGlobject::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_function_node(*this);
+  }
   std::optional<std::string> FunctionGlobject::codegen() {
 
     std::vector<std::string> variables_to_clean_up;

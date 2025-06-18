@@ -91,9 +91,12 @@ namespace ast {
     FunctionGlobject(
       std::shared_ptr<FunctionDeclaration> decl,
       std::shared_ptr<Block> body);
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    friend class TreePrinter;
   };
 }
 
