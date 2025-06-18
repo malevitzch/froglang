@@ -38,7 +38,7 @@ static const std::string compiler_help_message =
   "The possible flags are: \n"
   "\t-o [output name] - to set the name of the output file\n"
   "\t-genstdlib - to make the compiler generate the language standard library\n"
-  "\t-ast - to make the compiler generate an AST of the given file "
+  "\t-ast/-AST - to make the compiler generate an AST of the given file "
   "rather than compiling it to an object file\n"
   "\t-c - to make the compiler generate the .o file only, "
   "without linking to executable\n"
@@ -145,6 +145,9 @@ std::optional<std::string> Compiler::compile_to_AST(
   std::string input_filename,
   std::string output_filename) {
   std::ifstream input_stream(input_filename);
+  if(!input_stream.is_open()) {
+    return "Cannot open file \"" + input_filename + "\"";
+  }
   return compile_to_AST(&input_stream, output_filename);
 }
 
@@ -426,7 +429,7 @@ std::optional<std::string> Compiler::parse_option(
       return "The compiler mode should only be set once";
     data.mode = Mode::Stdlib;
   }
-  else if(option == "ast") {
+  else if(option == "ast" || option == "AST") {
     if(data.mode != Mode::Exec) 
       return "The compiler mode should only be set once";
     data.mode = Mode::AST;
