@@ -46,6 +46,8 @@ namespace ast {
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
+    std::shared_ptr<Statements> get_statements();
+
   };
 
   class DeclarationNode : public Node {
@@ -104,21 +106,27 @@ namespace ast {
 
   class ReturnStatement : public StatementNode {
   private:
-    std::shared_ptr<ExprNode> val;
+    std::shared_ptr<ExprNode> val = nullptr;
   public:
-    ReturnStatement(); // For void returns
-    ReturnStatement(std::shared_ptr<ExprNode> val); // For everything else
+    // Constructor for void returns
+    ReturnStatement(); 
+    // Constructor for everything else
+    ReturnStatement(std::shared_ptr<ExprNode> val); 
     virtual ~ReturnStatement() = default;
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    bool is_void();
+    std::shared_ptr<ExprNode> get_return_val();
   };
 
   class IfStatement : public StatementNode {
   private:
     std::shared_ptr<ExprNode> condition;
     std::shared_ptr<StatementNode> if_body;
-    std::shared_ptr<StatementNode> else_body;
+    std::shared_ptr<StatementNode> else_body = nullptr;
   public:
     IfStatement(
       std::shared_ptr<ExprNode> condition,
@@ -128,9 +136,12 @@ namespace ast {
       std::shared_ptr<StatementNode> if_body,
       std::shared_ptr<StatementNode> else_body);
     virtual ~IfStatement() = default;
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    friend class TreePrinter;
   };
 
   class WhileLoop : public StatementNode {

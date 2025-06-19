@@ -35,6 +35,8 @@ namespace ast {
 
     virtual void visit_declaration_node(DeclarationNode& node) override;
     virtual void visit_block_node(Block& node) override;
+    virtual void visit_if_statement(IfStatement& node) override;
+    virtual void visit_return_statement(ReturnStatement& node) override;
 
     virtual void visit_binary_operator_node(BinaryOperator& node) override;
   };

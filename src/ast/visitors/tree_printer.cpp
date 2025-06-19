@@ -92,16 +92,20 @@ namespace ast {
     line({node.get_varname(), ": ", "UNIMPLEMENTED"});
   }
   void TreePrinter::visit_binary_operator_node(BinaryOperator& node) {
-    line({node.get_operator_type()});
+    line({"Operator ", node.get_operator_type()});
     indent();
-    line("LHS: ");
+    line("LHS:");
+    indent();
     visit_node(node.left);
-    line("RHS: ");
+    unindent();
+    line("RHS:");
+    indent();
     visit_node(node.right);
+    unindent();
     unindent();
   }
   void TreePrinter::visit_block_node(Block& node) {
-    auto statements = node.get_children();
+    auto statements = node.get_statements()->get_children();
     if(statements.empty()) {
       line("Empty block");
       return;
@@ -111,6 +115,41 @@ namespace ast {
     for(auto statement : statements) {
       visit_node(*statement);
     }
+    unindent();
+  }
+  void TreePrinter::visit_if_statement(IfStatement& node) {
+    line("If Statement");
+    indent();
+
+    line("Condition:");
+    indent();
+    visit_node(*(node.condition));
+    unindent();
+
+    line("If-Body:");
+    indent();
+    visit_node(*(node.if_body));
+    unindent();
+
+    if(!node.else_body) {
+      unindent();
+      return;
+    }
+
+    line("Else-Body:");
+    indent();
+    visit_node(*(node.else_body));
+    unindent();
+
+    unindent();
+  }
+  void TreePrinter::visit_return_statement(ReturnStatement& node) {
+    line("Return");
+    if(node.is_void()) {
+      return;
+    }
+    indent();
+    visit_node(*(node.get_return_val()));
     unindent();
   }
 }

@@ -55,6 +55,10 @@ namespace ast {
   std::vector<std::shared_ptr<Node>> Block::get_children() {
     return {statements};
   }
+  std::shared_ptr<Statements> Block::get_statements() {
+    return statements;
+  }
+
 
   DeclarationNode::DeclarationNode(llvm::Type* var_type, std::string var_name) 
   : var_type(var_type), var_name(var_name) {final = true;}
@@ -130,6 +134,9 @@ namespace ast {
   : val(nullptr) {}
   ReturnStatement::ReturnStatement(std::shared_ptr<ExprNode> val)
   : val(val) {}
+  void ReturnStatement::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_return_statement(*this);
+  }
   std::optional<std::string> ReturnStatement::codegen() {
     // If there is no value, we create a void ret instruction
     if(!val) {
@@ -147,6 +154,17 @@ namespace ast {
     if(val) return {val};
     return {};
   }
+  bool ReturnStatement::is_void() {
+    return val == nullptr;
+  }
+  std::shared_ptr<ExprNode> ReturnStatement::get_return_val() {
+    if(is_void()) {
+      //FIXME: throws
+    }
+    return val;
+  }
+
+
   IfStatement::IfStatement(
     std::shared_ptr<ExprNode> condition,
     std::shared_ptr<StatementNode> if_body) 
@@ -156,6 +174,9 @@ namespace ast {
     std::shared_ptr<StatementNode> if_body,
     std::shared_ptr<StatementNode> else_body) 
   : condition(condition), if_body(if_body), else_body(else_body) {}
+  void IfStatement::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_if_statement(*this);
+  }
   std::optional<std::string> IfStatement::codegen() {
     using CompilerContext::Builder;
     using CompilerContext::TheContext;

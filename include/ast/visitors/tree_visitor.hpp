@@ -16,6 +16,8 @@ namespace ast {
 
     virtual void visit_declaration_node(DeclarationNode& node) = 0;
     virtual void visit_block_node(Block& node) = 0;
+    virtual void visit_if_statement(IfStatement& node) = 0;
+    virtual void visit_return_statement(ReturnStatement& node) = 0;
 
     virtual void visit_binary_operator_node(BinaryOperator& node) = 0;
   };
