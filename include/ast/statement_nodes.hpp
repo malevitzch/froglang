@@ -41,6 +41,7 @@ namespace ast {
   public:
     Block(std::shared_ptr<Statements> statements);
     virtual ~Block() = default;
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;

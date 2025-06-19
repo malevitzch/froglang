@@ -48,6 +48,8 @@ namespace ast {
   class BinaryOperator : public ExprNode {
   private:
     std::string operator_type;
+  // The constructor is protected because the objects are created using
+  // the create method which returns a binary operator of the proper class
   protected:
     BinaryOperator(
       std::string operator_type,
@@ -59,8 +61,12 @@ namespace ast {
       std::string operator_type,
       std::shared_ptr<ExprNode> left,
       std::shared_ptr<ExprNode> right);
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::string get_name() override;
+    std::string get_operator_type();
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    friend class TreePrinter;
   };
 
   //TODO: some of the constant functionality should probably be handled 

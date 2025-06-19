@@ -29,6 +29,9 @@ namespace ast {
 
   Block::Block(std::shared_ptr<Statements> statements) 
   : statements(statements) {}
+  void Block::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_block_node(*this);
+  }
   std::optional<std::string> Block::codegen() {
     std::vector<std::string> block_named_values;
     for(std::shared_ptr<StatementNode> statement : statements->get()) {

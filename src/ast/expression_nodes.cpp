@@ -3,6 +3,8 @@
 #include "ast/binary_operators.hpp"
 #include "ast/unary_operators.hpp"
 
+#include "ast/visitors/tree_visitor.hpp"
+
 #include <cstdlib>
 
 #include "llvm/IR/Constants.h"
@@ -133,8 +135,15 @@ namespace ast {
   : operator_type(operator_type), left(left), right(right) {}
   // TODO: This needs complex logic for result type deduction
   //once we want to use more than just integers.
+
+  void BinaryOperator::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_binary_operator_node(*this);
+  }
   std::string BinaryOperator::get_name() {
     return "Binary Operator";
+  }
+  std::string BinaryOperator::get_operator_type() {
+    return operator_type;
   }
   std::vector<std::shared_ptr<Node>> BinaryOperator::get_children() {
     return {left, right};

@@ -13,7 +13,11 @@ namespace ast {
     virtual void visit_program_node(ProgramNode& node) = 0;
     virtual void visit_function_declaration_node(FunctionDeclaration& node) = 0;
     virtual void visit_function_node(FunctionGlobject& node) = 0;
+
     virtual void visit_declaration_node(DeclarationNode& node) = 0;
+    virtual void visit_block_node(Block& node) = 0;
+
+    virtual void visit_binary_operator_node(BinaryOperator& node) = 0;
   };
 }
 
