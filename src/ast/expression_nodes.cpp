@@ -19,6 +19,10 @@ namespace ast {
   IversonExpr::IversonExpr(std::shared_ptr<ExprNode> expr) 
   : expr(expr) {}
 
+  void IversonExpr::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_iverson_node(*this);
+  }
+
   llvm::Value* IversonExpr::eval() {
     llvm::Value* expr_value = expr->eval();
     llvm::Value* zero = llvm::Constant::getNullValue(expr_value->getType());
@@ -37,6 +41,10 @@ namespace ast {
 
   std::vector<std::shared_ptr<Node>> IversonExpr::get_children() {
     return {expr};
+  }
+
+  std::shared_ptr<ExprNode> IversonExpr::get_expr() {
+    return expr;
   }
 
   UnaryOperator::UnaryOperator(
@@ -58,11 +66,22 @@ namespace ast {
     throw std::runtime_error(
       "Unimplemented unary operator: \"" + operator_type + "\"");
   }
+  void UnaryOperator::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_unary_operator_node(*this);
+  }
   std::string UnaryOperator::get_name() {
     return "Unary Operator";
   }
   std::vector<std::shared_ptr<Node>> UnaryOperator::get_children() {
     return {operand};
+  }
+
+  std::shared_ptr<ExprNode> UnaryOperator::get_operand() {
+    return operand;
+  }
+
+  std::string UnaryOperator::get_operator_type() {
+    return operator_type;
   }
 
   std::shared_ptr<BinaryOperator> BinaryOperator::create(

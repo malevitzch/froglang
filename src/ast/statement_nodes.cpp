@@ -104,6 +104,9 @@ namespace ast {
   DeclarationStatement::DeclarationStatement(
     std::shared_ptr<DeclarationNode> decl)
   : decl(decl) {}
+  void DeclarationStatement::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_node(*this);
+  }
   std::optional<std::string> DeclarationStatement::codegen() {
     CompilerContext::NamedValues->add_val(get_varname());
     return std::nullopt;
@@ -121,6 +124,9 @@ namespace ast {
   DeclarationAssignmentStatement::DeclarationAssignmentStatement(
     std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr)
   : DeclarationStatement(decl), expr(expr) {}
+  void DeclarationAssignmentStatement::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_declaration_assignment_statement(*this);
+  }
   std::optional<std::string> DeclarationAssignmentStatement::codegen() {
     CompilerContext::NamedValues->add_val(decl->get_varname(), expr->eval());
     return std::nullopt;

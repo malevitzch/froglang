@@ -86,6 +86,7 @@ namespace ast {
     std::shared_ptr<DeclarationNode> decl;
   public:
     DeclarationStatement(std::shared_ptr<DeclarationNode> decl);
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
@@ -101,6 +102,7 @@ namespace ast {
     DeclarationAssignmentStatement(
       std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr);
     ~DeclarationAssignmentStatement() = default;
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;

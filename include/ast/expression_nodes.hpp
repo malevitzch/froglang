@@ -23,9 +23,12 @@ namespace ast {
     std::shared_ptr<ExprNode> expr;
   public:
     IversonExpr(std::shared_ptr<ExprNode> operand);
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual llvm::Value* eval() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    std::shared_ptr<ExprNode> get_expr();
   };
 
   class UnaryOperator : public ExprNode {
@@ -40,9 +43,13 @@ namespace ast {
     UnaryOperator(
       std::string operator_type,
       std::shared_ptr<ExprNode> operand);
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
-};
+
+    std::shared_ptr<ExprNode> get_operand();
+    std::string get_operator_type();
+  };
 
   // Abstract class, inherits the pure virtual method from ExprNode
   class BinaryOperator : public ExprNode {
@@ -63,8 +70,9 @@ namespace ast {
       std::shared_ptr<ExprNode> right);
     virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::string get_name() override;
-    std::string get_operator_type();
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    std::string get_operator_type();
 
     friend class TreePrinter;
   };
@@ -132,7 +140,6 @@ namespace ast {
 
     std::string get_function_name();
   };
-
 }
 
 #endif

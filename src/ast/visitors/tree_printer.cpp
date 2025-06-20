@@ -1,4 +1,5 @@
 #include "ast/visitors/tree_printer.hpp"
+#include "ast/expression_nodes.hpp"
 
 namespace ast {
 
@@ -88,8 +89,20 @@ namespace ast {
     visit_node(*(node.body));
     unindent();
   }
+
   void TreePrinter::visit_declaration_node(DeclarationNode& node) {
     line({node.get_varname(), ": ", "UNIMPLEMENTED"});
+  }
+
+  void TreePrinter::visit_declaration_statement(DeclarationStatement& node) {
+    line({"Declaration of variable: ", node.get_varname()});
+  }
+  void TreePrinter::visit_declaration_assignment_statement(
+    DeclarationAssignmentStatement& node) {
+    line({"Declaration of variable: ", node.get_varname()});
+    indent();
+    line("Initial value:");
+    unindent();
   }
   void TreePrinter::visit_block_node(Block& node) {
     auto statements = node.get_statements()->get_children();
@@ -146,6 +159,18 @@ namespace ast {
     unindent();
   }
 
+  void TreePrinter::visit_iverson_node(IversonExpr& node) {
+    line({"Iverson evaluation:"});
+    indent();
+    visit_node(*(node.get_expr()));
+    unindent();
+  }
+  void TreePrinter::visit_unary_operator_node(UnaryOperator& node) {
+    line({"Operator ", node.get_operator_type()});
+    indent();
+    visit_node(*(node.get_operand()));
+    unindent();
+  }
   void TreePrinter::visit_binary_operator_node(BinaryOperator& node) {
     line({"Operator ", node.get_operator_type()});
     indent();

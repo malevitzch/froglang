@@ -35,11 +35,17 @@ namespace ast {
     virtual void visit_function_node(FunctionGlobject& node) override;
 
     virtual void visit_declaration_node(DeclarationNode& node) override;
+
+    virtual void visit_declaration_statement(DeclarationStatement& node) override;
+    virtual void visit_declaration_assignment_statement(
+      DeclarationAssignmentStatement& statement) override;
     virtual void visit_block_node(Block& node) override;
     virtual void visit_if_statement(IfStatement& node) override;
     virtual void visit_return_statement(ReturnStatement& node) override;
     virtual void visit_expression_statement(ExpressionStatement& node) override;
 
+    virtual void visit_iverson_node(IversonExpr& node) override;
+    virtual void visit_unary_operator_node(UnaryOperator& node) override;
     virtual void visit_binary_operator_node(BinaryOperator& node) override;
     virtual void visit_integer_constant(IntegerConstant& node) override;
     virtual void visit_variable_identifier(VariableIdentifier& node) override;
