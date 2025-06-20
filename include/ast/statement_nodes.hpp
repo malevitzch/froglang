@@ -31,8 +31,9 @@ namespace ast {
     virtual ~Statements() = default;
     const std::vector<std::shared_ptr<StatementNode>>& get();
     virtual std::string get_name() override;
-    void add_statement(std::shared_ptr<StatementNode> statement);
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    void add_statement(std::shared_ptr<StatementNode> statement);
   };
 
   class Block : public StatementNode {
@@ -71,9 +72,12 @@ namespace ast {
     std::shared_ptr<ExprNode> expr;
   public:
     ExpressionStatement(std::shared_ptr<ExprNode> expr);
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::optional<std::string> codegen() override;
     virtual std::string get_name() override;
-    virtual std::vector<std::shared_ptr<Node>> get_children() override; 
+    virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    std::shared_ptr<ExprNode> get_expr();
   };
 
   class DeclarationStatement : public StatementNode {

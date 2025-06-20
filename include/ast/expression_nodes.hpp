@@ -82,9 +82,12 @@ namespace ast {
     std::string data;
   public:
     IntegerConstant(unsigned precision, std::string data);
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual llvm::Value* eval() override;
     virtual ~IntegerConstant() = default;
     virtual std::string get_name() override;
+
+    std::string get_data();
   };
 
   class VariableIdentifier : public ExprNode {
@@ -92,8 +95,11 @@ namespace ast {
     std::string var_name;
   public:
     VariableIdentifier(std::string var_name);
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual llvm::Value* eval() override;
     virtual std::string get_name() override;
+
+    std::string get_variable_name();
   };
 
   class FunctionCallArglist : public Node {
@@ -119,9 +125,12 @@ namespace ast {
       std::string function_name,
       std::shared_ptr<FunctionCallArglist> args);
     virtual ~FunctionCallExpr() = default;
+    virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual llvm::Value* eval() override;
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
+
+    std::string get_function_name();
   };
 
 }

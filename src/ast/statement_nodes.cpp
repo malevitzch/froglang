@@ -84,6 +84,9 @@ namespace ast {
 
   ExpressionStatement::ExpressionStatement(std::shared_ptr<ExprNode> expr) 
   : expr(expr) {}
+  void ExpressionStatement::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_expression_statement(*this);
+  }
   std::optional<std::string> ExpressionStatement::codegen() {
     expr->eval();
     return std::nullopt;
@@ -93,6 +96,9 @@ namespace ast {
   }
   std::vector<std::shared_ptr<Node>> ExpressionStatement::get_children() {
     return {expr};
+  }
+  std::shared_ptr<ExprNode> ExpressionStatement::get_expr() {
+    return expr;
   }
 
   DeclarationStatement::DeclarationStatement(

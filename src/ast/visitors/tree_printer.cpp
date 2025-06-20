@@ -91,19 +91,6 @@ namespace ast {
   void TreePrinter::visit_declaration_node(DeclarationNode& node) {
     line({node.get_varname(), ": ", "UNIMPLEMENTED"});
   }
-  void TreePrinter::visit_binary_operator_node(BinaryOperator& node) {
-    line({"Operator ", node.get_operator_type()});
-    indent();
-    line("LHS:");
-    indent();
-    visit_node(node.left);
-    unindent();
-    line("RHS:");
-    indent();
-    visit_node(node.right);
-    unindent();
-    unindent();
-  }
   void TreePrinter::visit_block_node(Block& node) {
     auto statements = node.get_statements()->get_children();
     if(statements.empty()) {
@@ -150,6 +137,43 @@ namespace ast {
     }
     indent();
     visit_node(*(node.get_return_val()));
+    unindent();
+  }
+  void TreePrinter::visit_expression_statement(ExpressionStatement& node) {
+    line("Expression statement:");
+    indent();
+    visit_node(*node.get_expr());
+    unindent();
+  }
+
+  void TreePrinter::visit_binary_operator_node(BinaryOperator& node) {
+    line({"Operator ", node.get_operator_type()});
+    indent();
+    line("LHS:");
+    indent();
+    visit_node(node.left);
+    unindent();
+    line("RHS:");
+    indent();
+    visit_node(node.right);
+    unindent();
+    unindent();
+  }
+  void TreePrinter::visit_integer_constant(IntegerConstant& node) {
+    line({"Integer constant: ", node.get_data()});
+  }
+  void TreePrinter::visit_variable_identifier(VariableIdentifier& node) {
+    line({"Variable: ", node.get_variable_name()});
+  }
+  void TreePrinter::visit_function_call(FunctionCallExpr& node) {
+    line({"Call of function \"", node.get_function_name(), "\""});
+    indent();
+    line({"Arguments:"});
+    indent();
+    for(auto& arg : node.get_children()) {
+      visit_node(arg);
+    }
+    unindent();
     unindent();
   }
 }

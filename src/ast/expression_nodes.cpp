@@ -152,6 +152,10 @@ namespace ast {
   IntegerConstant::IntegerConstant(unsigned precision, std::string data) 
   : precision(precision), data(data) { final = true; }
 
+  void IntegerConstant::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_integer_constant(*this);
+  }
+
   llvm::Value* IntegerConstant::eval() {
     //TODO: Precision can't be zero
     return llvm::ConstantInt::get(
@@ -163,8 +167,17 @@ namespace ast {
     return "Integer Constant";
   }
 
+  std::string IntegerConstant::get_data() {
+    return data;
+  }
+
   VariableIdentifier::VariableIdentifier(std::string var_name) 
   : var_name(var_name) { final = true; }
+
+  void VariableIdentifier::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_variable_identifier(*this);
+  }
+
   llvm::Value* VariableIdentifier::eval() {
     if(!CompilerContext::NamedValues->has_val(var_name)) {
       //TODO: Some kind of exception?
@@ -174,6 +187,10 @@ namespace ast {
 
   std::string VariableIdentifier::get_name() {
     return "Variable Identifier";
+  }
+
+  std::string VariableIdentifier::get_variable_name() {
+    return var_name;
   }
 
   FunctionCallArglist::FunctionCallArglist(
@@ -198,6 +215,9 @@ namespace ast {
     std::string function_name,
     std::shared_ptr<FunctionCallArglist> args)
   : function_name(function_name), args(args) {}
+  void FunctionCallExpr::accept_visitor(TreeVisitor& visitor) {
+    visitor.visit_function_call(*this);
+  }
   llvm::Value* FunctionCallExpr::eval() {
     if(!CompilerContext::Functions->contains(function_name))
       throw std::runtime_error(
@@ -214,7 +234,12 @@ namespace ast {
   std::string FunctionCallExpr::get_name() {
     return "Function Call Expression";
   }
+
   std::vector<std::shared_ptr<Node>> FunctionCallExpr::get_children() {
-    return {args};
+    return args->get_children();
+  }
+
+  std::string FunctionCallExpr::get_function_name() {
+    return function_name;
   }
 }

@@ -2,6 +2,7 @@
 #define AST_VISITORS_TREE_VISITOR_HPP
 
 #include "ast.hpp"
+#include "ast/expression_nodes.hpp"
 
 namespace ast {
   class TreeVisitor {
@@ -18,8 +19,12 @@ namespace ast {
     virtual void visit_block_node(Block& node) = 0;
     virtual void visit_if_statement(IfStatement& node) = 0;
     virtual void visit_return_statement(ReturnStatement& node) = 0;
+    virtual void visit_expression_statement(ExpressionStatement& node) = 0;
 
     virtual void visit_binary_operator_node(BinaryOperator& node) = 0;
+    virtual void visit_integer_constant(IntegerConstant& node) = 0;
+    virtual void visit_variable_identifier(VariableIdentifier& node) = 0;
+    virtual void visit_function_call(FunctionCallExpr& node) = 0;
   };
 }
 

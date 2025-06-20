@@ -4,6 +4,7 @@
 
 #include "ast.hpp"
 
+#include "ast/statement_nodes.hpp"
 #include "ast/visitors/tree_visitor.hpp"
 
 namespace ast {
@@ -37,8 +38,12 @@ namespace ast {
     virtual void visit_block_node(Block& node) override;
     virtual void visit_if_statement(IfStatement& node) override;
     virtual void visit_return_statement(ReturnStatement& node) override;
+    virtual void visit_expression_statement(ExpressionStatement& node) override;
 
     virtual void visit_binary_operator_node(BinaryOperator& node) override;
+    virtual void visit_integer_constant(IntegerConstant& node) override;
+    virtual void visit_variable_identifier(VariableIdentifier& node) override;
+    virtual void visit_function_call(FunctionCallExpr& node) override;
   };
 }
 
