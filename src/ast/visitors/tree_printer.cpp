@@ -59,9 +59,7 @@ namespace ast {
     unindent();
   }
   void TreePrinter::visit_function_declaration_node(FunctionDeclaration& node) {
-    //FIXME: maybe no need for friend, maybe just expose the info
-    // in the nodes themselves (here it can be done easily)
-    line({"Declaration of function \"", node.function_name, "\""});
+    line({"Declaration of function \"", node.get_function_name(), "\""});
     indent();
     //FIXME: there is no type wrapper yet unfortunately so it's just raw LLVM types
     line({"Return type: ", "UNIMPLEMENTED"});
@@ -76,17 +74,17 @@ namespace ast {
     line("Arguments:");
     indent();
     for(auto& arg : node.get_args()) {
-      arg->accept_visitor(*this);
+      visit_node(arg);
     }
     unindent();
 
     unindent();
   }
   void TreePrinter::visit_function_node(FunctionGlobject& node) {
-    line({"Function ",  "\"", node.decl->get_varname(), "\""});
+    line({"Function ",  "\"", node.get_decl()->get_function_name(), "\""});
     indent();
-    visit_node(*(node.decl));
-    visit_node(*(node.body));
+    visit_node(node.get_decl());
+    visit_node(node.get_body());
     unindent();
   }
 
@@ -113,7 +111,7 @@ namespace ast {
     line("Block");
     indent();
     for(auto statement : statements) {
-      visit_node(*statement);
+      visit_node(statement);
     }
     unindent();
   }
@@ -123,22 +121,22 @@ namespace ast {
 
     line("Condition:");
     indent();
-    visit_node(*(node.condition));
+    visit_node(node.get_condition());
     unindent();
 
     line("If-Body:");
     indent();
-    visit_node(*(node.if_body));
+    visit_node(node.get_if_body());
     unindent();
 
-    if(!node.else_body) {
+    if(!node.get_else_body()) {
       unindent();
       return;
     }
 
     line("Else-Body:");
     indent();
-    visit_node(*(node.else_body));
+    visit_node(node.get_else_body());
     unindent();
 
     unindent();
@@ -149,26 +147,26 @@ namespace ast {
       return;
     }
     indent();
-    visit_node(*(node.get_return_val()));
+    visit_node(node.get_return_val());
     unindent();
   }
   void TreePrinter::visit_expression_statement(ExpressionStatement& node) {
     line("Expression statement:");
     indent();
-    visit_node(*node.get_expr());
+    visit_node(node.get_expr());
     unindent();
   }
 
   void TreePrinter::visit_iverson_node(IversonExpr& node) {
     line({"Iverson evaluation:"});
     indent();
-    visit_node(*(node.get_expr()));
+    visit_node(node.get_expr());
     unindent();
   }
   void TreePrinter::visit_unary_operator_node(UnaryOperator& node) {
     line({"Operator ", node.get_operator_type()});
     indent();
-    visit_node(*(node.get_operand()));
+    visit_node(node.get_operand());
     unindent();
   }
   void TreePrinter::visit_binary_operator_node(BinaryOperator& node) {
@@ -176,11 +174,11 @@ namespace ast {
     indent();
     line("LHS:");
     indent();
-    visit_node(node.left);
+    visit_node(node.get_LHS());
     unindent();
     line("RHS:");
     indent();
-    visit_node(node.right);
+    visit_node(node.get_RHS());
     unindent();
     unindent();
   }

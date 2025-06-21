@@ -147,7 +147,9 @@ namespace ast {
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
-    friend class TreePrinter;
+    std::shared_ptr<ExprNode> get_condition();
+    std::shared_ptr<StatementNode> get_if_body();
+    std::shared_ptr<StatementNode> get_else_body();
   };
 
   class WhileLoop : public StatementNode {

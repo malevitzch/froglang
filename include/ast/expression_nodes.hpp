@@ -74,7 +74,8 @@ namespace ast {
 
     std::string get_operator_type();
 
-    friend class TreePrinter;
+    std::shared_ptr<ExprNode> get_LHS();
+    std::shared_ptr<ExprNode> get_RHS();
   };
 
   //TODO: some of the constant functionality should probably be handled 

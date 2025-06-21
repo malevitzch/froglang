@@ -105,7 +105,7 @@ namespace ast {
     std::shared_ptr<DeclarationNode> decl)
   : decl(decl) {}
   void DeclarationStatement::accept_visitor(TreeVisitor& visitor) {
-    visitor.visit_node(*this);
+    visitor.visit_declaration_statement(*this);
   }
   std::optional<std::string> DeclarationStatement::codegen() {
     CompilerContext::NamedValues->add_val(get_varname());
@@ -245,6 +245,15 @@ namespace ast {
       children.push_back(else_body);
     }
     return children;
+  }
+  std::shared_ptr<ExprNode> IfStatement::get_condition() {
+    return condition;
+  }
+  std::shared_ptr<StatementNode> IfStatement::get_if_body() {
+    return if_body;
+  }
+  std::shared_ptr<StatementNode> IfStatement::get_else_body() {
+    return else_body;
   }
 
   WhileLoop::WhileLoop(

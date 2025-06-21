@@ -63,9 +63,7 @@ namespace ast {
 
     std::vector<std::shared_ptr<DeclarationNode>> get_args();
     llvm::Function* get_func();
-    std::string get_varname();
-
-    friend class TreePrinter;
+    std::string get_function_name();
   };
 
   class FunctionDeclarationGlobject : public GlobjectNode {
@@ -78,7 +76,7 @@ namespace ast {
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
-    friend class TreePrinter;
+    std::shared_ptr<FunctionDeclaration> get_decl();
   };
 
   class FunctionGlobject : public GlobjectNode {
@@ -96,7 +94,8 @@ namespace ast {
     virtual std::string get_name() override;
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
-    friend class TreePrinter;
+    std::shared_ptr<FunctionDeclaration> get_decl();
+    std::shared_ptr<Block> get_body();
   };
 }
 

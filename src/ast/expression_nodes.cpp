@@ -167,6 +167,12 @@ namespace ast {
   std::vector<std::shared_ptr<Node>> BinaryOperator::get_children() {
     return {left, right};
   }
+  std::shared_ptr<ExprNode> BinaryOperator::get_LHS() {
+    return left;
+  }
+  std::shared_ptr<ExprNode> BinaryOperator::get_RHS() {
+    return right;
+  }
 
   IntegerConstant::IntegerConstant(unsigned precision, std::string data) 
   : precision(precision), data(data) { final = true; }

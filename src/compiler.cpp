@@ -87,27 +87,6 @@ void Compiler::print_AST(
   ast::TreePrinter* printer = new ast::TreePrinter(output_stream);
   printer->visit_node(*node);
   delete(printer);
-  return;
-
-  std::ostream& out = *output_stream;
-  for(int i = 0; i < depth; i++) out << "  ";
-  out << node->get_name();
-  if(node->final) {
-    out << "\n";
-    return;
-  }
-  out << " {\n";
-  for(std::shared_ptr<ast::Node> child : node->get_children()) {
-    if(child == nullptr) {
-      throw std::runtime_error(
-        "The AST node: \"" 
-        + node->get_name() 
-        + "\" has a null child");
-      }
-    print_AST(child, depth+1, output_stream);
-  }
-  for(int i = 0; i < depth; i++) out << "  ";
-  out << "}\n";
 }
 
 std::optional<std::string> Compiler::parse_to_AST(std::istream* input_stream) {

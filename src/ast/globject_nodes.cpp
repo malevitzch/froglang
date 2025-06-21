@@ -96,7 +96,7 @@ namespace ast {
   FunctionDeclaration::get_args() {
     return args->get_args();
   }
-  std::string FunctionDeclaration::get_varname() {
+  std::string FunctionDeclaration::get_function_name() {
     return function_name;
   }
 
@@ -118,6 +118,9 @@ namespace ast {
   std::vector<std::shared_ptr<Node>> 
   FunctionDeclarationGlobject::get_children() {
     return {decl};
+  }
+  std::shared_ptr<FunctionDeclaration> FunctionDeclarationGlobject::get_decl() {
+    return decl;
   }
 
   void FunctionGlobject::ensure_return(llvm::Function* func) {
@@ -158,7 +161,7 @@ namespace ast {
 
     llvm::BasicBlock *EntryBlock = llvm::BasicBlock::Create(
       *CompilerContext::TheContext,
-      decl->get_varname(),
+      decl->get_function_name(),
       f);
     CompilerContext::Builder->SetInsertPoint(EntryBlock);
     body->codegen();
@@ -174,5 +177,11 @@ namespace ast {
   }
   std::vector<std::shared_ptr<Node>> FunctionGlobject::get_children() {
     return {decl, body};
+  }
+  std::shared_ptr<FunctionDeclaration> FunctionGlobject::get_decl() {
+    return decl;
+  }
+  std::shared_ptr<Block> FunctionGlobject::get_body() {
+    return body; 
   }
 }
