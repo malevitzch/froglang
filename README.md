@@ -19,8 +19,6 @@ docker container run -it froglang
 Inside the container the compiler can be ran using the 'frog' command.\
 Note: the docker commands might require sudo if the user is not in the docker group
 # todo
-- Allow the TreePrinter to cancel future indents by replacing the indentation counter with a stack
-
 - Change the codegen implementation to use the visitor pattern instead
 
 - Add consts to all the functions that should be const
@@ -35,8 +33,6 @@ Note: the docker commands might require sudo if the user is not in the docker gr
 
 - Add a linking option
 
-- Add "-help" so that I don't have to check source code when compiling
-
 - Make the CLI errors say to use -help rather than just fail completely with "unknown option"
 
 - Add read_i32()
@@ -50,8 +46,6 @@ Note: the docker commands might require sudo if the user is not in the docker gr
 - A reasonable way to build and run the docker image
 
 - Certain compilation functions still do not support multiple sources which should probably be fixed asap
-
-- Add some tests for iverson notation
 
 - Mutable variables
 

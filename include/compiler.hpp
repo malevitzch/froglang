@@ -27,6 +27,9 @@ private:
     std::optional<std::string> output_name;
   };
 
+  static bool is_valid_filename(const std::string& filename);
+  static std::string remove_extension(const std::string& filename);
+
   void prepare_llvm();
   std::optional<std::string> get_compiler_path();
   void print_AST(

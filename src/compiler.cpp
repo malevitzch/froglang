@@ -46,7 +46,7 @@ static const std::string compiler_help_message =
   "without compiling to object files\n"
   ;
 
-static bool is_valid_filename(const std::string& filename) {
+bool Compiler::is_valid_filename(const std::string& filename) {
     if(filename.empty()) return false;
     static const std::set<char> illegal_characters =
       {'\"', '?', ':', '*', '>', '<', '|'};
@@ -54,6 +54,14 @@ static bool is_valid_filename(const std::string& filename) {
       return !illegal_characters.contains(ch);
     };
     return std::ranges::all_of(filename, is_legal_char);
+}
+std::string Compiler::remove_extension(const std::string& filename) {
+  // We find the first dot and remove everything starting from the dot
+  int end_pos = filename.find_first_of('.');
+  if(end_pos >= filename.size()) {
+    return filename;
+  }
+  return filename.substr(0, end_pos);
 }
 
 void Compiler::prepare_llvm() {
@@ -256,13 +264,12 @@ std::optional<std::string> Compiler::compile_to_exec(
     std::ifstream input_stream(filename);
     if(!input_stream) 
       return "Couldn't open file: \"" + filename +"\"\n";
-    //FIXME: remove extension and create a better filename 
     std::optional<std::string> compilation_error =
-      compile_to_obj(&input_stream, filename + ".o");
+      compile_to_obj(&input_stream, remove_extension(filename) + ".o");
     if(compilation_error) {
-      return "Compilation of file \"" 
-        + filename 
-        + "\" to object failed due to: \"" 
+      return "Compilation of file \""
+        + filename
+        + "\" to object failed due to: \""
         + *compilation_error + "\"";
     }
   }
@@ -273,7 +280,7 @@ std::optional<std::string> Compiler::compile_to_exec(
   std::vector<std::string> args = 
     {*compiler_path, "-o", output_filename, STDLIB_PATH};
   for(std::string filename : filenames) {
-    args.push_back(filename + ".o");
+    args.push_back(remove_extension(filename) + ".o");
   }
   llvm::SmallVector<llvm::StringRef, 16> argv;
   for(auto& arg : args) {
