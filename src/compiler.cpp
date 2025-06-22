@@ -65,10 +65,17 @@ std::string Compiler::remove_extension(const std::string& filename) {
 }
 
 void Compiler::prepare_llvm() {
+  // LLVM needs those to work
+
+  // This one is not needed for the tests to run
+  // TODO: figure out if it's useful (it was in the LLVM tutorial)
   llvm::InitializeAllTargetInfos();
+
+  // This one is needed for codegen
   llvm::InitializeAllTargets();
+  // Same as above
   llvm::InitializeAllTargetMCs();
-  llvm::InitializeAllAsmParsers();
+  // This is needed for .o file generation
   llvm::InitializeAllAsmPrinters();
 }
 
@@ -76,6 +83,11 @@ std::optional<std::string> Compiler::get_compiler_path() {
   static const std::vector<std::string> possible_compilers =
     {"clang", "gcc", "cc", "cl"};
   std::optional<std::string> compiler_path = std::nullopt;
+
+  // Query all known C compilers and see if any is available
+  // if not, simply return the nullopt
+  // TODO: maybe add an option to instantiate compiler
+  // with extra C compiler options?
   for(const std::string& compiler : possible_compilers) {
     llvm::ErrorOr<std::string> error_or_compiler_path =
       llvm::sys::findProgramByName(compiler);
@@ -92,17 +104,20 @@ void Compiler::print_AST(
   int depth,
   std::ostream* output_stream) {
 
-  ast::TreePrinter* printer = new ast::TreePrinter(output_stream);
+  std::shared_ptr<ast::TreePrinter> printer 
+    = std::make_shared<ast::TreePrinter>(ast::TreePrinter(output_stream));
   printer->visit_node(*node);
-  delete(printer);
 }
 
 std::optional<std::string> Compiler::parse_to_AST(std::istream* input_stream) {
   FrogLexer lexer(input_stream);
-  Tokens::Token *yylval = new Tokens::Token();
+  std::shared_ptr<Tokens::Token> yylval
+    = std::make_shared<Tokens::Token>(Tokens::Token());
   yy::parser p(lexer);
   int parser_return_val = p();
-  delete yylval;
+  // This returns the ast in the "ast_root" global variable
+  // which is honestly quite a silly workaround
+  // TODO: find a better way if possible
   if(parser_return_val != 0) {
     return "Parsing error";
   }
@@ -112,7 +127,10 @@ std::optional<std::string> Compiler::parse_to_AST(std::istream* input_stream) {
 std::optional<std::string> Compiler::generate_IR(std::istream* input_stream) {
   std::optional<std::string> parsing_error = parse_to_AST(input_stream);
   if(parsing_error) return parsing_error;
+  // We know exactly what type the AST root will be
   dynamic_pointer_cast<ast::ProgramNode>(ast_root)->codegen();
+  // Clear out the root we made so that it's not left in memory
+  // once we stop using it
   ast_root = nullptr;
   //FIXME: implement AST error handling
   return std::nullopt;
@@ -123,8 +141,11 @@ std::optional<std::string> Compiler::compile_to_AST(
   std::string output_filename) {
   std::optional<std::string> parsing_error = parse_to_AST(input_stream);
   if(parsing_error) return parsing_error;
+
   std::ofstream output_stream(output_filename);
   print_AST(ast_root, 0, &output_stream);
+
+  ast_root = nullptr;
   return std::nullopt;
 }
 
@@ -154,12 +175,16 @@ std::optional<std::string> Compiler::compile_to_IR(
   std::string output_filename) {
   generate_IR(input_stream);
   std::error_code EC;
+
+  // It seems that the IR output can only be sent to a file
+  // using a special LLVM ostream (at least as far as I know)
   llvm::raw_fd_ostream IR_out(output_filename, EC, llvm::sys::fs::OF_None);
 
   if(EC) {
     return "Error opening file \"" + output_filename + "\": " + EC.message();
   }
 
+  // nullptr here means that there are no special annotations
   CompilerContext::TheModule->print(IR_out, nullptr);
   return std::nullopt;
 }
@@ -167,14 +192,21 @@ std::optional<std::string> Compiler::compile_to_IR(
 std::optional<std::string> Compiler::compile_to_obj(
   std::istream* input_stream,
   std::string output_filename) {
-  auto TargetTriple = llvm::sys::getDefaultTargetTriple();
 
   prepare_llvm();
 
+  // Find the build target
+  auto TargetTriple = llvm::sys::getDefaultTargetTriple();
   std::string Error;
   auto Target = llvm::TargetRegistry::lookupTarget(TargetTriple, Error);
+  if(!Target) {
+    return "Failed to find target: " + Error;
+  }
 
+  // Here we create a representation of the machine that is later
+  // used to generate code for the correct architecture
   auto CPU = "generic";
+  // CPU features would go here (like enabling SIMD)
   auto Features = "";
   llvm::TargetOptions opt;
   auto TargetMachine = Target->createTargetMachine(
@@ -190,10 +222,12 @@ std::optional<std::string> Compiler::compile_to_obj(
     return "Parsing failed due to: \"" + *parsing_error + "\""; 
   }
 
+  // Set the Module data layout so that it matches that of the machine
   CompilerContext::TheModule->setDataLayout(TargetMachine->createDataLayout());
   CompilerContext::TheModule->setTargetTriple(TargetTriple);
-  std::error_code EC;
 
+  // The output goes in a special ostream from LLVM
+  std::error_code EC;
   llvm::raw_fd_ostream dest(output_filename, EC, llvm::sys::fs::OF_None);
   llvm::legacy::PassManager pass;
 
