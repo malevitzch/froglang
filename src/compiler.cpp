@@ -80,8 +80,13 @@ void Compiler::prepare_llvm() {
 }
 
 std::optional<std::string> Compiler::get_compiler_path() {
-  static const std::vector<std::string> possible_compilers =
-    {"clang", "gcc", "cc", "cl"};
+  static const std::vector<std::string> possible_compilers = {
+    "clang",    // LLVM/Clang
+    "gcc",      // GNU Compiler Collection
+    "cc",       // Common alias for C compilers
+    "cl"        // MSVC on Windows
+    "tcc"       // Tiny C Compiler
+  };
   std::optional<std::string> compiler_path = std::nullopt;
 
   // Query all known C compilers and see if any is available
@@ -101,7 +106,6 @@ std::optional<std::string> Compiler::get_compiler_path() {
 
 void Compiler::print_AST(
   std::shared_ptr<ast::Node> node,
-  int depth,
   std::ostream* output_stream) {
 
   std::shared_ptr<ast::TreePrinter> printer 
@@ -143,7 +147,7 @@ std::optional<std::string> Compiler::compile_to_AST(
   if(parsing_error) return parsing_error;
 
   std::ofstream output_stream(output_filename);
-  print_AST(ast_root, 0, &output_stream);
+  print_AST(ast_root, &output_stream);
 
   ast_root = nullptr;
   return std::nullopt;
@@ -246,7 +250,7 @@ std::optional<std::string> Compiler::compile_to_obj(
   std::string output_filename) {
   std::ifstream input_stream(input_filename);
   if(!input_stream.is_open()) {
-    return "Cannot open file \"" + input_filename + "\"";
+    return "Cannot open file \"" + input_filename + "\": " + std::strerror(errno);
   }
   return compile_to_obj(&input_stream, output_filename);
 }
@@ -254,24 +258,25 @@ std::optional<std::string> Compiler::compile_to_obj(
 std::optional<std::string> Compiler::compile_to_exec(
   std::istream* input_stream,
   std::string output_filename) {
-  std::cout << "TEST" << std::endl;
+  
+  //TODO: maybe make unique filenames here too?
   std::optional<std::string> compilation_error = 
     compile_to_obj(input_stream, "out.o");
-  if(compilation_error) {
+
+  if(compilation_error)
     return "Compilation to object failed due to: \"" 
-      + *compilation_error + "\"";
-  }
+      + *compilation_error + "\""; 
 
   std::optional<std::string> compiler_path = get_compiler_path();
-  if(!compiler_path) {
+  if(!compiler_path)
     return "Can't find a C compiler";
-  }
+
   std::vector<std::string> args = 
       {*compiler_path, "-o", output_filename, "out.o", STDLIB_PATH};
-  llvm::SmallVector<llvm::StringRef, 16> argv;
-  for(auto& arg : args) {
-    argv.push_back(arg);
-  }
+  llvm::SmallVector<llvm::StringRef, 16> argv(args.begin(), args.end());
+
+  //TODO: the object should probably not be called out.o
+  // also this should support multiple files out of the box
   std::string error_message;
   int result = llvm::sys::ExecuteAndWait(
     argv[0],
@@ -290,16 +295,24 @@ std::optional<std::string> Compiler::compile_to_exec(
   return std::nullopt;
 }
 
+//FIXME: there are two versions of the same function
+// the upper one could perhaps be removed
 std::optional<std::string> Compiler::compile_to_exec(
   std::vector<std::string> filenames,
   std::string output_filename) {
+
   for(std::string& filename : filenames) {
+    // The context is unique to every single file that we compiler
+    // TODO: maybe compile_to_obj should do it instead
     CompilerContext::reset_context();
+
     std::ifstream input_stream(filename);
     if(!input_stream) 
-      return "Couldn't open file: \"" + filename +"\"\n";
+      return "Couldn't open file: \"" + filename + "\": " + std::strerror(errno);
+
     std::optional<std::string> compilation_error =
       compile_to_obj(&input_stream, remove_extension(filename) + ".o");
+
     if(compilation_error) {
       return "Compilation of file \""
         + filename
@@ -307,19 +320,18 @@ std::optional<std::string> Compiler::compile_to_exec(
         + *compilation_error + "\"";
     }
   }
+
   std::optional<std::string> compiler_path = get_compiler_path();
   if(!compiler_path) {
     return "Can't find a C compiler";
   }
   std::vector<std::string> args = 
     {*compiler_path, "-o", output_filename, STDLIB_PATH};
-  for(std::string filename : filenames) {
+
+  for(std::string filename : filenames)
     args.push_back(remove_extension(filename) + ".o");
-  }
-  llvm::SmallVector<llvm::StringRef, 16> argv;
-  for(auto& arg : args) {
-    argv.push_back(arg);
-  }
+
+  llvm::SmallVector<llvm::StringRef, 16> argv(args.begin(), args.end());
   std::string error_message;
   int result = llvm::sys::ExecuteAndWait(
     argv[0],
@@ -329,6 +341,7 @@ std::optional<std::string> Compiler::compile_to_exec(
     0,
     0,
     &error_message);
+
   if(result == -1) {
     return "Cannot execute the compilation command";
   }
@@ -342,10 +355,11 @@ std::optional<std::string> Compiler::compile_to_exec(
 std::optional<std::string> Compiler::compile_to_exec(
   std::string input_filename,
   std::string output_filename) {
+
   std::ifstream input_stream(input_filename);
-    if(!input_stream.is_open()) {
+  if(!input_stream.is_open())
       return "Cannot open file: \"" + input_filename + "\"";
-  }
+
   return compile_to_exec(&input_stream, output_filename);
 }
 
@@ -454,7 +468,7 @@ std::optional<std::string> Compiler::parse_option(
       return "The compiler mode should only be set once";
     data.mode = Mode::AST;
   }
-  else if(option == "help") {
+  else if(option == "help" || option == "-h") {
     if(data.mode != Mode::Exec) 
       return "The compiler mode should only be set once";
     data.mode = Mode::Help;
