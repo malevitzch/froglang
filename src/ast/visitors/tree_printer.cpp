@@ -48,7 +48,7 @@ namespace ast {
   }
   TreePrinter::TreePrinter(std::ostream* output_stream) : output_stream(output_stream) {}
   void TreePrinter::default_visit(Node& node) {
-    line("Unknown Node");
+    line({node.get_name(), "(Unimplemented)"});
   }
   void TreePrinter::visit_program_node(ProgramNode& node) {
     line("Program Node");

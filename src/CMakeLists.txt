@@ -34,7 +34,6 @@ set(LIB_SOURCES
   ${BISON_OUTPUT} 
   ${FLEX_OUTPUT} 
   tokens/tokens.cpp 
-  main.cpp 
 
   ast/node.cpp
   ast/expression_nodes.cpp
@@ -54,10 +53,6 @@ set(LIB_SOURCES
 )
 
 add_library(app_lib ${LIB_SOURCES})
-
-add_executable(lexer main.cpp)
-target_link_libraries(lexer PRIVATE ${llvm_libs})
-target_link_libraries(lexer PRIVATE app_lib)
 
 add_executable(compiler compiler.cpp compiler_driver.cpp)
 target_link_libraries(compiler PRIVATE LLVM)
