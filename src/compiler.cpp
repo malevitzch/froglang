@@ -129,9 +129,15 @@ std::optional<std::string> Compiler::parse_to_AST(std::istream* input_stream) {
 }
 
 std::optional<std::string> Compiler::generate_IR(std::istream* input_stream) {
+  // Reset context for codegen
+  CompilerContext::reset_context();
+
   std::optional<std::string> parsing_error = parse_to_AST(input_stream);
   if(parsing_error) return parsing_error;
-  // We know exactly what type the AST root will be
+
+  
+  if(ast_root == nullptr) return "Missing AST root";
+  // We know exactly what type the AST root will be so we can cast it
   dynamic_pointer_cast<ast::ProgramNode>(ast_root)->codegen();
   // Clear out the root we made so that it's not left in memory
   // once we stop using it
@@ -302,10 +308,6 @@ std::optional<std::string> Compiler::compile_to_exec(
   std::string output_filename) {
 
   for(std::string& filename : filenames) {
-    // The context is unique to every single file that we compiler
-    // TODO: maybe compile_to_obj should do it instead
-    CompilerContext::reset_context();
-
     std::ifstream input_stream(filename);
     if(!input_stream) 
       return "Couldn't open file: \"" + filename + "\": " + std::strerror(errno);
