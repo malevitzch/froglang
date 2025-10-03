@@ -449,27 +449,27 @@ std::optional<std::string> Compiler::parse_option(
     it++;
   }
   else if(option == "ir") {
-    if(data.mode != Mode::Exec) 
+    if(data.mode != Mode::Exec)
       return "The compiler mode should only be set once";
     data.mode = Mode::IR;
   }
   else if(option == "c") {
-    if(data.mode != Mode::Exec) 
+    if(data.mode != Mode::Exec)
       return "The compiler mode should only be set once";
     data.mode = Mode::Obj;
   }
   else if(option == "genstdlib") {
-    if(data.mode != Mode::Exec) 
+    if(data.mode != Mode::Exec)
       return "The compiler mode should only be set once";
     data.mode = Mode::Stdlib;
   }
   else if(option == "ast" || option == "AST") {
-    if(data.mode != Mode::Exec) 
+    if(data.mode != Mode::Exec)
       return "The compiler mode should only be set once";
     data.mode = Mode::AST;
   }
   else if(option == "help" || option == "-h") {
-    if(data.mode != Mode::Exec) 
+    if(data.mode != Mode::Exec)
       return "The compiler mode should only be set once";
     data.mode = Mode::Help;
   }
@@ -483,10 +483,11 @@ std::optional<std::string> Compiler::parse_source(
   std::vector<std::string>::iterator& it,
   std::vector<std::string>::iterator& end,
   CommandData& data) {
+  if(it == end)
+    return "Trying to parse an argument from nothing.";
   auto arg = *it;
-  if(!is_valid_filename(arg)) {
-    return "Invalid input filename: \"" + arg + "\""; 
-  }
+  if(!is_valid_filename(arg))
+    return "Invalid input filename: \"" + arg + "\"";
   it++;
   data.sources.push_back(arg);
   return std::nullopt;
