@@ -53,6 +53,7 @@
 
 %token <token> FN
 %token <token> RET
+%token <token> VAR
 
 %token <token> LPAREN
 %token <token> RPAREN
@@ -204,6 +205,15 @@ declaration: IDENTIFIER COLON TYPE_ID {
       YYERROR;
     }
     $$ = std::make_shared<ast::DeclarationNode>(*type_ref, $1->metadata);
+  }
+  | VAR IDENTIFIER COLON TYPE_ID {
+    std::optional<llvm::Type*> type_ref =
+      CompilerContext::Types->get_type($4->metadata);
+    if(!type_ref) {
+      yy::parser::error("Undeclared type: \"" + $4->metadata + "\"");
+      YYERROR;
+    }
+    $$ = std::make_shared<ast::DeclarationNode>(*type_ref, $2->metadata, true);
   }
   ;
 

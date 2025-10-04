@@ -55,8 +55,9 @@ namespace ast {
   private:
     llvm::Type* var_type;
     std::string var_name;
+    bool is_var = false;
   public:
-    DeclarationNode(llvm::Type* var_type, std::string var_name);
+    DeclarationNode(llvm::Type* var_type, std::string var_name, bool is_var = false);
     virtual void accept_visitor(TreeVisitor& visitor) override;
     virtual std::optional<std::string> codegen();
     std::string get_name() override;

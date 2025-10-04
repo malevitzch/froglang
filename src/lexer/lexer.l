@@ -25,6 +25,7 @@ keywords = {
   {"true",  {Tokens::TokType::TRUE,   yy::parser::token::TRUE}},
   {"false", {Tokens::TokType::FALSE,  yy::parser::token::FALSE}},
   {"while", {Tokens::TokType::WHILE,  yy::parser::token::WHILE}},
+  {"var",   {Tokens::TokType::VAR,    yy::parser::token::VAR}},
 };
 
 std::ostream* diagnostic_stream = &std::cout;

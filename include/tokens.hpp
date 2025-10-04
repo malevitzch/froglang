@@ -51,6 +51,7 @@ namespace Tokens {
 
     RET,
     FN,
+    VAR,
 
     IF,
     ELSE,

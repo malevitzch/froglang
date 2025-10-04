@@ -60,8 +60,8 @@ namespace ast {
   }
 
 
-  DeclarationNode::DeclarationNode(llvm::Type* var_type, std::string var_name) 
-  : var_type(var_type), var_name(var_name) {final = true;}
+  DeclarationNode::DeclarationNode(llvm::Type* var_type, std::string var_name, bool is_var) 
+  : var_type(var_type), var_name(var_name), is_var(is_var) {final = true;}
   void DeclarationNode::accept_visitor(TreeVisitor& visitor) {
     visitor.visit_declaration_node(*this);
   }
