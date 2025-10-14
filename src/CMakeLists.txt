@@ -45,6 +45,7 @@ set(LIB_SOURCES
 
   ast/visitors/tree_visitor.cpp
   ast/visitors/tree_printer.cpp
+  ast/visitors/tree_compiler.cpp
 
   dsa/value_holder.cpp
   dsa/type_holder.cpp
