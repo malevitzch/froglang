@@ -53,6 +53,13 @@ bool Compiler::is_valid_filename(const std::string& filename) {
     static auto is_legal_char = [](char ch) {
       return !illegal_characters.contains(ch);
     };
+    static auto is_legal_starting_char = [](char ch) {
+      return isalnum(ch) || ch == '_' || ch == '.' || ch == '/';
+    };
+
+    if(!is_legal_starting_char(filename[0])) {
+      return false;
+    }
     return std::ranges::all_of(filename, is_legal_char);
 }
 std::string Compiler::remove_extension(const std::string& filename) {
