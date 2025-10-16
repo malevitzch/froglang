@@ -1,10 +1,11 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.24)
 
 project(froglang-compiler LANGUAGES CXX C)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(LLVM_USE_STATIC_LIBS OFF)
 find_package(FLEX REQUIRED)
@@ -22,7 +23,7 @@ add_subdirectory(src)
 enable_testing()
 add_custom_target(check
   COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
-  DEPENDS compiler
+  DEPENDS compiler app_lib
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 add_subdirectory(tests)

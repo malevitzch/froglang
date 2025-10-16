@@ -5,9 +5,9 @@ set(BISON_HEADER ${CMAKE_BINARY_DIR}/parser.hpp)
 add_custom_command(
   DEPENDS ${BISON_INPUT}
   OUTPUT ${BISON_OUTPUT} ${BISON_HEADER}
-  COMMAND ${BISON_EXECUTABLE} -d 
-    --defines=${BISON_HEADER} 
-    -o ${BISON_OUTPUT} 
+  COMMAND ${BISON_EXECUTABLE} -d
+    --defines=${BISON_HEADER}
+    -o ${BISON_OUTPUT}
     ${BISON_INPUT}
 )
 
