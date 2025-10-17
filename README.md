@@ -8,9 +8,9 @@ The repository also contains tests that can be run using CTest. To run them simp
 ```sh
 ctest
 ```
-There is also a Dockerfile situated in the docker/ubuntu/ directory which can be used to build an image which can run the project without worrying about dependencies, barring docker itself. To build the image use the following command inside the root directory of the project:
+There is also a Dockerfile situated in the docker/alpine/ directory which can be used to build an image which can run the project without worrying about dependencies, barring docker itself. To build the image use the following command inside the root directory of the project:
 ```sh
-docker build -f docker/ubuntu/Dockerfile -t froglang .
+docker build -f docker/alpine/Dockerfile -t froglang .
 ```
 To run the container:
 ```sh
