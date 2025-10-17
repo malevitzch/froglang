@@ -1,5 +1,5 @@
 FROM alpine:3.17
-RUN apk update && apk add \
+RUN apk add --no-cache \
   g++ \
   cmake \
   ninja \
