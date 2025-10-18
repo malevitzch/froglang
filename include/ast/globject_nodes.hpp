@@ -28,6 +28,7 @@ namespace ast {
     virtual std::string get_name() override;
     virtual std::optional<std::string> codegen();
     void add_obj(std::shared_ptr<GlobjectNode> globject);
+    std::vector<std::shared_ptr<GlobjectNode>>& get_globjects();
 
     std::vector<std::shared_ptr<Node>> get_children() override;
   };
@@ -64,6 +65,8 @@ namespace ast {
     std::vector<std::shared_ptr<DeclarationNode>> get_args();
     llvm::Function* get_func();
     std::string get_function_name();
+
+    friend class TreeCompiler;
   };
 
   class FunctionDeclarationGlobject : public GlobjectNode {

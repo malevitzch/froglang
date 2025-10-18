@@ -7,6 +7,8 @@
 
 namespace ast {
 
+  using std::shared_ptr;
+
   std::string GlobjectNode::get_name() {
     return "Globject Node";
   }
@@ -23,26 +25,29 @@ namespace ast {
     std::ranges::for_each(globjects, &GlobjectNode::codegen);
     return std::nullopt;
   }
-  void ProgramNode::add_obj(std::shared_ptr<GlobjectNode> globject) {
+  void ProgramNode::add_obj(shared_ptr<GlobjectNode> globject) {
     globjects.push_back(globject);
   }
   ProgramNode::ProgramNode() {}
-  std::vector<std::shared_ptr<Node>> ProgramNode::get_children() {
+  std::vector<shared_ptr<Node>> ProgramNode::get_children() {
     return {globjects.begin(), globjects.end()};
+  }
+  std::vector<shared_ptr<GlobjectNode>>& ProgramNode::get_globjects() {
+    return globjects;
   }
 
   std::string FunctionArglist::get_name() {
     return "Function Arglist";
   }
-  std::vector<std::shared_ptr<Node>> FunctionArglist::get_children() {
-    std::vector<std::shared_ptr<Node>> children;
+  std::vector<shared_ptr<Node>> FunctionArglist::get_children() {
+    std::vector<shared_ptr<Node>> children;
     std::ranges::copy(args, std::back_inserter(children));
     return children;
   }
-  void FunctionArglist::add_arg(std::shared_ptr<DeclarationNode> arg) {
+  void FunctionArglist::add_arg(shared_ptr<DeclarationNode> arg) {
     args.push_back(arg);
   }
-  std::vector<std::shared_ptr<DeclarationNode>> FunctionArglist::get_args() {
+  std::vector<shared_ptr<DeclarationNode>> FunctionArglist::get_args() {
     return args;
   }
   std::vector<llvm::Type*> FunctionArglist::get_arg_types() {
@@ -56,7 +61,7 @@ namespace ast {
 
   FunctionDeclaration::FunctionDeclaration(
     std::string function_name,
-    std::shared_ptr<FunctionArglist> args,
+    shared_ptr<FunctionArglist> args,
     llvm::Type* return_type)
   : function_name(function_name), args(args), return_type(return_type) {}
   void FunctionDeclaration::accept_visitor(TreeVisitor& visitor) {
@@ -89,10 +94,10 @@ namespace ast {
   std::string FunctionDeclaration::get_name() {
     return "Function Declaration";
   }
-  std::vector<std::shared_ptr<Node>> FunctionDeclaration::get_children() {
+  std::vector<shared_ptr<Node>> FunctionDeclaration::get_children() {
     return {args};
   }
-  std::vector<std::shared_ptr<DeclarationNode>> 
+  std::vector<shared_ptr<DeclarationNode>> 
   FunctionDeclaration::get_args() {
     return args->get_args();
   }
@@ -101,7 +106,7 @@ namespace ast {
   }
 
   FunctionDeclarationGlobject::FunctionDeclarationGlobject(
-    std::shared_ptr<FunctionDeclaration> decl)
+    shared_ptr<FunctionDeclaration> decl)
   : decl(decl) {}
   std::optional<std::string> FunctionDeclarationGlobject::codegen() {
     decl->codegen();
@@ -115,11 +120,11 @@ namespace ast {
   std::string FunctionDeclarationGlobject::get_name() {
     return "Function Declaration Globject";
   }
-  std::vector<std::shared_ptr<Node>> 
+  std::vector<shared_ptr<Node>> 
   FunctionDeclarationGlobject::get_children() {
     return {decl};
   }
-  std::shared_ptr<FunctionDeclaration> FunctionDeclarationGlobject::get_decl() {
+  shared_ptr<FunctionDeclaration> FunctionDeclarationGlobject::get_decl() {
     return decl;
   }
 
@@ -138,8 +143,8 @@ namespace ast {
     }
   }
   FunctionGlobject::FunctionGlobject(
-    std::shared_ptr<FunctionDeclaration> decl,
-    std::shared_ptr<Block> body) 
+    shared_ptr<FunctionDeclaration> decl,
+    shared_ptr<Block> body) 
   : decl(decl), body(body) {}
   void FunctionGlobject::accept_visitor(TreeVisitor& visitor) {
     visitor.visit_function_node(*this);
@@ -148,7 +153,7 @@ namespace ast {
 
     std::vector<std::string> variables_to_clean_up;
 
-    for(std::shared_ptr<DeclarationNode> arg : decl->get_args()) {
+    for(shared_ptr<DeclarationNode> arg : decl->get_args()) {
       variables_to_clean_up.push_back(arg->get_varname());
     }
 
@@ -175,13 +180,13 @@ namespace ast {
   std::string FunctionGlobject::get_name() {
     return "Function Globject";
   }
-  std::vector<std::shared_ptr<Node>> FunctionGlobject::get_children() {
+  std::vector<shared_ptr<Node>> FunctionGlobject::get_children() {
     return {decl, body};
   }
-  std::shared_ptr<FunctionDeclaration> FunctionGlobject::get_decl() {
+  shared_ptr<FunctionDeclaration> FunctionGlobject::get_decl() {
     return decl;
   }
-  std::shared_ptr<Block> FunctionGlobject::get_body() {
-    return body; 
+  shared_ptr<Block> FunctionGlobject::get_body() {
+    return body;
   }
 }

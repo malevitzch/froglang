@@ -8,11 +8,16 @@
 
 namespace ast {
 
-
-  class TreePrinter : public TreeVisitor {
+  class TreeCompiler : public TreeVisitor {
   private:
+    llvm::LLVMContext TheContext;
+    llvm::Module TheModule;
+    llvm::IRBuilder<> Builder;
+    DSA::ValueHolder NamedValues;
+    std::map<std::string, llvm::Function*> Functions;
+    DSA::TypeHolder Types;
   public:
-    TreePrinter(std::ostream* output_stream);
+    TreeCompiler();
     virtual void default_visit(Node& node) override;
     virtual void visit_program_node(ProgramNode& program_node) override;
     virtual void visit_function_declaration_node(FunctionDeclaration& node) override;
