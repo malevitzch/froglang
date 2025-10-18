@@ -16,6 +16,9 @@ namespace ast {
     DSA::ValueHolder NamedValues;
     std::map<std::string, llvm::Function*> Functions;
     DSA::TypeHolder Types;
+
+    void ensure_return(llvm::Function* func);
+
   public:
     TreeCompiler();
     virtual void default_visit(Node& node) override;

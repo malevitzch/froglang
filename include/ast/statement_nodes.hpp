@@ -93,6 +93,7 @@ namespace ast {
     virtual std::vector<std::shared_ptr<Node>> get_children() override;
 
     std::string get_varname();
+    std::shared_ptr<DeclarationNode> get_decl();
   };
 
   class DeclarationAssignmentStatement : public DeclarationStatement {

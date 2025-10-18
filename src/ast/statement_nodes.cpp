@@ -120,6 +120,7 @@ namespace ast {
   std::string DeclarationStatement::get_varname() {
     return decl->get_varname();
   }
+  std::shared_ptr<DeclarationNode> DeclarationStatement::get_decl() { return decl; }
 
   DeclarationAssignmentStatement::DeclarationAssignmentStatement(
     std::shared_ptr<DeclarationNode> decl, std::shared_ptr<ExprNode> expr)

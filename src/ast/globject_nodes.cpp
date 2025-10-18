@@ -129,6 +129,8 @@ namespace ast {
   }
 
   void FunctionGlobject::ensure_return(llvm::Function* func) {
+    // FIXME: this needs to be removed once the functionality is fully moved
+    // to the TreeCompiler class
     llvm::BasicBlock *last_block = &func->back();
     if(last_block->getTerminator()) return;
 
